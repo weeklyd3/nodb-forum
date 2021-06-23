@@ -1,0 +1,7 @@
+[contenteditable="true"]:focus {
+	outline:none;
+}
+[contenteditable="true"] * {
+	font-family:inherit;
+	font-size:inherit;
+}

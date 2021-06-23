@@ -1,0 +1,1 @@
+<h2>This is the start of chat.</h2><p>You have scrolled to the top.</p><small>remember, the <a href="tos.php" target="_blank">terms of use</a> apply.</small><hr>
