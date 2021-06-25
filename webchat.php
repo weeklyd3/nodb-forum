@@ -26,16 +26,23 @@ function update() {
         } else {
 var pos = [window.scrollX, window.scrollY];
 			console.log(pos);
-if($(window).scrollTop() + $(window).height() == $(document).height()) {
-     			globalThis.bottom = true;
-   			}
+window.onscroll = function(ev) {
+  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+    console.log("bottom of the page reached");
+	globalThis.bottom = true;
+  }
+};
             // show the result
             document.getElementById('status').innerHTML=(`Done, got ${xhr.response.length} bytes`); // response is the server response
 			var text = xhr.responseText;
+			document.getElementById('message').innerHTML='';
 			document.getElementById('message').innerHTML=text;
+			window.scrollTo(0, 0);
+			window.scrollTo(pos[0], pos[1]);
 			if (window.bottom) {
 				window.scrollTo(0,document.body.scrollHeight);
 			} else {
+				window.scrollTo(0, 0);
 				window.scrollTo(pos[0], pos[1]);
 			}
         }
