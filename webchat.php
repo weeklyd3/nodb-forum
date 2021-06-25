@@ -30,6 +30,8 @@ window.onscroll = function(ev) {
   if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
     console.log("bottom of the page reached");
 	globalThis.bottom = true;
+  } else {
+	  globalThis.bottom = false;
   }
 };
             // show the result
