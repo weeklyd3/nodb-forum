@@ -1,1 +1,1 @@
-<h2>This is the start of chat.</h2><p>You have scrolled to the top.</p><small>remember, the <a href="tos.php" target="_blank">terms of use</a> apply.</small><hr>
+<h2>This is the start of chat.</h2><p>You have scrolled to the top.</p><small>remember, the <a href="tos.php" target="_blank">terms of use</a> apply. Note that if you are at the bottom of the page, it will automatically scroll when new messages come.</small><hr><!--user2762153624-->

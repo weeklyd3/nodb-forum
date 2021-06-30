@@ -24,18 +24,17 @@ function update() {
             // analyze HTTP status of the response
             document.getElementById('status').innerHTML=(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
         } else {
-var pos = [window.scrollX, window.scrollY];
+			var pos = [window.scrollX, window.scrollY];
 			console.log(pos);
-window.onscroll = function(ev) {
-  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-    console.log("bottom of the page reached");
-	globalThis.bottom = true;
-  } else {
-	  globalThis.bottom = false;
-  }
-};
+			if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+				console.log("bottom of the page reached");
+				globalThis.bottom = true;
+			} else {
+				globalThis.bottom = false;
+			}
             // show the result
-            document.getElementById('status').innerHTML=(`Done, got ${xhr.response.length} bytes`); // response is the server response
+            document.getElementById('status').innerHTML=(`<strong>Finished refresh</strong> Done, got ${xhr.response.length} bytes`);
+			 // response is the server response
 			var text = xhr.responseText;
 			document.getElementById('message').innerHTML='';
 			document.getElementById('message').innerHTML=text;
@@ -62,37 +61,63 @@ window.onscroll = function(ev) {
         document.getElementById('status').innerHTML=("Request failed");
     };
 }
+
 function post() {
-    // 1. Create a new XMLHttpRequest object
-    let xhr = new XMLHttpRequest();
+	if (document.getElementById('messages').value) {
+		document.getElementById('status').innerHTML='Sending message. Hold tight...';
+		// 1. Create a new XMLHttpRequest object
+		let xhr = new XMLHttpRequest();
 
-    // 2. Configure it: GET-request for the URL /article/.../load
-    xhr.open("POST", "post_message_to_chat.php");
-	var data = new FormData(document.getElementById('compose'));
-    // 3. Send the request over the network
-    xhr.send(data);
+		// 2. Configure it: GET-request for the URL /article/.../load
+		xhr.open("POST", "post_message_to_chat.php");
+		var data = new FormData(document.getElementById('compose'));
+		// 3. Send the request over the network
+		xhr.send(data);
 
-    // 4. This will be called after the response is received
-	xhr.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			document.getElementById('messages').value="";
-			console.log('sent');
-		}
-	};
+		// 4. This will be called after the response is received
+		xhr.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				document.getElementById('messages').value="";
+				document.getElementById('status').innerHTML = 'Sent!'
+				console.log('sent');
+			}
+		};
+	} else {
+		document.getElementById('status').innerHTML='<span style="color:red;"><strong>Refusing to send because it&apos;s empty.</strong></span>';
+	}
 }
-setInterval(update, 1000);
-</script><pre id="message"><h2>This is the start of chat.</h2></pre>
-	<details style="position:sticky; bottom:0; background-color:lightblue;" open="open">
+var refresh = setInterval(update, 1000);
+function insertAtCursor(myField, myValue) {
+    //IE support
+    if (document.selection) {
+        myField.focus();
+        sel = document.selection.createRange();
+        sel.text = myValue;
+    }
+    //MOZILLA and others
+    else if (myField.selectionStart || myField.selectionStart == '0') {
+        var startPos = myField.selectionStart;
+        var endPos = myField.selectionEnd;
+        myField.value = myField.value.substring(0, startPos)
+            + myValue
+            + myField.value.substring(endPos, myField.value.length);
+    } else {
+        myField.value += myValue;
+    }
+}
+</script><pre id="message" style="font-family:inherit;"><h2><em>Please wait...</em></h2></pre>
+	<details style="position:sticky; bottom:0; background-color:lightblue; max-height:75%;" open="open">
 	<summary>Compose message</summary>
 	<p id="status">loading status</p>
 	<form action="javascript:void(0);" id="compose" onsubmit="post();">
-	<label for="messages">message</label><br>
-	<input type="text" <?php if ($_COOKIE['login']==''){echo 'disabled="disabled"'; }?> name="message" id="messages" style="width:100%;" required="required" /><br>
+	<label for="messages">message (no spam please)</label><br>
+	<textarea required="required" onkeydown="if (event.keyCode == 13 && !event.shiftKey) { post(); return false; }" rows="7" <?php if ($_COOKIE['login']==''){echo 'disabled="disabled"'; }?> name="message" id="messages" style="width:100%;" required="required" placeholder="Type here"></textarea><br>
 	<?php
 	$name = $_COOKIE['login'];
 	if ($name != "") {
-		echo '<input type="hidden" name="login" value="'.htmlspecialchars($name).'" />';
+		echo '<input type="hidden" name="login" value="'.htmlspecialchars(getname()).'" />';
 		echo '<input type="submit" value="send" />';
+		echo '&nbsp;&nbsp;<input type="button" value="stop refresh" onclick="clearInterval(refresh);document.getElementById(\'status\').innerHTML=\'Disconnected. Reload to start connection again.\';" />';
 	} else {
 		echo "You have to log in to post messages.";
 	}

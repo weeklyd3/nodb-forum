@@ -27,7 +27,7 @@
 		<h3 id="options">Your Data Options</h3>
 		<ul>
 		<li>You can stay anonymous by choosing a pseudonym as your username. As long as it is not offensive or an impersonation, you can sign up with it to achieve privacy online. You do not have to use your real name as the username, in fact, it is discouraged.</li>
-		<strong><li>You have the option to delete your data at any time. You can request account deletion using the contact form at the bottom of every form, then tell the support team that you want to delete your account. When this happens, all of your account information is promptly, permanently deleted from the server, and contributions are anonymized as deleted-user-XXXXXXXXXX where XXXXXXXXXX is a number.</li></strong>
+		<!--<strong><li>You have the option to delete your data at any time. You can request account deletion using the contact form at the bottom of every form, then tell the support team that you want to delete your account. When this happens, all of your account information is promptly, permanently deleted from the server, and contributions are anonymized as deleted-user-XXXXXXXXXX where XXXXXXXXXX is a number.</li></strong>-->
 		</ul>
 	</td>
 	<td style="vertical-align:top;" width="200">

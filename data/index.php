@@ -28,8 +28,6 @@ if ($handle = opendir('./')) {
     closedir($handle);
 }
 echo "</ul></pre>";
-?>
-	<?php
 	include('../public/footer.php');
 	?>
 </body>

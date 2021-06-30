@@ -1,8 +1,12 @@
 <?php
+header('Content-Type: text/plain');
 $message = htmlspecialchars($_POST['message']);
-$message = str_replace("\n", "<br>", $message);
 $name = $_POST['login'];
-$pointer = fopen('data/messages/webchat.txt', 'a+');
-$text = '<div style="border:1px solid black;">'.$name.'<div style="background-color:gray;">'.$message.'</div></div>';
-fwrite($pointer, $text);
+if ($name) {
+	$pointer = fopen('data/messages/webchat.txt', 'a+');
+	$text = '<div style="border:1px solid black;">'.$name.'<div style="background-color:gray;">'.$message.'</div></div>';
+	echo fwrite($pointer, $text);
+} else {
+	echo false;
+}
 ?>
