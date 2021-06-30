@@ -1,4 +1,6 @@
 # Weekly D3 Forum Software
+**WARNING: DO NOT INSTALL WITH THE REPO CODE. DOWNLOAD A STABLE RELEASE INSTEAD. DEV VERSION IS VERY UNSTABLE.**
+
 I hope you enjoy it! I had fun developing it, and you can have fun chatting.
 ## Installation
 1. Upload all files to the Web server.
