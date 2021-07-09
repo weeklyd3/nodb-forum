@@ -1,19 +1,21 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"] . '/libraries/lib.php');
 error_reporting(0);
-echo '<table style="width:100%; position:sticky; top:0; background-color:blue;z-index:1;">';
+echo '<table style="width:100%; position:sticky; top:0; background-color:blue;z-index:10;">';
 function getname() {
 	$COOK = $_COOKIE['login'];
 	$STATS = explode("\0", $COOK);
 	$path = cleanFilename($STATS[0]);
 	$path = $_SERVER['DOCUMENT_ROOT'].'/data/accounts/'.$path;
 	$hash = file_get_contents($path . '/psw.txt');
-	if (password_verify($STATS[1], $hash)) {
-		$match = true;
-	} else {
-		header('Location: ./../invalidpass.php');
+	if ($COOK != '') {
+		if (password_verify($STATS[1], $hash)) {
+			$match = true;
+		} else {
+			//header('Location: ./../invalidpass.php');
+		}
+		return $STATS[0];
 	}
-	return $STATS[0];
 }
 echo "<tr><td><h1 style=\"display:inline;\"><span id=\"menubutton\" style=\"cursor:pointer;\">☰</span> <a style=\"text-decoration:none !important;\" href=\"./\"><img alt=\"Forum Logo\" src=\"./img/logo.png\" />Forums <small><small>Beta</small></small></a></h1></td>";
 $login = $_COOKIE['login'];
@@ -27,9 +29,9 @@ if ($login == "") {
 }
 echo "</table>";
 ?>
-<div id="menu" style="max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#00dddd; display:none; position:fixed; top:0; left:0; overflow-y:scroll;">
+<div id="menu" style="resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#00dddd; display:none; position:fixed; top:0; left:0; overflow-y:scroll;">
+<p id="drag" style="text-align:right;cursor:move;"><span style="text-align:left;">Menu</span> <span onclick="document.getElementById('menu').style.display='none';" style="cursor:pointer;">&times;</span></p>
 <ul style="list-style:none; padding:7px;">
-<p style="text-align:right;"><span style="text-align:left;">Menu</span> <span onclick="document.getElementById('menu').style.display='none';" style="cursor:pointer;">&times;</span></p>
 <li><a href="./">Home</a></li>
 <li><a href="./webchat.php">Chat room</a></li>
 <br>
@@ -46,7 +48,8 @@ $link = 'Location: ';
 $link .= $_SERVER['HTTP_HOST'];
 $link .= $_SERVER['REQUEST_URI'];
 echo $link;
-?></em></center>
+?><br><br>
+<strong><a href="javascript:;" onclick="document.getElementById('menu').setAttribute('style', 'resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#00dddd; display:block; position:fixed; top:0; left:0; overflow-y:scroll;');">Reset menu position</a></strong></em></center>
 </div>
 <script>
 document.getElementById('menubutton').addEventListener('click', function() {
@@ -61,4 +64,58 @@ window.addEventListener('click', function(e) {
 	  document.getElementById('menu').style.display = 'none';
   }
 });
+	function makeDraggable(dragHandle, dragTarget) {
+  let dragObj = null; //object to be moved
+  let xOffset = 0; //used to prevent dragged object jumping to mouse location
+  let yOffset = 0;
+
+  document.querySelector(dragHandle).addEventListener("mousedown", startDrag, true);
+  document.querySelector(dragHandle).addEventListener("touchstart", startDrag, true);
+
+  /*sets offset parameters and starts listening for mouse-move*/
+  function startDrag(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    dragObj = document.querySelector(dragTarget);
+    dragObj.style.position = "absolute";
+    let rect = dragObj.getBoundingClientRect();
+
+    if (e.type=="mousedown") {
+      xOffset = e.clientX - rect.left; //clientX and getBoundingClientRect() both use viewable area adjusted when scrolling aka 'viewport'
+      yOffset = e.clientY - rect.top;
+      window.addEventListener('mousemove', dragObject, true);
+    } else if(e.type=="touchstart") {
+      xOffset = e.targetTouches[0].clientX - rect.left;
+      yOffset = e.targetTouches[0].clientY - rect.top;
+      window.addEventListener('touchmove', dragObject, true);
+    }
+  }
+
+  /*Drag object*/
+  function dragObject(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if(dragObj == null) {
+      return; // if there is no object being dragged then do nothing
+    } else if(e.type=="mousemove") {
+      dragObj.style.left = e.clientX-xOffset +"px"; // adjust location of dragged object so doesn't jump to mouse position
+      dragObj.style.top = e.clientY-yOffset +"px";
+    } else if(e.type=="touchmove") {
+      dragObj.style.left = e.targetTouches[0].clientX-xOffset +"px"; // adjust location of dragged object so doesn't jump to mouse position
+      dragObj.style.top = e.targetTouches[0].clientY-yOffset +"px";
+    }
+  }
+
+  /*End dragging*/
+  document.onmouseup = function(e) {
+    if (dragObj) {
+      dragObj = null;
+      window.removeEventListener('mousemove', dragObject, true);
+      window.removeEventListener('touchmove', dragObject, true);
+    }
+  }
+}
+
+makeDraggable("#drag", "div");
 </script>
