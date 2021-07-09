@@ -3,6 +3,7 @@
 	<base href="../" />
     <title>Log In</title>
 	<?php
+	ob_start();
  include '../public/header.php';
  include '../styles/inject.php';
  if ($_POST['c'] == 'login') {
@@ -17,7 +18,6 @@
 		if (password_verify($PASS, $hash)) {
 			$COOK = $USER . "\0" . $PASS;
 			setcookie('login', $COOK, time() + 72000, '/');
-			$_COOKIE['login'] = $COOK;
 			echo "<script>location.href='/';</script>";
 		} else {
 			echo "Bad password!<br>";
