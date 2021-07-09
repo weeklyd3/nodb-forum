@@ -9,13 +9,11 @@
   <body>
     <?php 
 	$login = $_COOKIE['login'];
-	if ($login == "") {
-		echo "<center><h2>You are not logged in. You may still browse the chat rooms in read-only mode.</h2></center>";
-	} else {
+	if ($login != "") {
 		echo "Welcome, ".htmlspecialchars(getname())."! We're glad to have you. Choose a room to join:";
+	} else {
+		echo "You are not logged in. You will not be able to post any messages.";
 	}
-	?> 
-	<?php
 	include('./public/footer.php');
 	?>
   </body>

@@ -1,5 +1,8 @@
 <?php
 include($_SERVER["DOCUMENT_ROOT"] . '/libraries/lib.php');
+if (!file_exists($_SERVER['DOCUMENT_ROOT']."/config.json")) {
+	header("Location: /app/install.php");
+}
 error_reporting(0);
 echo '<table style="width:100%; position:sticky; top:0; background-color:blue;z-index:10;">';
 function getname() {
@@ -17,7 +20,8 @@ function getname() {
 		return $STATS[0];
 	}
 }
-echo "<tr><td><h1 style=\"display:inline;\"><span id=\"menubutton\" style=\"cursor:pointer;\">☰</span> <a style=\"text-decoration:none !important;\" href=\"./\"><img alt=\"Forum Logo\" src=\"./img/logo.png\" />Forums <small><small>Beta</small></small></a></h1></td>";
+$object = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT']."/config.json"));
+echo "<tr><td><h1 style=\"display:inline;\"><span id=\"menubutton\" style=\"cursor:pointer;\">☰</span> <a style=\"text-decoration:none !important;\" href=\"./\"><img alt=\"Forum Logo\" src=\"./img/logo.png\" />".$object->forumtitle."</a></h1></td>";
 $login = $_COOKIE['login'];
 echo '<td><a href="explorer/">source code</a></td>';
 if ($login == "") {
