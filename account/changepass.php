@@ -1,4 +1,22 @@
-<html>
+<?php
+/*
+    Forum Software
+    Copyright (C) 2021 weeklyd3
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+?><html>
   <head>
     <base href="../" />
     <title>Forums &mdash; Change Account Name</title>
@@ -15,7 +33,7 @@
 			echo '<strong>WARNING: The passwords are hashed, so we can&apos;t recover it if you lose it!</strong><br><form action="'. $_SERVER['PHP_SELF'].'" method="post"><input type="checkbox" required="required" id="confirm" />&nbsp;&nbsp;<label for="confirm">I know that.</label><input type="hidden" name="pages" value="confirm" /><br><input type="submit" value="Next >" /></form>';
 		} if ($_POST['pages'] == 'confirm') {
 			echo "<h2>Confirm access</h2>";
-			echo '<br><form method="post" action="'.$_SERVER['PHP_SELF'].'"><label for="pass">Existing password: </label><input type="password" name="psw" required="required" id="pass" /> <input type="hidden" value="verify" name="pages" /><input type="submit" value="Continue" /></form>';
+			echo '<br><form method="post" action="'.$_SERVER['PHP_SELF'].'"><label for="pass">Existing password: </label><input type="password" name="psw" id="pass" /> <input type="hidden" value="verify" name="pages" /><input type="submit" value="Continue" /></form>';
 		}
 		if ($_POST['pages'] == 'verify') {
 			$psw = $_POST['psw'];

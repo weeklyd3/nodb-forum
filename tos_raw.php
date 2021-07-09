@@ -1,4 +1,22 @@
 <?php
+/*
+    Forum Software
+    Copyright (C) 2021 weeklyd3
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+?><?php
 echo '<p> - This is a <i>forum</i>. This has user-submitted content. <i>You</i> are responsible for what you do, and other people are responsible for what they do.</p>';
 echo '<p> - User content is licensed under the <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>. By signing up, you agree to those terms.</p>';
 echo '<p> - You must give attribution as said by the license to the user who posted the message. Otherwise, you violate the license.</p>';
