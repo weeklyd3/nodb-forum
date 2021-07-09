@@ -10,7 +10,6 @@
   <body>
   <form action="account/signup.php" method="post">
 	<?php
-	include('../libraries/lib.php');
 	$page = $_POST['page'];
 	if ($page == "1") {
 		echo '<script>function change(){if(document.getElementById("psw").type=="password"){document.getElementById("psw").type="text";}else{document.getElementById("psw").type="password";}}</script>';

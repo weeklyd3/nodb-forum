@@ -3,7 +3,6 @@
 	<base href="../../" />
     <title>Source Code Examiner</title>
 	<?php
-	include('../libraries/lib.php');
 	include('../public/header.php');
 	include('../styles/inject.php');
 	/* $loc = $_SERVER['PHP_SELF'];

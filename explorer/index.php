@@ -3,7 +3,6 @@
 	<base href="../../" />
     <title>File Viewer</title>
 	<?php
-	include('../libraries/lib.php');
 	include('../public/header.php');
 	include('../styles/inject.php');
 	/* $loc = $_SERVER['PHP_SELF'];
@@ -29,7 +28,7 @@ if ($handle = opendir(getcwd() . '/../' . $url)) {
 	/* This is the correct way to loop over the directory. */
 	while (false !== ($entry = readdir($handle))) {
 		if ($entry != ".." && $entry != ".") {
-			echo "<li><a href=\"./explorer/?address=".$_GET['address']."$entry/\">$entry</a> (<a href=\"".$_GET['address']."".$entry."\" target=\"_blank\">open raw</a>) (<a href=\"./explorer/viewsource.php?address=".$_GET['address']."/".$entry."\">view source</a>)</li>";
+			echo "<li><a href=\"./explorer/?address=".$_GET['address']."$entry/\">$entry</a> (<a href=\"".$_GET['address']."".$entry."\" target=\"_blank\">open raw</a>) (<a href=\"./explorer/viewsource.php?address=".$_GET['address'].$entry."\">view source</a>)</li>";
 		}
 	}
 
