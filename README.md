@@ -1,8 +1,16 @@
 # Weekly D3 Forum Software
+
 **WARNING: DO NOT INSTALL WITH THE REPO CODE. DOWNLOAD A STABLE RELEASE INSTEAD. DEV VERSION IS VERY UNSTABLE.**
+
+## Updates
+**7/8/2021**: Relicensed as AGPL.
+
+**7/8/2021**: E_ERROR fixed, repo code is usuable. (But that doesn't make us like downloading repo code more!)
 
 I hope you enjoy it! I had fun developing it, and you can have fun chatting.
 ## Installation
+**Note**: You need to be logged in as `admin` for administrator functions such as uninstallation.
+
 1. Upload all files to the Web server.
 2. Save the files (if needed).
 3. Visit the Web site that you are uploading to. If you do not have a Web site, you can copy it onto your computer and run 
