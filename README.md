@@ -3,6 +3,8 @@
 **WARNING: DO NOT INSTALL WITH THE REPO CODE. DOWNLOAD A STABLE RELEASE INSTEAD. DEV VERSION IS VERY UNSTABLE.**
 
 ## Updates
+**7/8/2021**: Relicensed as AGPL.
+
 **7/8/2021**: E_ERROR fixed, repo code is usuable. (But that doesn't make us like downloading repo code more!)
 
 I hope you enjoy it! I had fun developing it, and you can have fun chatting.
