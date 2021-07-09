@@ -9,6 +9,8 @@
 
 I hope you enjoy it! I had fun developing it, and you can have fun chatting.
 ## Installation
+**Note**: You need to be logged in as `admin` for administrator functions such as uninstallation.
+
 1. Upload all files to the Web server.
 2. Save the files (if needed).
 3. Visit the Web site that you are uploading to. If you do not have a Web site, you can copy it onto your computer and run 
