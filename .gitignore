@@ -1,0 +1,13 @@
+# Use this .gitignore file to track
+# files that are in the repository but
+# should not be published.
+#
+# config.json is one of them, since installation
+# generates it automatically:
+
+config.json
+
+# I sometimes change .replit, so let's ignore
+# it for the Repl.it users.
+
+.replit
