@@ -1,7 +1,7 @@
 <?php
 /*
     Forum Software
-    Copyright (C) 2021 contributors
+    Copyright (C) 2021 weeklyd3
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -63,7 +63,7 @@ echo "</table>";
 <br>
 <li><a href="./data/messages/webchat.txt">Chat messages - raw</a></li>
 <li><a href="./explorer">File Explorer</a></li>
-<li><a href="https://github.com/contributors/nodb-forum">GitHub repository</a></li>
+<li><a href="https://github.com/weeklyd3/nodb-forum">GitHub repository</a></li>
 </ul>
 <center style="word-break:break-all;"><em><?php
 $link = 'Location: ';
