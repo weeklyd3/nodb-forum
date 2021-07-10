@@ -1,7 +1,7 @@
 <?php
 /*
     Forum Software
-    Copyright (C) 2021 weeklyd3
+    Copyright (C) 2021 contributors
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -32,7 +32,7 @@
 	?>
 	<h1>Install!</h1>
 	<p>It looks like your discussion board has not been set up yet! That's fine, you can set it up by completing the form below.</p>
-	<p>If you think you already installed the software and you see this screen after reloading, there's something wrong with the installation. Please open an issue on GitHub: weeklyd3/nodb-forum.</p>
+	<p>If you think you already installed the software and you see this screen after reloading, there's something wrong with the installation. Please open an issue on GitHub: contributors/nodb-forum.</p>
 	<form action="app/welcome.php" method="post">
 	<label for="title">Type the title:</label>
 	<input type="text" id="title" name="title" required="required" value="Forums &lt;small&gt;Beta&lt;/small&gt;" size="35"/>
