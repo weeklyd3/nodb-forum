@@ -1,8 +1,9 @@
 name: New-Themed Bug Report
 description: Step by step bug report
 title: "[Bug]: "
-labels: 
+labels: bug
 assignees:
+  -
 body:
   - type: markdown
     attributes:
