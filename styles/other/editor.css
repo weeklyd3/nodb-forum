@@ -21,4 +21,6 @@
 [contenteditable="true"] * {
 	font-family:inherit;
 	font-size:inherit;
+	background-color:inherit !important;
+	color:inherit !important;
 }

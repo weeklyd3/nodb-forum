@@ -25,13 +25,15 @@ input {
     font-family: -apple-system, Tahoma, Verdana, sans-serif;
     /* Default font size. Editor can 
 	override this. */
-    font-size: 17px;
+    font-size: 17;
 }
 /* sync with system selection color */
 ::selection {
     background-color: Highlight;
 }
-body {
+body, html {
+	margin:3px;
+	padding:0;
  color:white;
 background: rgb(69,183,212);
 background: -moz-linear-gradient(0deg, rgba(69,183,212,1) 50%, rgba(12,227,227,1) 100%);
@@ -63,11 +65,14 @@ input[type="button"],
 input[type="submit"],
 input[type="reset"],
 input[type="password"],
-select {
+input[type="search"],
+select,
+textarea {
     background-color: white;
     border: 1px solid black;
     transition: background-color 0.3s;
     padding: 7px;
+	font-size:inherit;
 }
 button:hover,
 input[type="button"]:hover,
@@ -76,7 +81,8 @@ input[type="reset"]:hover {
     background-color: Highlight;
 }
 input[type="text"],
-input[type="color"] {
+input[type="color"],
+input[type="search"] {
     padding: 7px;
     border: 1px solid black;
 }
@@ -113,4 +119,32 @@ input[type="checkbox"]:disabled {
   border-color: black;
   background: #ddd;
   color: gray;
+}
+.gallery {
+	margin:2px;
+	border-radius: 10px;
+	background-color: white;
+	color: black;
+}
+blockquote {
+	border-left: 4px solid;
+	padding-left: 10px;
+}
+kbd {
+	font-family: inherit;
+	border:1px solid;
+	box-shadow: 2px 2px 0px 0px gray;
+	border-radius: 2px;
+	padding:1px;
+}
+.message {
+	font-size:17;
+	font-family: -apple-system, Tahoma, Verdana, sans-serif !important;
+	background-color:inherit !important;
+	color:inherit !important;
+}
+@media screen and (max-width: 600px) {
+    #titleText {
+		display: none;
+	}
 }
