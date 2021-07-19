@@ -5,6 +5,8 @@
 Use this section to tell people about which versions of your project are
 currently being supported with security updates.
 
+**Out of date versions will not have coverage by security policies.**
+
 | Version | Supported          | Comment                                 |
 | ------- | ------------------ | --------------------------------------- |
 | 0.0.2   | :white_check_mark: | none                                    |
