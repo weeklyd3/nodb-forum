@@ -16,13 +16,15 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><?php
+?>
+<table id="header" style="width:100%; position:sticky; top:0; background-color:blue;z-index:10;">
+<tr><td><h1 style="display:inline;"><span id="menubutton" style="cursor:pointer;">☰</span> <a style="text-decoration:none !important;" href="./"><img alt="Forum Logo" src="./img/logo.png" /><span id="TitleText">
+<?php
 include($_SERVER["DOCUMENT_ROOT"] . '/libraries/lib.php');
 if (!file_exists($_SERVER['DOCUMENT_ROOT']."/config.json")) {
 	header("Location: /app/install.php");
 }
 error_reporting(0);
-echo '<table style="width:100%; position:sticky; top:0; background-color:blue;z-index:10;">';
 function getname() {
 	$COOK = $_COOKIE['login'];
 	$STATS = explode("\0", $COOK);
@@ -33,23 +35,22 @@ function getname() {
 		if (password_verify($STATS[1], $hash)) {
 			$match = true;
 		} else {
-			//header('Location: ./../invalidpass.php');
+			header('Location: '.$SERVER['DOCUMENT_ROOT'].'/invalidpass.php');
 		}
 		return $STATS[0];
 	}
 }
 $object = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT']."/config.json"));
-echo "<tr><td><h1 style=\"display:inline;\"><span id=\"menubutton\" style=\"cursor:pointer;\">☰</span> <a style=\"text-decoration:none !important;\" href=\"./\"><img alt=\"Forum Logo\" src=\"./img/logo.png\" />".$object->forumtitle."</a></h1></td>";
+echo $object->forumtitle."</span></a></h1></td>";
 $login = $_COOKIE['login'];
 echo '<td><a href="explorer/">source code</a></td>';
 if ($login == "") {
 	echo '<td><a href="account/signup.php">sign up</a></td>';
 	echo '<td><a href="account/login.php">log in</a></td>';
 } else {
-	echo '<td>Logged in as: '.htmlspecialchars(getname()).'</td>';
-	echo '<td><a href="webchat.php">web chat</a> (<a href="account/">Account Options</a> | <a href="account/logout.php">log out</a>)</td>';
+	echo '<td>'.htmlspecialchars(getname()).'</td>';
+	echo '<td><a href="webchat.php">web chat</a> (<a href="account/">Account Options</a> | <a href="account/logout.php">log out</a>)</td></tr>';
 }
-echo "</table>";
 ?>
 <tr><td>&nbsp;</td><td align="right"><form action="search.php" method="GET"> <input type="search" id="query" name="query" placeholder="search rooms" /> <input type="submit" value=">" /></form></td><td></td></tr>
 </table>
@@ -73,7 +74,6 @@ $link .= $_SERVER['HTTP_HOST'];
 $link .= $_SERVER['REQUEST_URI'];
 echo $link;
 ?><br><br>
-<strong><a href="javascript:;" onclick="document.getElementById('menu').setAttribute('style', 'resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#00dddd; display:block; position:fixed; top:0; left:0; overflow-y:scroll;');">Reset menu position</a></strong></em></center>
 <strong><a href="javascript:;" onclick="document.getElementById('menu').setAttribute('style', 'resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#e2ccf5; display:block; position:fixed; top:0; left:0; overflow-y:scroll;');">Reset menu position</a></strong></em></center>
 </div>
 <script>
