@@ -28,10 +28,11 @@
     <?php 
 	$login = $_COOKIE['login'];
 	if ($login != "") {
-		echo "Welcome, ".htmlspecialchars(getname())."! We're glad to have you. Choose a room to join:";
+		echo "Welcome, ".htmlspecialchars(getname()).'! We&apos;re glad to have you. Choose a room to join. (<a href="create.php">new topic</a>)';
 	} else {
 		echo "You are not logged in. You will not be able to post any messages.";
 	}
+	include('./libraries/listroom.php');
 	include('./public/footer.php');
 	?>
   </body>

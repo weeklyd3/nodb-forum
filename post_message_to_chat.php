@@ -16,15 +16,28 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><?php
-header('Content-Type: text/plain');
-$message = htmlspecialchars($_POST['message']);
+header('Content-Type: application/json');
+include('./libraries/lib.php');
+$message = removeScriptTags($_POST['message']);
+$room = $_POST['room'];
 $name = $_POST['login'];
 if ($name) {
-	$pointer = fopen('data/messages/webchat.txt', 'a+');
-	$text = '<div style="border:1px solid black;">'.$name.'<div style="background-color:gray;">'.$message.'</div></div>';
-	echo fwrite($pointer, $text);
+	$pointer = fopen('data/messages/'.cleanFilename($room).'/webchat.txt', 'a+');
+	if (!file_exists('data/messages/'.cleanFilename($room).'/webchat.txt')) {
+		touch('data/messages/'.cleanFilename($room).'/webchat.txt', 0777);
+	}
+	putenv("TZ=UTC");
+	$time = date("h:i:s m/d/20y");
+	$time.=' UTC';
+	$time = substr($time, 0, 23);
+	$text = '<div style="border:1px solid black;">'.$name.' on '.$time.'<br /><span class="message" style="background-color:gray;font-family:inherit;font-size:17;background-color:transparent !important;color:white !important;">'.$message.'</span></div>';
+	$write = fwrite($pointer, $text);
+	if ($write) {
+		echo '{"status":true}';
+	} else {
+		echo '{"status":null}';
+	}
 } else {
-	echo false;
+	echo '{"status":false}';
 }
 ?>

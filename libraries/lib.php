@@ -31,4 +31,20 @@ function cleanFilename($stuff) {
 	$cleaned = str_replace($illegal,$legal,$stuff);
 	return $cleaned;
 }
+function removeScriptTags($html) {
+	$doc = new DOMDocument;
+
+	$doc->loadHTML($html);
+
+	$script_tags = $doc->getElementsByTagName('script');
+
+	$length = $script_tags->length;
+
+	for ($i = 0; $i < $length; $i++) {
+		$script_tags->item($i)->parentNode->removeChild($script_tags->item($i));
+	}
+
+	$no_script_html_string = $doc->saveHTML();
+	return $no_script_html_string;
+}
 ?>
