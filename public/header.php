@@ -51,7 +51,9 @@ if ($login == "") {
 }
 echo "</table>";
 ?>
-<div id="menu" style="resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#00dddd; display:none; position:fixed; top:0; left:0; overflow-y:scroll;">
+<tr><td>&nbsp;</td><td align="right"><form action="search.php" method="GET"> <input type="search" id="query" name="query" placeholder="search rooms" /> <input type="submit" value=">" /></form></td><td></td></tr>
+</table>
+<div id="menu" style="resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#e2ccf5; display:none; position:fixed; top:0; left:0; overflow-y:scroll;">
 <p id="drag" style="text-align:right;cursor:move;"><span style="text-align:left;">Menu</span> <span onclick="document.getElementById('menu').style.display='none';" style="cursor:pointer;">&times;</span></p>
 <ul style="list-style:none; padding:7px;">
 <li><a href="./">Home</a></li>
@@ -72,6 +74,7 @@ $link .= $_SERVER['REQUEST_URI'];
 echo $link;
 ?><br><br>
 <strong><a href="javascript:;" onclick="document.getElementById('menu').setAttribute('style', 'resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#00dddd; display:block; position:fixed; top:0; left:0; overflow-y:scroll;');">Reset menu position</a></strong></em></center>
+<strong><a href="javascript:;" onclick="document.getElementById('menu').setAttribute('style', 'resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#e2ccf5; display:block; position:fixed; top:0; left:0; overflow-y:scroll;');">Reset menu position</a></strong></em></center>
 </div>
 <script>
 document.getElementById('menubutton').addEventListener('click', function() {
