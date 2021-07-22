@@ -26,7 +26,7 @@
 	?>
   </head>
   <body>
-  <form action="account/signup.php" method="post">
+  <form action="account/signup.php" method="post" enctype="multipart/form-data">
 	<?php
 	$page = $_POST['page'];
 	if ($page == "1") {
@@ -44,50 +44,84 @@
 		echo '&nbsp;&nbsp;';
 		echo '<button type="button" onclick="change()">Show/Hide Password</button>';
 		echo '<br><br>';
+		echo '<label for="date">When did you turn 20?&nbsp;</label>';
+		include('../files/date.php');
+		echo '<br><br>';
+		echo '<label for="image">Profile picture (100x100 is best): </label>';
+		echo '<input type="file" accept="image/png" name="image" id="image" />';
+		echo '<br><br>';
 		echo '<input type="submit" value="Continue" />';
 	} else if ($page == "2") {
 		$PASSWORD = $_POST['psw'];
 		$USER = $_POST['usr'];
 		$directory = cleanFilename($USER);
 		if (!(file_exists('../data/accounts/'.$directory.'/user.txt'))) {
-			echo "<center><h2>Hi, @".htmlspecialchars($USER)."! Just a second...</h2>";
-			echo "<h3>We're setting up your account. This may take a long time. Please do not close this window, as all data will be lost if you do so. Thank you.</h3></center>";
-			$hash = password_hash($PASSWORD, PASSWORD_DEFAULT);
-			if (!$hash) {
-				echo "Password hash not created. Try reloading.";
+			$now = new DateTime('now');
+			$twenty = new DateTime($_POST['date']);
+			$diff = $twenty->diff($now);
+			$years = $diff->y + 1;
+			if ($years > 30) {
+				echo "You are underage. You have to be at least 9 years of age to continue.";
 			} else {
-				echo "Password hash created.";
+				echo "<center><h2>Hi, @".htmlspecialchars($USER)."! Just a second...</h2>";
+				echo "<h3>We're setting up your account. This may take a long time. Please do not close this window, as all data will be lost if you do so. Thank you.</h3></center>";
+				$hash = password_hash($PASSWORD, PASSWORD_DEFAULT);
+				if (!$hash) {
+					echo "Password hash not created. Try reloading.";
+				} else {
+					echo "Password hash created.";
+				}
+				$illegal = array(" ","?","/","\\","*","|","<",">",'"');
+				// legal characters
+				$legal = array("-","_","_","_","_","_","_","_","_");
+				$directory = str_replace($illegal,$legal,$USER);
+				$fullname = '../data/accounts/'.$directory;
+				$dirstatus = mkdir('../data/accounts/'.$directory, 0777, true);
+				if ($dirstatus) {
+					echo "<br>Your personal directory was created.";
+				} else {
+					echo "<br>Bad bad bad. Your personal directory was not created.";
+				}
+				if ($_FILES['image']['name'] != '' && $_FILES['image']['size'] < 4538) {
+					$uploaddir = __DIR__ . '/../data/accounts/'.cleanFilename($USER).'/';
+					$uploadfile = $uploaddir . basename($_FILES['image']['name']);
+
+					echo '<pre>';
+					if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile)) {
+						echo "Avatar is valid, and was successfully uploaded. ";
+						rename('../data/accounts/'.cleanFilename($USER).'/'.$_FILES['image']['name'], '../data/accounts/'.cleanFilename($USER).'/avatar.png');
+					} else {
+						echo "Possible file upload attack!\n";
+					}
+
+					echo '<details><summary>Here is some more debugging info:</summary>';
+					echo var_dump($_FILES);
+
+					print "</details></pre>";
+				} else {
+					$avatar = fopen('../data/accounts/'.cleanFilename($USER).'/avatar.png', 'w+');
+					fwrite($avatar, file_get_contents('../data/accounts/default.png'));
+				}
+				$hashfile = fopen($fullname . "/psw.txt", 'w+');
+				$hashwrite = fwrite($hashfile, $hash);
+				fclose($hashfile);
+				if ($hashwrite) {
+					echo "<br>Hash file generated.";
+				} else {
+					echo "<br>Houston, we have a really serious problem... We can't write the hash!";
+				}
+				$userfile = fopen($fullname . "/user.txt", 'w+');
+				$userwrite = fwrite($userfile, $USER);
+				fclose($userfile);
+				if ($userwrite) {
+					echo "<br>Account registration completed.";
+				} else {
+					echo "<br>This is <em>really</em> serious. Start again. Thanks!";
 			}
-			$illegal = array(" ","?","/","\\","*","|","<",">",'"');
-			// legal characters
-			$legal = array("-","_","_","_","_","_","_","_","_");
-			$directory = str_replace($illegal,$legal,$USER);
-			$fullname = '../data/accounts/'.$directory;
-			$dirstatus = mkdir('../data/accounts/'.$directory, 0777, true);
-			if ($dirstatus) {
-				echo "<br>Your personal directory was created.";
-			} else {
-				echo "<br>Bad bad bad. Your personal directory was not created.";
-			}
-			$hashfile = fopen($fullname . "/psw.txt", 'w+');
-			$hashwrite = fwrite($hashfile, $hash);
-			fclose($hashfile);
-			if ($hashwrite) {
-				echo "<br>Hash file generated.";
-			} else {
-				echo "<br>Houston, we have a really serious problem... We can't write the hash!";
-			}
-			$userfile = fopen($fullname . "/user.txt", 'w+');
-			$userwrite = fwrite($userfile, $USER);
-			fclose($userfile);
-			if ($userwrite) {
-				echo "<br>Account registration completed.";
-			} else {
-				echo "<br>This is <em>really</em> serious. Start again. Thanks!";
-			}
-		} else {
-			echo "Username is taken";
 		}
+		} else {
+			echo 'Username is taken';
+		} 
 	} else if ($page != "1" && $page != "2") {
 		echo '<center><h2>Welcome: This is step one of three.</h2>';
 		echo "<h3>Please read this information, then state if you agree with it.</h3></center>";

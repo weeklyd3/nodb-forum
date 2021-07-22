@@ -28,11 +28,14 @@
 	if ($room == "") {
 		echo 'You haven\'t specified a room. Here are the available options. If you can\'t find a good room, <a href="create.php">create one.</a>';
 		include('libraries/listroom.php');
+		include('public/footer.php');
 		echo '<!--';
+		exit(0);
 	}
 	if (!file_exists('data/messages/'.cleanFilename($GLOBALS['room']).'/webchat.txt')) {
-		echo "No such room, <a href=\"create.php\">create one?</a><!--";
+		echo "No such room, <a href=\"create.php\">create one?</a>";
 		include('public/footer.php');
+		exit(0);
 	}
 	?>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -40,105 +43,107 @@
   <body>
 <script>window.scrollTo(0,document.body.scrollHeight);
 function update() {
-	var exist = document.getElementById('message').innerHTML;
+    var exist = document.getElementById("message").innerHTML;
+	console.log(typeof(exist), " ", exist.length);
     let xhr = new XMLHttpRequest();
-
     xhr.open("GET", "data/messages/<?php echo cleanFilename($GLOBALS['room']); ?>/webchat.txt");
-
     xhr.send();
-
     xhr.onload = function () {
         if (xhr.status != 200) {
-            document.getElementById('status').innerHTML=(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+            document.getElementById("status").innerHTML = `Error ${xhr.status}:${xhr.statusText}`;
         } else {
-			var pos = [window.scrollX, window.scrollY];
-			if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-				globalThis.bottom = true;
-			} else {
-				globalThis.bottom = false;
-			}
-            document.getElementById('status').innerHTML=(`<strong>Finished refresh</strong> Done, got ${xhr.response.length} bytes`);
-			var text = xhr.responseText;
-			document.getElementById('message').innerHTML = text;
-			window.scrollTo(0, 0);
-			window.scrollTo(pos[0], pos[1]);
-			if (window.bottom) {
-				window.scrollTo(0,document.body.scrollHeight);
-			}
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                globalThis.bottom = true;
+            } else {
+                globalThis.bottom = false;
+            }
+            document.getElementById("status").innerHTML = `<strong>Finished refresh</strong> Done,got ${xhr.response.length} bytes`;
+            var text = xhr.response;
+            if (text !== exist) {
+                document.getElementById("message").innerHTML = text;
+            } else {
+                document.getElementById("status").innerHTML = "The same.";
+            }
+            if (window.bottom) {
+                window.scrollTo(0, document.body.scrollHeight);
+            }
         }
     };
-
     xhr.onprogress = function (event) {
         if (event.lengthComputable) {
-            document.getElementById('status').innerHTML=(`Received ${event.loaded} of ${event.total} bytes`);
+            document.getElementById("status").innerHTML = `Received ${event.loaded}of ${event.total}bytes`;
         } else {
-            document.getElementById('status').innerHTML=(`Received ${event.loaded} bytes`); // no Content-Length
+            document.getElementById("status").innerHTML = `Received ${event.loaded}bytes`;
         }
     };
-
     xhr.onerror = function () {
-        document.getElementById('status').innerHTML=("Request failed");
+        document.getElementById("status").innerHTML = "Request failed";
     };
 }
-
 function post() {
-	if (document.getElementById('messages').textContent) {
-		document.getElementById('status').innerHTML='Sending message. Hold tight...';
-		// 1. Create a new XMLHttpRequest object
-		let xhr = new XMLHttpRequest();
-
-		// 2. Configure it: GET-request for the URL /article/.../load
-		xhr.open("POST", "post_message_to_chat.php");
-		var data = new FormData(document.getElementById('compose'));
-		// 3. Send the request over the network
-		xhr.send(data);
-
-		// 4. This will be called after the response is received
-		xhr.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				document.getElementById('messages').innerHTML="";
-				document.getElementById('status').innerHTML = 'Sent!'
-				update();
-			}
-		};
-	} else {
-		document.getElementById('status').innerHTML='<span style="color:red;"><strong>Refusing to send because it&apos;s empty.</strong></span>';
-	}
+    if (document.getElementById("messages").value) {
+        document.getElementById("status").innerHTML = "Sending message. Hold tight...";
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "post_message_to_chat.php");
+        var data = new FormData(document.getElementById("compose"));
+        xhr.send(data);
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("messages").value = "";
+                document.getElementById("status").innerHTML = "Sent!";
+                update();
+            }
+        };
+    } else {
+        document.getElementById("status").innerHTML = '<span style="color:red;"><strong>Your post has no text, try adding some.</strong></span>';
+    }
 }
 var refresh = setInterval(update, 1000);
 function insertAtCursor(myField, myValue) {
-    //IE support
     if (document.selection) {
         myField.focus();
-        sel = document.selection.createRange();
+        var sel = document.selection.createRange();
         sel.text = myValue;
-    }
-    //MOZILLA and others
-    else if (myField.selectionStart || myField.selectionStart == '0') {
+    } else if (myField.selectionStart || myField.selectionStart == "0") {
         var startPos = myField.selectionStart;
         var endPos = myField.selectionEnd;
-        myField.value = myField.value.substring(0, startPos)
-            + myValue
-            + myField.value.substring(endPos, myField.value.length);
+        myField.value = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
     } else {
         myField.value += myValue;
     }
 }
-enterPressed = function(event) {
-	var x = document.querySelector('input[type=radio]:checked');
-	if (event.keyCode == 13 && !event.shiftKey && x == document.getElementById('quick')) {
-		post(); 
-		event.preventDefault();
-		return false; 
-	}
-	if (x == document.getElementById('quick')) {
-		if (event.keyCode == 13 && !event.shiftKey) {
-			post(); 
-			event.preventDefault();
-			return false; 
+function preview() {
+	document.getElementById("status").innerHTML = "Previewing message. Hold tight...";
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", "libraries/parsemd.php");
+	var data = new FormData(document.getElementById("compose"));
+	xhr.send(data);
+	xhr.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+			document.getElementById('messages').style.display = 'none';
+			document.getElementById('previewHTML').innerHTML = xhr.responseText + '<br /><button type="button" onclick="document.getElementById(\'previewHTML\').style.display = \'none\'; document.getElementById(\'messages\').style.display = \'inline-block\';">hide preview</button>';
+			document.getElementById('previewHTML').style.display = 'block';
+			document.getElementById("status").innerHTML = "Preview finished rendering!";
+			update();
 		}
-	}
+	};
 }
+var enterPressed = function (event) {
+    var x = document.querySelector("input[type=radio]:checked");
+    if (event.keyCode == 13 && !event.shiftKey && x == document.getElementById("quick")) {
+        post();
+        event.preventDefault();
+        return false;
+    }
+    if (x == document.getElementById("quick")) {
+        if (event.keyCode == 13 && !event.shiftKey) {
+            post();
+            event.preventDefault();
+            return false;
+        }
+    }
+};
+
 </script><div id="message" style="font-family:inherit;"><?php echo file_get_contents('data/messages/'.cleanFilename($GLOBALS['room']).'/webchat.txt'); ?></div>
 	<details style="position:sticky; bottom:0; background-color:lightblue; max-height:75%;" open="open">
 	<summary style="list-style: none;">Reply</summary>
@@ -149,9 +154,11 @@ enterPressed = function(event) {
 	<span><input type="radio" name="mode" id="nonquick" />
 	<label for="nonquick">Detailed chat (click send = send)</label></span>
 	<br />
-	<label for="messages">message (no spam please)</label><br>
-	<div required="required" contenteditable="<?php if ($_COOKIE['login']==''){echo 'false'; }else{echo 'true';}?>" onkeydown="enterPressed(event);document.getElementById('messageText').value=this.innerHTML;" onkeyup="document.getElementById('messageText').value=this.innerHTML" onmousedown="document.getElementById('messageText').value=this.innerHTML" onmouseup="document.getElementById('messageText').value=this.innerHTML" id="messages" style="width:calc(100% - 10);height:7em;margin:5px;border:1px solid;padding:7px;overflow-y:scroll;" placeholder="Type here"></div>
-	<textarea required="required" rows="7" <?php if ($_COOKIE['login']==''){echo 'disabled="disabled"'; }?> onkeydown="enterPressed(event)" name="message" id="messageText" style="display:none;width:100%;" required="required" placeholder="Type here"></textarea><input type="hidden" name="room" value="<?php echo $GLOBALS['room']; ?>" /><br>
+	<label for="messages">message (markdown allowed, no spam please), <button type="button" onclick="preview()">preview</button></label><textarea rows="7" <?php if ($_COOKIE['login']==''){echo 'disabled="disabled"'; }?> onkeydown="enterPressed(event)" name="message" id="messages" style="width:100%;" required="required" placeholder="Type here"></textarea><br>
+	<div id="previewHTML" style="display:none;">Click 'preview'!</div>
+	<label for="attach">Attachment filename (<button onclick="window.open('files/', 'upload', 'width=600,height=600');" type="button">upload</button>)</label>
+	<input type="text" id="attach" name="attach" placeholder="sample.txt" />
+	<input type="hidden" name="room" value="<?php echo $GLOBALS['room']; ?>" /><br>
 	<?php
 	$name = $_COOKIE['login'];
 	if ($name != "") {

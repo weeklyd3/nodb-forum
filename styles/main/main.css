@@ -25,7 +25,10 @@ input {
     font-family: -apple-system, Tahoma, Verdana, sans-serif;
     /* Default font size. Editor can 
 	override this. */
-    font-size: 17;
+    font-size: 17px;
+}
+h1 {
+	font-size: 34px;
 }
 /* sync with system selection color */
 ::selection {
@@ -61,11 +64,7 @@ select {
 	font-size:inherit;
 }
 button,
-input[type="button"],
-input[type="submit"],
-input[type="reset"],
-input[type="password"],
-input[type="search"],
+input:not([type="file"]),
 select,
 textarea {
     background-color: white;
@@ -79,12 +78,6 @@ input[type="button"]:hover,
 input[type="submit"]:hover,
 input[type="reset"]:hover {
     background-color: Highlight;
-}
-input[type="text"],
-input[type="color"],
-input[type="search"] {
-    padding: 7px;
-    border: 1px solid black;
 }
 pre {
 	white-space:pre-wrap;

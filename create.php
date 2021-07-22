@@ -78,6 +78,10 @@
 		<button type="button" onclick="document.getElementById('tips').src='files/md.php#inlinecode';"><span style="font-family:monospace;">ABC</span></button>
 
 		<button type="button" onclick="document.getElementById('tips').src='files/md.php#link';">Link</button>
+
+		<button type="button" onclick="document.getElementById('tips').src='files/md.php#image';">Image</button>
+		<button type="button" onclick="window.open('files/', 'upload file', 'width=300,height=300');">Upload</button>
+
 		</div>
 		<button type="button" onclick="document.getElementById('tips').style.display = 'block';this.style.display='none';" style="width:100%;">Show formatting tips</button>
 
