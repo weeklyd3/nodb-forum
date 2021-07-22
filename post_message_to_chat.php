@@ -18,19 +18,35 @@
 */
 header('Content-Type: application/json');
 include('./libraries/lib.php');
-$message = removeScriptTags($_POST['message']);
+include('./libraries/parsedown.php');
+$Parsedown = new Parsedown;
+$message = $_POST['message'];
 $room = $_POST['room'];
-$name = $_POST['login'];
+$name = explode("\0", $_COOKIE['login'])[0];
+$attach = cleanFilename($_POST['attach']);
+$image = 'data/accounts/'.cleanFilename($name).'/avatar.png';
+if ($attach == "") {
+	$GLOBALS['attach'] = 'none!';
+} else {
+	if (file_exists('files/uploads/'.$attach)) {
+		$GLOBALS['attach'] = htmlspecialchars($attach) . ' (<a href="files/uploads/'.htmlspecialchars($attach).'" download="">download at your own risk!</a>) (<a href="files/uploads/'.htmlspecialchars($attach).'" target="_blank">view raw</a>)';
+	} else {
+		$GLOBALS['attach'] = 'File not found. Ask the sender!';
+	}
+}
 if ($name) {
 	$pointer = fopen('data/messages/'.cleanFilename($room).'/webchat.txt', 'a+');
 	if (!file_exists('data/messages/'.cleanFilename($room).'/webchat.txt')) {
 		touch('data/messages/'.cleanFilename($room).'/webchat.txt', 0777);
 	}
 	putenv("TZ=UTC");
+	$raw = $Parsedown->text($message);
+	$parsedHTML = html_entity_decode($raw);
+	$parsedHTML = preg_replace_callback("/(&#[0-9]+;)/", function($m) { return mb_convert_encoding($m[1], "UTF-8", "HTML-ENTITIES"); }, $parsedHTML);
 	$time = date("h:i:s m/d/20y");
 	$time.=' UTC';
 	$time = substr($time, 0, 23);
-	$text = '<div style="border:1px solid black;">'.$name.' on '.$time.'<br /><span class="message" style="background-color:gray;font-family:inherit;font-size:17;background-color:transparent !important;color:white !important;">'.$message.'</span></div>';
+	$text = '<div style="border:1px solid black;"><img src="'.$image.'" alt="Avatar"> '.$name.'<br>on '.$time.'<br><span class="message" style="background-color:gray;font-family:inherit;font-size:17;background-color:transparent !important;color:white !important;">'.$parsedHTML.'</span><div style="background-color:#00dddd;">Attachment: '.$GLOBALS['attach'].'</div></div>';
 	$write = fwrite($pointer, $text);
 	if ($write) {
 		echo '{"status":true}';
