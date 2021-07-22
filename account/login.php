@@ -60,4 +60,8 @@
   <br>
   <br>
   <input type="submit" value="Log In" />
-  </form>
+  </form></center>
+  To log in you need an account.
+
+  <p>If you do not have one, you can register using the 
+  "Sign Up" link on the top.</p>
