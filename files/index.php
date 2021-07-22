@@ -16,23 +16,15 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><?php
-function endsWith($haystack, $needle) {
-    $length = strlen($needle);
-    if(!$length) {
-        return true;
-    }
-    return substr($haystack, -$length) === $needle;
-}
-function cleanFilename($stuff) {
-	$illegal = array(" ","?","/","\\","*","|","<",">",'"');
-	// legal characters
-	$legal = array("-","_","_","_","_","_","_","_","_");
-	$cleaned = str_replace($illegal,$legal,$stuff);
-	return $cleaned;
-}
-function removeScriptTags($html) {
-	$html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
-	return $html;
-}
-?>
+?><html>
+  <head>
+	<base href="../" />
+    <title>Forums &mdash; Upload</title>
+	<?php
+	include('../styles/inject.php');
+	?>
+  </head>
+  <body>
+    <?php 
+		include('upload.php');
+		?>

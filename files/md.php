@@ -86,6 +86,12 @@
 					<li>When all else fails:<pre><?php echo htmlspecialchars('Link to <a href="'.htmlspecialchars($_SERVER['HTTP_HOST']) . '">home page</a>'); ?></pre></li>
 				</ul>
 			</div>
+			<div id="image">
+				When inserting from your computer,
+				click <button type="button" onclick="window.open('files/', 'upload file', 'width=300,height=300');">here</button> to upload.
+				<br /><br />
+				You can use: <pre>[image alt text](http://<?php echo htmlspecialchars($_SERVER['HTTP_HOST']); ?>/img/logo.png)</pre> or <pre>[image alt text][1]<br /><br />[1]: http://<?php echo htmlspecialchars($_SERVER['HTTP_HOST']); ?>/img/logo.png</pre>
+			</div>
 			<div>
 				<h2>Other Things</h2>
 				<ul>
