@@ -11,10 +11,10 @@ config.json
 # it for the Repl.it users.
 
 .replit
+data/messages/Meta-Discussion/webchat.txt
 data/accounts/admin/avatar.png
-data/accounts/admin/psw.txt
 data/accounts/admin/user.txt
+data/accounts/admin/psw.txt
+data/accounts/user2762153624/avatar.png
 data/messages/Sandbox/webchat.txt
 data/messages/web-chat/webchat.txt
-data/messages/Meta-Discussion/webchat.txt
-data/accounts/user2762153624/avatar.png
