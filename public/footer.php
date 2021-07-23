@@ -17,6 +17,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 ?>
+<hr>
+QUICK LINKS: <br />
+<a href="faq.php">FAQ</a> <a href="create.php">new room</a>
 <hr><footer>
 <center>
 <small>looks like you're at the end!</small>
