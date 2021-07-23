@@ -25,7 +25,12 @@
 	?>
   </head>
   <body>
-	<?php 
+  <?php 
+  if (!$_COOKIE['login']) {
+	  echo 'You need to log in to create rooms.';
+	  include('./public/footer.php');
+	  exit(0);
+  }
 		if (isset($_POST['roomtitle'])) {
 			include('libraries/parsedown.php');
 			$parsedown = new Parsedown();
