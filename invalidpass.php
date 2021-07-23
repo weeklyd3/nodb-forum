@@ -25,4 +25,10 @@
   </head>
   <body>
   <h1>Invalid Login</h1>
-  <p>You have an invalid login. Please <a href="./account/login.php">log in again.</a> If this keeps appearing please open an issue on GitHub.</p></body></html>
+  <p>You have an invalid login. Please <a href="./account/login.php">log in again.</a> If this keeps appearing please open an issue on GitHub.</p>
+  <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+  <label>Username: <input type="text" name="user" /></label>
+  <label>Password: <input type="password" name="psw" /></label>
+  <input type="submit" value="log in" />
+  </form>
+  </body></html>
