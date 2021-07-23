@@ -39,10 +39,11 @@
   <body>
 	<h1>Moderation Tools</h1>
 	<small><small><em>Only the account <code>admin</code> may view this page.</em></small></small>
-	<div style="display:flex; flex-wrap:nowrap;overflow-x:scroll;justify-content:center;">
+	<nav style="display:flex; flex-wrap:nowrap;overflow-x:scroll;justify-content:center;">
 	<div style="margin:2px;"><a href="app/tools">Home</a></div>
 	<div style="margin:2px;"><a href="app/tools/users.php">Users</a></div>
 	<div style="margin:2px;"><a href="app/tools/topics.php">Topics</a></div>
 	<div style="margin:2px;"><a href="app/tools/files.php">Files</a></div>
+	<div style="margin:2px;"><a href="app/tools/edit_tos.php">Edit TOS</a></div>
 	<div style="margin:2px;"><a href="."><strong>Log Out of Moderation Tools</strong></a></div>
-	</div>
+	</nav>
