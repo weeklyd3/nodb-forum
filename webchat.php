@@ -43,8 +43,7 @@
   <body>
 <script>window.scrollTo(0,document.body.scrollHeight);
 function update() {
-    var exist = document.getElementById("message").innerHTML;
-	console.log(typeof(exist), " ", exist.length);
+    const exist = globalThis.currentValue;
     let xhr = new XMLHttpRequest();
     xhr.open("GET", "data/messages/<?php echo cleanFilename($GLOBALS['room']); ?>/webchat.txt");
     xhr.send();
@@ -61,6 +60,7 @@ function update() {
             var text = xhr.response;
             if (text !== exist) {
                 document.getElementById("message").innerHTML = text;
+				globalThis.currentValue = text;
             } else {
                 document.getElementById("status").innerHTML = "The same.";
             }
