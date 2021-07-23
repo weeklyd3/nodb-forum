@@ -77,6 +77,18 @@ echo $link;
 <strong><a href="javascript:;" onclick="document.getElementById('menu').setAttribute('style', 'resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#e2ccf5; display:block; position:fixed; top:0; left:0; overflow-y:scroll;');">Reset menu position</a></strong></em></center>
 </div>
 <script>
+document.querySelector("#query").onfocus = function() {
+	document.getElementById('query').setAttribute(
+		"placeholder",
+		"type your search"
+	);
+}
+document.querySelector("#query").onblur = function() {
+	document.getElementById('query').setAttribute(
+		"placeholder",
+		"search rooms"
+	);
+}
 document.getElementById('menubutton').addEventListener('click', function() {
 	if (document.getElementById('menu').style.display=='none') {
 		document.getElementById('menu').style.display = 'block';
