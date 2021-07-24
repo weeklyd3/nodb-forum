@@ -1,5 +1,5 @@
 # Starting Your Contribution
-[&lt; Back](welcome.md)
+[< Back](welcome.md)
 
 You can do anything you want in a commit, fix a bug,
 update documentation, anything that's related.
