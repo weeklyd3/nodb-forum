@@ -115,6 +115,7 @@ input[type="checkbox"]:disabled {
 }
 :focus {
 	outline: none;
+	border:2px solid;
 }
 .gallery {
 	margin:2px;
