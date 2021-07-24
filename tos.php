@@ -26,4 +26,10 @@
   </head>
   <body>
   <p style="background-color:red;">This is an official policy.</p>
-  <?php include('tos_raw.php'); include('public/footer.php'); ?></body></html>
+  <?php include('tos_raw.php'); 
+  
+  // Check if TOS Edit plugin is installed
+  if (file_exists('./extensions/nodb-forum-tos-edit/index.php')) {
+	  include './extensions/nodb-forum-tos-edit/index.php';
+  }
+  include('public/footer.php'); ?></body></html>
