@@ -43,8 +43,6 @@
 			$room->title = $_POST['roomtitle'];
 			$room->description = $_POST['description'];
 			$room->description_html = $parsedown->text($room->description);
-			$room->description_html = str_replace(array("\r", "\n"), '', $room->description_html);
-			echo '<h2>';
 			echo htmlspecialchars($room->title) . ' is being created...</h2>';
 			echo '<pre>'.htmlspecialchars(json_encode($room)).'</pre>';
 			if (!file_exists('data/messages/'.cleanFilename($room->title).'/config.json')) {
