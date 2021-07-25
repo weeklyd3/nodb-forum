@@ -41,4 +41,5 @@ if ($handle = opendir('data/accounts')) {
     closedir($handle);
 }
 echo '</ul>';
+echo htmlspecialchars($GLOBALS['i'] - 1) . ' total user(s)';
 ?>
