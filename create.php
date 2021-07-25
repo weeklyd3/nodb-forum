@@ -35,14 +35,18 @@
 			include('libraries/parsedown.php');
 			$parsedown = new Parsedown();
 			class Room {
+				function __construct($message) {
+					echo $message;
+				}
 				public $title = null;
 				public $description = null;
 				public $description_html = null;
 			}
-			$room = new Room;
+			$room = new Room("-<span></span>-> constructed template");
 			$room->title = $_POST['roomtitle'];
 			$room->description = $_POST['description'];
 			$room->description_html = $parsedown->text($room->description);
+			echo '<h2>';
 			echo htmlspecialchars($room->title) . ' is being created...</h2>';
 			echo '<pre>'.htmlspecialchars(json_encode($room)).'</pre>';
 			if (!file_exists('data/messages/'.cleanFilename($room->title).'/config.json')) {
