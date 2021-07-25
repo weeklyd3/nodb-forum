@@ -50,6 +50,9 @@ if ($login == "") {
 	echo '<td>'.htmlspecialchars(getname()).'</td>';
 	echo '<td><a href="webchat.php">web chat</a> (<a href="account/">Account Options</a> | <a href="account/logout.php">log out</a>)</td></tr>';
 }
+if (file_exists(__DIR__ . '/../data/accounts/'.cleanFilename(getname()).'/ban.txt') && $_SERVER['REQUEST_URI'] != '/banned.php') {
+	header('Location: /banned.php');
+}
 ?>
 <tr><td>&nbsp;</td><td rowspan="2" align="right"><form action="search.php" method="GET"> <input type="search" id="query" name="query" placeholder="search rooms" /> <input type="submit" value=">" /></form></td><td></td></tr>
 </table>

@@ -44,6 +44,7 @@
 	<div style="margin:2px;"><a href="app/tools/users.php">Users</a></div>
 	<div style="margin:2px;"><a href="app/tools/topics.php">Topics</a></div>
 	<div style="margin:2px;"><a href="app/tools/files.php">Files</a></div>
+	<div style="margin:2px;"><a href="app/tools/ban.php">User Bans</a></div>
 	<div style="margin:2px;"><a href="app/tools/edit_tos.php">Edit TOS</a></div>
 	<div style="margin:2px;"><a href="."><strong>Log Out of Moderation Tools</strong></a></div>
 	</nav>
