@@ -13,7 +13,7 @@ I hope you enjoy it! I had fun developing it, and you can have fun chatting.
 
 1. Upload all files to the Web server.
 2. Save the files (if needed).
-3. Visit the Web site that you are uploading to. If you do not have a Web site, you can copy it onto your computer and run 
+3. Visit the Web site that you are uploading to. If you do not have a Web site, you can copy it onto your computer and run
     `php -S 0.0.0.0:8000 -t filesareuploadedhere/`,
    where filesareuploadedhere/ is the directory where you copied the files. Then, visit `localhost:8000`.
 4. Edit the following files to match your forum's policy:
@@ -65,4 +65,4 @@ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR  
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER  
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN  
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
