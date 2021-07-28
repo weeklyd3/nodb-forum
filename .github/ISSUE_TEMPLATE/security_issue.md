@@ -2,9 +2,11 @@
 name: Security issue
 about: Report a security issue
 title: ''
-labels: 'security'
+labels: security, status-pending
 assignees: ''
+
 ---
+
 # Your Report
 ## Summary
 <!--something like 'xss' -->

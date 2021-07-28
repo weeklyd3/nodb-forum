@@ -18,10 +18,19 @@
 */
 ?><html>
   <head>
-  
-    <title>Forums &mdash; Web Chat</title>
+  <?php 	include('./public/header.php'); ?>
+    <title><?php
+	 if (isset($_GET['room'])) { 
+		 // verify that room exists
+		if (file_exists('./data/messages/'.cleanFilename($_GET['room']).'/webchat.txt')) {
+			echo htmlspecialchars($_GET['room']);
+		} else {
+			echo 'Room not found';
+		}
+	 } else {
+		 echo 'Choose a room';
+	 } ?></title>
 	<?php
-	include('./public/header.php');
 	include('./styles/inject.php');
 	echo '<link rel="stylesheet" href="styles/other/editor.css" />';
 	$GLOBALS['room'] = $_GET['room'];

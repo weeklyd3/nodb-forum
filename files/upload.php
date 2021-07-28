@@ -1,5 +1,8 @@
 <h2>File Upload</h2>
 <?php
+if (!isset($_COOKIE['login'])) {
+	die("You must log in to upload files.");
+}
 if (isset($_POST['upload'])) {
 	ini_set('upload_tmp_dir', __DIR__ . '/uploads/');
 	$uploaddir = __DIR__ . '/uploads/';

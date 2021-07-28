@@ -94,8 +94,8 @@
 
 		<iframe id="tips" src="files/md.php" style="display:none;width:100%;"></iframe>
 		<label for="description">Room description:</label><br />
-		<textarea required="required" maxlength="5000" name="description" id="description" rows="15" style="width:100%;" oninput="document.getElementById('chars').innerHTML=this.value.length+'/5000 allowed characters';"></textarea>
-		<div id="chars"><strong>Character limit:</strong> 5000</div>
+		<textarea required="required" maxlength="30000" name="description" id="description" rows="15" style="width:100%;" oninput="document.getElementById('chars').innerHTML=this.value.length+'/30000 allowed characters';"></textarea>
+		<div id="chars"><strong>Character limit:</strong> 30000</div>
 		<button onclick="this.innerHTML='Please wait...';this.disabled='disabled';preview();this.disabled='';this.innerHTML='Preview';" type="button">Preview</button>
 		<div id="preview" style="border:1px solid;padding:2px;">markdown preview here</div>
 		<br />

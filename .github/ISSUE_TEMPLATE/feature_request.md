@@ -2,9 +2,11 @@
 name: Feature Request
 about: New Feature
 title: ''
-labels: 'enhancement, status-pending'
+labels: enhancement, status-pending
 assignees: ''
+
 ---
+
 # Feature Request
 ## What's your new feature?
 ## Progress
