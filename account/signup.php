@@ -127,11 +127,9 @@
 		echo "<h3>Please read this information, then state if you agree with it.</h3></center>";
 		include('../tos_raw.php');
 		echo '<center>';
-		echo '<label for="stuff">I agree to these terms:<br></label>';
-		echo '<input type="checkbox" id="stuff" required="required" style="width:20px;" />';
-		echo '<br>';
 		echo '<input type="hidden" value="1" name="page" />';
-		echo '<input type="submit" value="Continue" />';
+		echo '<input type="submit" value="I agree to these terms" /> &nbsp; ';
+		echo '<input type="reset" onclick="location.href=\'/\';" value="I do not agree" />';
 		echo '</center>';
 	}
 ?>
