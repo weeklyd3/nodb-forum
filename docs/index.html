@@ -1,0 +1,29 @@
+<script>
+let xhr = new XMLHttpRequest();
+
+xhr.open('GET', './assets/header.html', true);
+
+xhr.send();
+
+// 4. This will be called after the response is received
+xhr.onload = function() {
+  if (xhr.status == 200) {
+    document.write(xhr.responseText);
+  }
+};
+</script>
+<h1>nodb-forum</h1>
+<h2>The forum software that doesn't need databases.</h2>
+<table>
+<tr>
+<th>The Others</th>
+<th>Us</th>
+</tr>
+<tr>
+<td>Setup: Many messy slides of database passwords</td>
+<td>Setup: Type name. Click install.</td>
+</tr>
+<tr>
+<td></td>
+</tr>
+</table>
