@@ -1,7 +1,7 @@
 <h4>Available Topics</h4>
 <?php
 if ($handle = opendir('data/messages/')) {
-	echo "<table>";
+	echo "<table style=\"width:100%;\">";
     while (false !== ($entry = readdir($handle))) {
 		if (is_dir('data/messages/'.$entry) && $entry!='.' && $entry!='..') {
 			echo '<tr style="width:100%;"><td>';
