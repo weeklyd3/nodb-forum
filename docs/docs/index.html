@@ -1,0 +1,127 @@
+<script>
+    let xhr = new XMLHttpRequest();
+    
+    xhr.open('GET', '../assets/header.html', true);
+    
+    xhr.send();
+    
+    // 4. This will be called after the response is received
+    xhr.onload = function() {
+      if (xhr.status == 200) {
+        document.getElementById('navigation').innerHTML = xhr.responseText;
+      }
+    };
+    </script>
+    <div id="navigation"></div>
+    <h1>nodb-forum</h1>
+    <ul id="contents">
+        <li>&raquo; <a href="#intro">Introduction</a>
+            <ul>
+                <li>&raquo; <a href="#intro-install">Installation</a></li>
+                <li>&raquo; <a href="#intro-usage">Usage</a></li>
+            </ul>
+        </li>
+        <li>&raquo; <a href="#issue">Issues</a></li>
+        <li>&raquo; <a href="#pr">Pull Requesting</a></li>
+    </ul>
+    <label style="position: sticky;top:0;background-color: white;">Jump to:
+    <select onchange="window.location.href = '#'+this.value;">
+        <option style="display: none;" selected="selected" disabled="disabled">Jump to...</option>
+        <option value="">&lt;top></option>
+        <option value="contents">&lt;TOC></option>
+        <option value="intro">Introduction</option>
+        <option value="intro-install">Installation</option>
+        <option value="intro-usage">Usage</option>
+    </select>
+    </label>
+    <main>
+        <section id="intro">
+            <h2>Introduction</h2>
+            nodb-forum is forum software that does not need databases to read or write from. It writes files on the server instead of writing to tables or databases. There are a few advantages of this:
+            <ul>
+                <li>You don't need database software.</li>
+                <li>You don't need to keep asking your web hosting company for the username and password.</li>
+                <li>One system can cleanly keep track of the data.</li>
+                <li>The data is easier to browse.</li>
+            </ul>
+            <h3 id="intro-install">Installation</h3>
+            <ol>
+                <li>Go to the <a href="https://github.com/weeklyd3/nodb-forum/releases">download page</a>, and download the zip source code.
+                <div class="infobox">
+                    If you need an older release, go to the <a href="https://github.com/weeklyd3/nodb-forum/tags">listing page</a> and select your release.
+                    <div class="warningbox">
+                        The first release has a critical security vulnerability. Do not use it.
+                    </div>
+                </div>
+                </li>
+                <li>Decompress it.
+                    <div class="infobox">
+                        Any tool works to decompress it, as long as it can extract all the files without telling you to pay or anything else that blocks you.
+                    </div>
+                </li>
+                <li>If required, upload to the <strong>document root</strong> of your server. It has to be the document root, or else the whole thing will break.
+                    <div class="infobox">
+                        The document root could be called: <code>
+                        <ul>
+                            <li>/public_html</li>
+                            <li>/htdocs</li>
+                        </ul></code>
+                        or something else. Look for a folder in the root directory. Ask your web hosting company for more details.
+                    </div>
+                </li>
+                <li>
+                    Go to the site you uploaded to.
+                    <div class="infobox">
+                        You might not have a web server. You can use PHP's CLI SAPI web server:
+                        <ol>
+                            <li>Download PHP from <a href="https://php.net">https://php.net</a></li>
+                            <li>Copy files onto computer</li>
+                            <li>Open command window</li>
+                            <li>Run:
+                                <pre>C:\nodb-forum> php <span style="color:#333333;">-S</span> 0.0.0.0:8000 <span style="color:#333333;">-t</span> /path/to/your/files</pre>
+                                The web server is now running.<p>
+                                    however,
+                                    <div class="warningbox">
+                                        This is not actual web hosting, and should not be used on a network to provide services. Use it only for development!
+                                    </div>
+                                </p>
+                            </li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    Type your forum name and install.
+                    <div class="infobox">
+                        Have your elePHPants so in case something goes wrong, it's easier to debug.
+                    </div>
+                </li>
+            </ol>
+            <h3 id="intro-usage">Usage and Licensing</h3>
+            You can use this software for:
+            <ul>
+                <li>tech support</li>
+                <li>issue discussion</li>
+                <li>or just regular chit chat!</li>
+            </ul>
+            Here's the licensing information:
+            <div class="infobox">
+                <p>nodb-forum Forum Software.
+                Copyright (C) 2021 nodb-forum contributors</p>
+                
+                <p>This program is free software: you can redistribute it and/or modify
+                it under the terms of the GNU Affero General Public License as
+                published by the Free Software Foundation, either version 3 of the
+                License, or (at your option) any later version.</p>
+                
+                <p>This program is distributed in the hope that it will be useful,
+                but WITHOUT ANY WARRANTY; without even the implied warranty of
+                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+                GNU Affero General Public License for more details.</p>
+                
+                <p>You should have received a copy of the GNU Affero General Public License
+                along with this program. If not, see https://www.gnu.org/licenses/.</p>
+            </div>
+            <hr />
+            <a href="#contents">top</a>
+        </section>
+        </main>
