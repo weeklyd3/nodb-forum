@@ -154,7 +154,7 @@ var enterPressed = function (event) {
 };
 
 </script><div id="message" style="font-family:inherit;"><?php echo file_get_contents('data/messages/'.cleanFilename($GLOBALS['room']).'/webchat.txt'); ?></div>
-	<details style="position:sticky; bottom:0; background-color:lightblue; max-height:75%;" open="open">
+	<details style="position:sticky; bottom:0; background-color:lightblue; max-height:75%;">
 	<summary style="list-style: none;">Reply</summary>
 	<span id="status">loading status</span><br />
 	<form action="javascript:void(0);" id="compose" onsubmit="post();">
