@@ -27,8 +27,10 @@
   </head>
   <body>
 	<?php
+	ob_start();
 	echo '<em>Please wait...</em>';
-	setcookie('login', '', time() - 3600, '/');
+	setcookie('login', false, time() - 3600, '/');
+	unset($_COOKIE['login']);
 	echo '<p>Logged out!</p>';
 	include('../public/footer.php');
 	echo '<script>location.href="/";</script>';
