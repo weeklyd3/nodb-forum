@@ -26,3 +26,11 @@ helped by this! -->
 error_reporting(0);
 echo '<link rel="stylesheet" href="./styles/main/main.css" />';
 ?>
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css" />
+<!-- highlight.js -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+<script>
+console.log('%c If you are pasting code here others could be trying to make you do Self XSS. ', 'color:red;font-size:2em;');
+console.log("%c If you're debugging you're fine", 'color:blue;font-size:1.5em;');
+</script>
