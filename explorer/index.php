@@ -39,14 +39,14 @@ $url = $_GET['address'];
 if (!(endsWith($url, '/'))) {
 	$url.='/';
 }
-if ($handle = opendir(getcwd() . '/../' . $url)) {
+if ($handle = scandir(getcwd() . '/../' . $url)) {
 	echo "<h2>File Viewer</h2>";
 
 	echo "<h3>Entries:</h3><ul>";
 	/* This is the correct way to loop over the directory. */
-	while (false !== ($entry = readdir($handle))) {
+	foreach ($handle as $entry) {
 		if ($entry != ".." && $entry != ".") {
-			echo "<li><a href=\"./explorer/?address=".$_GET['address']."$entry/\">$entry</a> (<a href=\"".$_GET['address']."".$entry."\" target=\"_blank\">open raw</a>) (<a href=\"./explorer/viewsource.php?address=".$_GET['address'].$entry."\">view source</a>)</li>";
+			?><li><a href="<?php if (is_dir(getcwd() . '/../' . $url.'/'.$entry)) { ?>explorer/?address=<?php echo htmlspecialchars($url.$entry); } else { ?>explorer/viewsource.php?address=<?php echo htmlspecialchars($url.$entry);} ?>"><?php echo htmlspecialchars($entry); ?></a></li><?php
 		}
 	}
 
