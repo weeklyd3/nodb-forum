@@ -25,5 +25,7 @@ QUICK LINKS: <br />
 <small>looks like you're at the end!</small>
 <p>Version: 1.0.21
 <br>Hi! :) Have a good time here chatting! Also read these links:</p>
-<a href="DCP.php">Data Collection Policy</a> - <a href="tos.php">Terms of Use</a>
+<a href="DCP.php">Data Collection Policy</a> - <a href="tos.php">Terms of Use</a> - 
+<a href="info.php">PHP Information</a><hr />
+<?php echo "This page was last modified on ".date( "F d Y H:i:s.", getlastmod() ); ?> <strong>All times are UTC.</strong>
 </center></footer>
