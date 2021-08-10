@@ -26,13 +26,13 @@
   </head>
   <body>
   <?php 
+  error_reporting(E_ALL);
   if (!$_COOKIE['login']) {
 	  echo 'You need to log in to create rooms.';
 	  include('./public/footer.php');
 	  exit(0);
   }
 		if (isset($_POST['roomtitle'])) {
-			include('libraries/parsedown.php');
 			$parsedown = new Parsedown();
 			class Room {
 				function __construct($message) {
@@ -41,11 +41,29 @@
 				public $title = null;
 				public $description = null;
 				public $description_html = null;
+				public $author = null;
+				public $creationTime = null;
+				public $tags = array();
 			}
 			$room = new Room("-<span></span>-> constructed template");
 			$room->title = $_POST['roomtitle'];
 			$room->description = $_POST['description'];
 			$room->description_html = $parsedown->text($room->description);
+			$room->author = getname();
+			$room->creationTime = time();
+			$room->tags = implode(" ", array_filter(array_unique(explode(" ", $_POST['tags']))));
+
+			$exist = json_decode(file_get_contents('config.json'))->tags;
+			foreach (explode(" ", $_POST['tags']) as $key => $value) {
+				if (!in_array($value, $exist)) {
+					array_push($exist, $value);
+				}
+			}
+
+			$decode = json_decode(file_get_contents('config.json'));
+			$decode->tags = $exist;
+			fwrite(fopen('config.json', 'w+'), json_encode($decode));
+
 			echo '<h2>';
 			echo htmlspecialchars($room->title) . ' is being created...</h2>';
 			echo '<pre>'.htmlspecialchars(json_encode($room)).'</pre>';
@@ -96,8 +114,22 @@
 		<label for="description">Room description:</label><br />
 		<textarea required="required" maxlength="30000" name="description" id="description" rows="15" style="width:100%;" oninput="document.getElementById('chars').innerHTML=this.value.length+'/30000 allowed characters';"></textarea>
 		<div id="chars"><strong>Character limit:</strong> 30000</div>
-		<button onclick="this.innerHTML='Please wait...';this.disabled='disabled';preview();this.disabled='';this.innerHTML='Preview';" type="button">Preview</button>
+		<button id="previewButton" onclick="this.innerHTML='Please wait...';this.disabled='disabled';preview();" type="button">Preview</button>
 		<div id="preview" style="border:1px solid;padding:2px;">markdown preview here</div>
+		<br />
+		<label>Enter your tags separated by spaces:
+		<input required="required" type="text" style="width: 100%;" name="tags" placeholder="Add your tags" />
+		</label>
+		<details>
+			<summary>Show all tags</summary>
+			<?php 
+				$stuff = file_get_contents('config.json');
+				$object = json_decode($stuff);
+				foreach ($object->tags as $key => $value) {
+					?><span class="tag"><?php echo htmlspecialchars($value); ?></span> <?php
+				}
+			?>
+		</details>
 		<br />
 		<input type="submit" value="Create Room" />
 		<input type="reset" style="background-color:transparent !important;outline:none !important;border:none;color:white;" onclick="document.getElementById('chars').innerHTML = 'Discarded'" value="Discard" />
@@ -113,11 +145,24 @@
     xhr.onload = function () {
         if (xhr.status != 200) {
 			throw new Error('error');
-			document.getElementById('preview').innerHTML = "<span style=\"color:red;\">Error "+xhr.status+"!</span>"
+			document.getElementById('preview').innerHTML = "<span style=\"color:red;\">Error "+xhr.status+"!</span>";
+
         } else {
 			var text = xhr.responseText;
 			document.getElementById('preview').innerHTML='';
 			document.getElementById('preview').innerHTML=text;
+			hljs.highlightAll();
+			document.getElementById('previewButton')
+				.setAttribute(
+					'style',
+					'color:white;background-color:#00ff00;'
+				);
+			document.getElementById('previewButton').innerHTML = 'Done';
+			setTimeout(function() {
+				document.getElementById('previewButton').removeAttribute('style');
+				document.getElementById('previewButton').innerHTML = 'Preview';
+				document.getElementById('previewButton').disabled = '';
+			}, 667);
         }
     };
     xhr.onerror = function () {
