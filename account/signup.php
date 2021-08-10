@@ -16,6 +16,9 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+ini_set('display_errors',1);
+
+error_reporting(E_ALL);
 ?><html>
   <head>
 	<base href="../" />
@@ -50,6 +53,12 @@
 		echo '<label for="image">Profile picture (100x100 is best): </label>';
 		echo '<input type="file" accept="image/png" name="image" id="image" />';
 		echo '<br><br>';
+		?>
+		<label>Security question (for password resets): <input type="text" required="required" name="question" /></label><br />
+		<label>Answer:
+		<input type="text" name="answer" required="required" /></label>
+		<br /><br />
+		<?php
 		echo '<input type="submit" value="Continue" />';
 	} else if ($page == "2") {
 		$PASSWORD = $_POST['psw'];
@@ -66,10 +75,21 @@
 				echo "<center><h2>Hi, @".htmlspecialchars($USER)."! Just a second...</h2>";
 				echo "<h3>We're setting up your account. This may take a long time. Please do not close this window, as all data will be lost if you do so. Thank you.</h3></center>";
 				$hash = password_hash($PASSWORD, PASSWORD_DEFAULT);
+				error_log(__DIR__ . '/../data/accounts/'.$directory.'/question.json');
 				if (!$hash) {
 					echo "Password hash not created. Try reloading.";
 				} else {
 					echo "Password hash created.";
+				}
+				class securityQuestion {
+					public $question = null;
+					public $answer = null;
+				}
+				$userinput = new securityQuestion;
+				$userinput->question = $_POST['question'];
+				$ansHash = password_hash($_POST['answer'], PASSWORD_DEFAULT);
+				if (!$ansHash) {
+					die("Hash not generated");
 				}
 				$illegal = array(" ","?","/","\\","*","|","<",">",'"');
 				// legal characters
@@ -82,6 +102,13 @@
 				} else {
 					echo "<br>Bad bad bad. Your personal directory was not created.";
 				}
+
+				$userinput->answer = $ansHash;
+				$userinputHandle = fopen(__DIR__ . '/../data/accounts/'.$directory.'/question.json', 'w+');
+				$json_encoded = json_encode($userinput);
+				fwrite($userinputHandle, $json_encoded);
+				$about = fopen(__DIR__ . '/../data/accounts/'.cleanFilename($USER).'/user.json', 'w+');
+				fwrite($about, '{"text":"","site":"","github":"","mail":""}');
 				if ($_FILES['image']['name'] != '' && $_FILES['image']['size'] < 4538) {
 					$uploaddir = __DIR__ . '/../data/accounts/'.cleanFilename($USER).'/';
 					$uploadfile = $uploaddir . basename($_FILES['image']['name']);

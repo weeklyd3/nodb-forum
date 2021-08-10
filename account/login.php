@@ -61,7 +61,29 @@
   <br>
   <input type="submit" value="Log In" />
   </form></center>
+  <h3>Forgetful?</h3>
+  <ul>
+  <li><a href="javascript:;" onclick="document.getElementById('overlay').style.display = 'block';">Forgot user name?</a></li>
+  <li><a href="./account/resetpass.php">Forgot password?</a></li>
+  </ul>
   To log in you need an account.
 
   <p>If you do not have one, you can register using the 
   "Sign Up" link on the top.</p>
+  <div id="blanket" class="blanket">
+	<div class="overlay" id="overlay">
+		<h3>I lost my username</h3>
+		If you lost your username...
+		<ol>
+			<li>Enter what you think it is. You might still remember it!</li>
+			<li>If you can't...
+				<ol>
+					<li><a href="users.php">Head over to the list of users.</a></li>
+					<li>Find what might be your username.</li>
+					<li>See if it matches by entering your password.</li>
+				</ol>
+			</li>
+		</ol>
+		<button onclick="this.parentNode.setAttribute('style','');">Got it</button>
+	</div>
+  </div>
