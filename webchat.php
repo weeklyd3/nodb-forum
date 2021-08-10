@@ -70,6 +70,7 @@ function update() {
             if (text !== exist) {
                 document.getElementById("message").innerHTML = text;
 				globalThis.currentValue = text;
+				hljs.highlightAll();
             } else {
                 document.getElementById("status").innerHTML = "The same.";
             }
@@ -101,7 +102,10 @@ function post() {
                 document.getElementById("messages").value = "";
                 document.getElementById("status").innerHTML = "Sent!";
                 update();
-            }
+            } else if (this.readyState == 4 && this.status != 200) {
+				document.getElementById('overlay').style.display = 'block';
+				document.getElementById('error').innerHTML = 'XHR Ready State: '+this.readyState+"\nStatus: "+this.status;
+			}
         };
     } else {
         document.getElementById("status").innerHTML = '<span style="color:red;"><strong>Your post has no text, try adding some.</strong></span>';
@@ -134,6 +138,7 @@ function preview() {
 			document.getElementById('previewHTML').style.display = 'block';
 			document.getElementById("status").innerHTML = "Preview finished rendering!";
 			update();
+			hljs.highlightAll();
 		}
 	};
 }
@@ -154,8 +159,8 @@ var enterPressed = function (event) {
 };
 
 </script><div id="message" style="font-family:inherit;"><?php echo file_get_contents('data/messages/'.cleanFilename($GLOBALS['room']).'/webchat.txt'); ?></div>
-	<details style="position:sticky; bottom:0; background-color:lightblue; max-height:75%;">
-	<summary style="list-style: none;">Reply</summary>
+	<details style="position:sticky; bottom:0; background-color:lightblue; overflow-y:scroll;max-height:calc(100% - 7em);">
+	<summary style="list-style: none;padding-left:10;">-<span></span>-> Reply</summary>
 	<span id="status">loading status</span><br />
 	<form action="javascript:void(0);" id="compose" onsubmit="post();">
 	<span><input checked="checked" type="radio" name="mode" id="quick" />
@@ -183,3 +188,13 @@ var enterPressed = function (event) {
 	<script>
 update();
 </script>
+<div class="blanket" id="overlay" style="display: none;width:100vw;height:100vw;">
+	<div class="overlay" style="display:block;">
+		<h2>A problem occurred while sending your request</h2>
+		Please try again later.
+		<br />
+		<pre>Error code: <br /><code id="error"></code></pre>
+		<br />
+		<input type="button" onclick="this.parentNode.parentNode.style.display = 'none';" value="close" />
+	</div>
+</div>
