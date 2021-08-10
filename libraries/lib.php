@@ -35,4 +35,21 @@ function removeScriptTags($html) {
 	$html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
 	return $html;
 }
+function str_replace_first($from, $to, $content) {
+    $from = '/'.preg_quote($from, '/').'/';
+
+    return preg_replace($from, $to, $content, 1);
+}
+function scan_dir($dir) {
+    $ignored = array();
+    $files = array(); 
+    foreach (scandir($dir) as $file) {
+        if ($file[0] === '.') continue; 
+        if (in_array($file, $ignored)) continue; 
+        $files[$file] = filemtime($dir . '/' . $file);
+    }
+    arsort($files); 
+    $files = array_keys($files); 
+    return ($files) ? $files : false;
+}
 ?>
