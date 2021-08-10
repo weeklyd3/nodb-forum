@@ -46,7 +46,7 @@ if ($name) {
 	$time = date("h:i:s m/d/20y");
 	$time.=' UTC';
 	$time = substr($time, 0, 23);
-	$text = '<div style="border:1px solid black;"><img src="'.$image.'" alt="Avatar"> '.$name.'<br>on '.$time.'<br><span class="message" style="background-color:gray;font-family:inherit;font-size:17;background-color:transparent !important;color:white !important;">'.$parsedHTML.'</span><div style="background-color:#00dddd;">Attachment: '.$GLOBALS['attach'].'</div></div>';
+	$text = '<div style="border:1px solid black;"><a href="account/viewuser.php?user='.htmlspecialchars(explode("\0", $_COOKIE['login'])[0]).'"><img src="'.$image.'" alt="Avatar"> '.$name.'</a><br>on '.$time.'<br><span class="message">'.$parsedHTML.'</pre><!--comment--></blockquote></span><div style="background-color:#00dddd;">Attachment: '.$GLOBALS['attach'].'</div></div>';
 	$write = fwrite($pointer, $text);
 	if ($write) {
 		echo '{"status":true}';
