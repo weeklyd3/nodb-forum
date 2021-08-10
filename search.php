@@ -28,17 +28,16 @@
   <table style="width:100%;">
   <tr style="background-color:#f1c1e6;"><td>Search Results for "<?php echo htmlspecialchars($_GET['query']); ?>"</td></tr>
   <?php 
-		if ($handle = opendir('data/messages')) {
-
-		while (false !== ($entry = readdir($handle))) {
+		if ($handle = scandir('data/messages')) {
+			natcasesort($handle);
+		foreach ($handle as $key => $entry) {
 			$name = json_decode(file_get_contents("data/messages/".$entry."/config.json"));
-			if (($entry != "." && $entry != ".." && is_dir('data/messages/'.$entry) && (stripos($name->title, $_GET['query']) !== false)) || $_GET['query'] == "") {
+			if ((!empty($name->title) && $entry != "" && $entry != "." && $entry != ".." && file_exists('data/messages/'.$entry.'/config.json') && (stripos($name->title, $_GET['query']) !== false)) || $_GET['query'] == "") {
 
-				echo '<tr><td><a href="webchat.php?room='.$name->title.'">'.$name->title."</a></td></tr>";
+				echo '<tr><td><a href="webchat.php?room='.htmlspecialchars($name->title).'">'.htmlspecialchars($name->title)."</a></td></tr>";
 			}
 		}
 
-		closedir($handle);
 	}
   ?>
   <tr style="background-color:#f1c1e6;"><td>Search Results for "<?php echo htmlspecialchars($_GET['query']); ?>"</td></tr>
