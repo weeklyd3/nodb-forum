@@ -25,7 +25,7 @@
 	?>
 	<!--<?php include('../../public/header.php'); ?>-->
 	<?php
-	if ($_COOKIE['login']) {
+	if (isset($_COOKIE['login'])) {
 		if (getname() != 'admin') {
 			echo 'You need to be logged in as admin to continue.';
 			exit(0);
@@ -46,5 +46,11 @@
 	<div style="margin:2px;"><a href="app/tools/files.php">Files</a></div>
 	<div style="margin:2px;"><a href="app/tools/ban.php">User Bans</a></div>
 	<div style="margin:2px;"><a href="app/tools/edit_tos.php">Edit TOS</a></div>
-	<div style="margin:2px;"><a href="."><strong>Log Out of Moderation Tools</strong></a></div>
+	<div style="margin:2px;"><a href="app/tools/banner.php">Banners</a></div>
+	<?php 
+		if (file_exists(__DIR__ . '/../../extensions/nodb-forum-ban-appeal/index.php')) {
+			echo '<div style="margin:2px;"><a href="app/tools/appeals.php">Appeals</a></div>';
+		}
+	?>
+	<div style="margin:2px;"><a href="."><strong>Log Out</strong></a></div>
 	</nav>

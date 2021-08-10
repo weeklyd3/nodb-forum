@@ -23,3 +23,8 @@ if (!isset($_POST['hidden'])) {
 <br />
 <input type="submit" value="Save" />
 </form>
+<strong>IMPORTANT:</strong> Do the following before editing the TOS:
+<ul>
+	<li><a href="articles/write.php">Write an article</a> documenting the change.</li>
+	<li><a href="app/tools/banner.php">Add a banner</a> informing others of the change. Link to your article.</li>
+</ul>

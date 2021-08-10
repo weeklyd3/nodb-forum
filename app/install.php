@@ -39,4 +39,9 @@
 	<br />
 	HTML will <strong>not</strong> be escaped! This allows rich text formatting.
 	<hr />
+	<label>These are the tags. Type them, separated by spaces.
+	<br />
+	<input type="text" name="tags" style="width: 100%;" placeholder="javascript python php" />
+	</label>
+	<hr />
 	<input type="submit" value="install" /></form></bodybody></html>

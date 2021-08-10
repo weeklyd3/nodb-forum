@@ -26,15 +26,19 @@
   </head>
   <body>
 	<?php 
+		if (!isset($_POST['title'])) die("Start from installation page first");
 		if (file_exists('../config.json')) {
 			header('Location: ..');
 		}
 		$title = $_POST['title'];
 		class Installation {
 			public $forumtitle = "default";
+			public $tags = array();
+			public $descriptions = new stdClass;
 		}
 		$install = new Installation;
 		$install->forumtitle = $title;
+		$install->tags = explode(" ", $_POST['tags']);
 		$json = json_encode($install);
 		$handle = fopen("../config.json", 'w+');
 		$status = fwrite($handle, $json);
@@ -43,6 +47,14 @@
 			echo "> Installed!";
 		}
 	?>
+	<div>Tags:
+	<?php 
+		$tags = explode(" ", $_POST['tags']);
+		foreach ($tags as $key => $value) {
+			?><span class="tag"><?php echo htmlspecialchars($value); ?></span> <?php
+		}
+	?>
+	</div>
 	<h1>Congratulations!</h1>
 	<p>If you see <code>> Installed!</code> above, you have successfully set up your discussion board!</p>
 	<p>You can now:
