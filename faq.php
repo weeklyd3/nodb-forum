@@ -25,7 +25,7 @@
 	?>
   </head>
   <body>
-  <style>.answer { background-color: #61ff9e; width: 45%; height: 25vw; margin: 5px; overflow-y: scroll; } </style>
+  <style>.answer { background-color: #61ff9e; width: 45%; height: 25vw; margin: 5px; overflow-y: scroll; min-width: 360px; max-width: 100%; } </style>
   <div id="contents"><ul>
   <li><a href="#register">Why Register?</a></li>
   <li><a href="#price">How much does it cost?</a></li>
