@@ -18,55 +18,75 @@
 */
 ?>
 <table id="header" style="width:100%; position:sticky; top:0px; background-color:blue;z-index:10;">
-<tr><td><h1 style="display:inline;"><span id="menubutton" style="cursor:pointer;"><img src="img/menu.png" alt="Click to open menu" /></span> <a style="text-decoration:none !important;" href="./"><img alt="Forum Logo" src="./img/logo.png" /><span id="TitleText">
+<tr><td><h1 style="display:inline;"><span id="menubutton" style="cursor:pointer;"><img src="img/menu.png" alt="≡" /></span> <a style="text-decoration:none !important;" href="./"><img alt="Forum Logo" src="./img/logo.png" /><span id="TitleText">
 <?php
 include(__DIR__ . '/../libraries/lib.php');
 if (!file_exists(__DIR__ ."/../config.json")) {
 	header("Location: /app/install.php");
 }
 function getname() {
-	$COOK = $_COOKIE['login'];
-	$STATS = explode("\0", $COOK);
-	$path = cleanFilename($STATS[0]);
-	$path = __DIR__ . '/../data/accounts/'.$path;
-	$hash = file_get_contents($path . '/psw.txt');
-	if ($COOK != '') {
-		if (password_verify($STATS[1], $hash)) {
-			$match = true;
-		} else {
-			header('Location: '.$SERVER['DOCUMENT_ROOT'].'/invalidpass.php');
+	if (isset($_COOKIE['login'])) {
+		$COOK = $_COOKIE['login'];
+		$STATS = explode("\0", $COOK);
+		$path = cleanFilename($STATS[0]);
+		$path = __DIR__ . '/../data/accounts/'.$path;
+		$hash = file_get_contents($path . '/psw.txt');
+		if ($COOK != '') {
+			if (password_verify($STATS[1], $hash)) {
+				$match = true;
+			} else {
+				header('Location: '.$SERVER['DOCUMENT_ROOT'].'/invalidpass.php');
+			}
+			return $STATS[0];
 		}
-		return $STATS[0];
 	}
 }
 $object = json_decode(file_get_contents(__DIR__ ."/../config.json"));
 echo $object->forumtitle."</span></a></h1></td>";
-$login = $_COOKIE['login'];
 echo '<td><a href="explorer/">source code</a></td>';
-if ($login == "") {
+if (!getname()) {
 	echo '<td><a href="account/signup.php">sign up</a></td>';
 	echo '<td><a href="account/login.php">log in</a></td>';
 } else {
-	echo '<td>'.htmlspecialchars(getname()).'</td>';
-	echo '<td><a href="webchat.php">web chat</a> (<a href="account/">Account Options</a> | <a href="account/logout.php">log out</a>)</td></tr>';
+	echo '<td><a href="account/">'.htmlspecialchars(getname()).'</a></td>';
+	echo '<td>(<a href="account/logout.php">log out</a>)</td></tr>';
 }
 if (file_exists(__DIR__ . '/../data/accounts/'.cleanFilename(getname()).'/ban.txt') && $_SERVER['REQUEST_URI'] != '/banned.php') {
 	header('Location: /banned.php');
 }
 ?>
+<script>
+	document.querySelector('html')
+		.addEventListener('keydown',
+			function(event) {
+				if (!(document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement) && event.key == '/') {
+					event.preventDefault();
+					document.querySelector('input[type=search]').focus();
+				}
+			}
+		);
+</script>
 <tr><td>&nbsp;</td><td rowspan="2" align="right"><form action="search.php" method="GET"> <input type="search" id="query" name="query" placeholder="search rooms" /> <input type="submit" value=">" /></form></td><td></td></tr>
 </table>
+<div id="banner" style="width:100%;background-color:gold;color:black;text-align:center;"><?php 
+require(__DIR__ . '/../libraries/parsedown.php');
+	if (isset($object->banner)) {
+		$parse = new Parsedown;
+		echo $parse->text($object->banner);
+		?><a href="javascript:;" onclick="this.parentNode.style.display = 'none';">&times;</a><?php
+	}
+?></div>
 <div id="menu" style="resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#e2ccf5; display:none; position:fixed; top:0; left:0; overflow-y:scroll;">
 <p id="drag" style="text-align:right;cursor:move;"><span style="text-align:left;">Menu</span> <span onclick="document.getElementById('menu').style.display='none';" style="cursor:pointer;">&times;</span></p>
 <ul style="list-style:none; padding:7px;">
 <li><a href="./">Home</a></li>
 <li><a href="./webchat.php">Chat room</a></li>
+<li><a href="./articles">Articles</a>
 <br>
 <li><a href="./account/">My Account</a></li>
 <li><a href="./account/login.php">Log in to different account</a></li>
 <li><a href="./account/signup.php">Sign up for account</a></li>
 <br>
-<li><a href="./data/messages/webchat.txt">Chat messages - raw</a></li>
 <li><a href="./explorer">File Explorer</a></li>
 <li><a href="https://github.com/weeklyd3/nodb-forum">GitHub repository</a></li>
 <li><a href="app/tools/">Moderation Tools</a></li>
