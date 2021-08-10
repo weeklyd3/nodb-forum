@@ -1,2 +1,2 @@
 language = "php8"
-run = "echo Running PHP Server... ;php -S 0.0.0.0:8000 -t . ; echo PHP Server Stopped"
+run = "echo Running PHP Server... ; php -S 0.0.0.0:8000 -t . ; echo PHP Server Stopped"
