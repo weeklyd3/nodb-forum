@@ -152,3 +152,43 @@ table.table, table.table>tbody>tr, table.table>tbody>tr>td, table.table>tbody>tr
 table, table>tr, table>td {
 	padding:7px;
 }
+.blanket {
+	z-index: 20;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: rgba(122, 122, 122, 0.4);
+	width: 0;
+	height: 0;
+}
+
+.overlay {
+	display: none;
+	color: black;
+	background-color: white;
+	opacity: 1;
+	padding: 5px;	
+	border: 3px solid;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.tag {
+	background-color: rgb(159, 197, 255);
+	border-radius: 3px;
+	text-decoration: none !important;
+	cursor: default;
+}
+.tag:hover {
+	background-color: #6c9ce6;
+}
+.tag>a {
+	text-decoration: none;
+}
+details {
+	margin-left: 10px;
+}
+summary {
+	margin-left: -10px;
+}
