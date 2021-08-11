@@ -66,7 +66,7 @@ if (file_exists(__DIR__ . '/../data/accounts/'.cleanFilename(getname()).'/ban.tx
 			}
 		);
 </script>
-<tr><td>&nbsp;</td><td rowspan="2" align="right"><form action="search.php" method="GET"> <input type="search" id="query" name="query" placeholder="search rooms" /> <input type="submit" value=">" /></form></td><td></td></tr>
+<tr><td>&nbsp;</td><td rowspan="2" align="right"><form action="search.php" method="GET"> <input type="search" id="query" name="query" placeholder="search rooms" value="<?php if (isset($_GET['query'])) { echo htmlspecialchars($_GET['query']); } ?>" /> <input type="submit" value=">" /></form></td><td></td></tr>
 </table>
 <div id="banner" style="width:100%;background-color:gold;color:black;text-align:center;"><?php 
 require(__DIR__ . '/../libraries/parsedown.php');
