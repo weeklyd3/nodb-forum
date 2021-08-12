@@ -31,6 +31,7 @@ echo '<link rel="stylesheet" href="./styles/main/main.css" />';
 <!-- highlight.js -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
 <script>
-console.log('%c If you are pasting code here others could be trying to make you do Self XSS. ', 'color:red;font-size:2em;');
-console.log("%c If you're debugging you're fine", 'color:blue;font-size:1.5em;');
+console.log('%cIf you are pasting code here others could be trying to make you do Self XSS. ', 'color:red;font-size:2em;');
+console.log("%cWhat could attackers do when you paste their code? A lot of evil things. Such as:\n - Logging a user out\n - Creating random topics without user interaction\n - or even send messages without user consent!\nSo don't paste any code unless you absolutely know what you're doing!", 'color:#d3b312;font-size:1.2em;')
+console.log("%cIf you're debugging you're fine", 'color:blue;font-size:1.5em;');
 </script>

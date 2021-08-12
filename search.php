@@ -20,13 +20,19 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 ?><html>
   <head>
-    <title>Forums &mdash; Searching for <?php echo htmlspecialchars($_GET['query']); ?></title>
+    <title>Searching for <?php echo htmlspecialchars($_GET['query']); ?></title>
 	<?php
 	include('./public/header.php');
 	include('./styles/inject.php');
 	?>
   </head>
   <body>
+  <?php if (!isset($_GET['query']) || $_GET['query'] == '') {
+	  echo "Type query first.";
+	  include('./public/footer.php');
+	  exit(0);
+  }
+  ?>
   <table style="width:100%;">
   <tr style="background-color:#f1c1e6;"><td>Search Results for "<?php echo htmlspecialchars($_GET['query']); ?>"</td></tr>
   <?php 
@@ -34,7 +40,7 @@ error_reporting(E_ALL);
 			natcasesort($handle);
 			$stuff = array();
 			foreach ($handle as $key => $entry)
-				$stuff[(string) substr_count(strtoupper(strip_tags(file_get_contents('data/messages/'.$entry.'/webchat.txt'))), strtoupper($_GET['query']))] = $entry;
+				if (custom_substr_count(strtoupper(strip_tags(file_get_contents('data/messages/'.$entry.'/webchat.txt'))), explode(" ", $_GET['query'])) > 0) $stuff[(string) custom_substr_count(strtoupper(strip_tags(file_get_contents('data/messages/'.$entry.'/webchat.txt'))), explode(" ", $_GET['query']))] = $entry;
 			ksort($stuff);
 			$stuff = array_reverse($stuff);
 		foreach ($stuff as $key => $entry) {
@@ -46,14 +52,14 @@ error_reporting(E_ALL);
 				 && (contains($name->title, explode(" ", $_GET['query'])) || contains($name->description, explode(" ", $_GET['query'])))) || $_GET['query'] == "") {
 
 				echo '<tr><td style="background:white;color:black;border-radius:3px;"><h3><a href="webchat.php?room='.htmlspecialchars($name->title).'">'.htmlspecialchars($name->title)."</a>";
-				?> <em><?php echo substr_count(strtoupper(strip_tags(file_get_contents('data/messages/'.$entry.'/webchat.txt'))), strtoupper($_GET['query'])); ?> match(es)</em><?php
+				?> <em><?php echo custom_substr_count(strip_tags(file_get_contents('data/messages/'.$entry.'/webchat.txt')), explode(" ", $_GET['query'])); ?> match(es)</em><?php
 				echo "</h3>";
 				?><ul><li>Created <?php
 				echo date('Y-m-d H:i:s', $name->creationTime);
 				?></li><li>by <?php
 				echo htmlspecialchars($name->author);
 				?></li><li><strong>Hit:</strong><br /><?php 
-					$chat = strip_tags(file_get_contents('data/messages/'.$entry.'/webchat.txt'));
+					$chat = htmlspecialchars_decode(strip_tags(file_get_contents('data/messages/'.$entry.'/webchat.txt')));
 					$chat = str_ireplace(array("\r", "\n", "\r\n"), " ", $chat);
 					$index = stripos($chat, $_GET['query']) ? stripos($chat, $_GET['query']) : 0;
 					$max = 50;
@@ -62,7 +68,12 @@ error_reporting(E_ALL);
 					else 
 						$index -= $max;
 					$extract = substr($chat, $index, 750);
-					$extract = preg_replace("/".preg_quote($_GET['query'], "/")."/i", "<strong style=\"background-color:#00ff00;\">$0</strong>", $extract);					
+					$regexp = array();
+					foreach (explode(" ", $_GET['query']) as $value) 
+						array_push($regexp, preg_quote($value, '/'));
+					$regexp = implode("|", $regexp);
+					echo "<!-- regular expression is /(".htmlspecialchars($regexp).')/i -->';
+					$extract = preg_replace("/(".$regexp.")/i", "<span style=\"font-weight:bold;background-color:lightblue;border-radius:3px;\" class=\"hit\">$0</span>", $extract);
 					echo $extract;
 				?></li></ul><?php
 				echo "</td></tr>";
@@ -85,4 +96,13 @@ error_reporting(E_ALL);
 	background: linear-gradient(0deg, rgba(218,166,245,1) 0%, rgba(45,231,253,1) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#daa6f5",endColorstr="#2de7fd",GradientType=1);
 }</style>
+<script> 
+function clearMark() {
+	const links = document.getElementsByClassName('hit');
+	for (const value of links) {
+		value.setAttribute('style', '');
+	}
+}
+</script>
+<a href="javascript:;" onclick="clearMark()">Clear all marks</a>
 <?php include('./public/footer.php'); ?>

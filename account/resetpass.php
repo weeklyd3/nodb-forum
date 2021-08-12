@@ -60,7 +60,7 @@
 				<pre><?php 
 					$json = file_get_contents('../data/accounts/'.cleanFilename($_POST['user']).'/question.json');
 					$question = json_decode($json);
-					echo $question->question;
+					echo htmlspecialchars($question->question);
 				?></pre>
 				<label>
 				Answer:

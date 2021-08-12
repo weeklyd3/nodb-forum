@@ -19,7 +19,7 @@
 ?><html>
   <head>
     <base href="../" />
-    <title>Forums &mdash; Change Account Name</title>
+    <title>Change Account Name</title>
 	<?php
 	include('../public/header.php');
 	include('../styles/inject.php');

@@ -52,4 +52,17 @@ function scan_dir($dir) {
     $files = array_keys($files); 
     return ($files) ? $files : false;
 }
+function contains($str, $arr) {
+    foreach($arr as $a) {
+        if (!(stripos($str, $a) === false)) return true;
+    }
+    return false;
+}
+function custom_substr_count($str, $arr) {
+	$i = 0;
+    foreach($arr as $a) {
+        if (substr_count(strtoupper($str), strtoupper($a))) $i+=substr_count(strtoupper($str), strtoupper($a));
+    }
+    return $i;
+}
 ?>

@@ -34,7 +34,6 @@
 		class Installation {
 			public $forumtitle = "default";
 			public $tags = array();
-			public $descriptions = new stdClass;
 		}
 		$install = new Installation;
 		$install->forumtitle = $title;

@@ -38,11 +38,11 @@ body, html {
 	margin:3px;
 	padding:0;
  color:white;
-background: rgb(69,183,212);
-background: -moz-linear-gradient(0deg, rgba(69,183,212,1) 50%, rgba(12,227,227,1) 100%);
-background: -webkit-linear-gradient(0deg, rgba(69,183,212,1) 50%, rgba(12,227,227,1) 100%);
-background: linear-gradient(0deg, rgba(69,183,212,1) 50%, rgba(12,227,227,1) 100%);
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#45b7d4",endColorstr="#0ce3e3",GradientType=1);
+background: rgb(148,187,233);
+background: -moz-linear-gradient(0deg, rgba(148,187,233,1) 0%, rgba(255,97,167,1) 96%);
+background: -webkit-linear-gradient(0deg, rgba(148,187,233,1) 0%, rgb(255, 97, 167) 96%);
+background: linear-gradient(0deg, rgba(148,187,233,1) 0%, rgba(255,97,167,1) 96%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#94bbe9",endColorstr="#ff61a7",GradientType=1);
 }
 /* Configure hyperlinks. */
 a {
