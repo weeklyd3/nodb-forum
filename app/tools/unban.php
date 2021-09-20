@@ -1,6 +1,11 @@
-<?php include('header.php');
+<?php include_once('header.php');
 ?>
 <h2>Unban Users</h2>
+<ul>
+	<li><a href="app/tools/users.php">&raquo; User Removal</a></li>
+	<li><a href="app/tools/ban.php">&raquo; User Bans</a></li>
+	<li>&raquo; User Unbans</li>
+</ul>
 <a href="app/tools/ban.php">&laquo; Back to Bans</a>
 <?php
 	if (isset($_POST['reason'])) {

@@ -16,25 +16,36 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-header('Content-Type: application/json');
-include_once('./libraries/lib.php');
+?><html lang="en">
+  <head>
+    <title>Post Reply</title>
+	<?php
+	include_once('./public/header.php');
+	include_once('./styles/inject.php');
+	if (!isset($_GET['room'])) die("Bad title");
+	if (!isset($_COOKIE['login'])) die("Not logged in");
+	if (!file_exists(__DIR__ . '/data/messages/' . cleanFilename($_GET['room']) . '/msg.json')) die("Bad title");
+	?>
+  </head>
+  <body>
+	<h2>Post a Reply</h2>
+	<div><?php
+	if (!isset($_POST['submit'], $_POST['contents'])) { ?>
+	Write your reply below: <?php } 
+	if (isset($_POST['submit'], $_POST['contents'])) {
+		if ($_POST['submit'] == 'Preview') { ?>
+			Preview:<br /><?php 
+			$Parsedown = new Parsedown;
+			echo $Parsedown->text($_POST['contents']); 
+		}
+		if ($_POST['submit'] == 'Submit') {
+			include_once('./libraries/lib.php');
 include_once('./libraries/parsedown.php');
 $Parsedown = new Parsedown;
-$message = $_POST['message'];
-$room = $_POST['room'];
+$message = $_POST['contents'];
+$room = $_GET['room'];
 $name = explode("\0", $_COOKIE['login'])[0];
 $attach = cleanFilename($_POST['attach']);
-$image = 'data/accounts/'.cleanFilename($name).'/avatar.png';
-if ($attach == "") {
-	$GLOBALS['attach'] = 'none!';
-} else {
-	if (file_exists('files/uploads/'.$attach)) {
-		$GLOBALS['attach'] = htmlspecialchars($attach) . ' (<a href="files/uploads/'.htmlspecialchars($attach).'" download="">download at your own risk!</a>) (<a href="files/uploads/'.htmlspecialchars($attach).'" target="_blank">view raw</a>)';
-	} else {
-		$GLOBALS['attach'] = 'File not found. Ask the sender!';
-	}
-}
-if ($name) {
 	putenv("TZ=UTC");
 	$raw = $Parsedown->text($message);
 	$parsedHTML = html_entity_decode($raw);
@@ -56,8 +67,8 @@ if ($name) {
 			$this->html = $Parsedown->text($this->md);
 		}
 	}
-	$json = json_decode(file_get_contents(__DIR__ . '/data/messages/'.cleanFilename($_POST['room']) . '/msg.json'));
-	$json->$name = new msg(getname(), $_POST['message'], time(), $_POST['attach']);
+	$json = json_decode(file_get_contents(__DIR__ . '/data/messages/'.cleanFilename($_GET['room']) . '/msg.json'));
+	$json->$name = new msg(getname(), $_POST['contents'], time(), $_POST['attach']);
 	if ($_POST['reply'] != '')
 		$json->$name->reply = $_POST['reply'];
 
@@ -79,15 +90,15 @@ if ($name) {
 	}
 	$pointer = fopen('data/messages/'.cleanFilename($room).'/msg.json', 'w+');
 	$write = fwrite($pointer, json_encode($json));
-	$search = fopen(__DIR__ . '/data/messages/'.cleanFilename($_POST['room']).'/webchat.txt', 'a+');
-	fwrite($search, "<div>".htmlspecialchars(getname())." on ".date("Y:m:d H:i:s", time()).":<div>".$Parsedown->text($_POST['message'])."</div>with attachment &quot;".$_POST['attach']."&quot;</div>");
-	if ($write) {
-		echo '{"status":true}';
-	} else {
-		echo '{"status":null}';
+		}
 	}
-} else {
-	echo '{"status":false}';
-}
-if (!isset($_POST['js'])) header("Location: webchat.php?room=" . urlencode($_POST['room']));
-?>
+	?></div>
+	<form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="post">
+	<ul style="list-style:none;padding:0;">
+		<li><label>Reply contents:<br /><textarea name="contents" rows="20" style="width:100%;"><?php if (isset($_POST['contents'])) { echo htmlspecialchars($_POST['contents']); } ?></textarea></label></li>
+		<li><label>Reply to: <input type="text" name="reply" /></label></li>
+		<li><label>Reply attachment (<a href="files/">upload</a>: <input type="text" name="attach" /></label></li>
+		<li><input type="submit" name="submit" value="Preview" /> 
+		<input type="submit" name="submit" value="Submit" style="font-weight:bold;" /></li>
+	</ul>
+	</form>

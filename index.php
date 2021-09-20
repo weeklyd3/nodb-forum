@@ -16,24 +16,29 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html>
+?><html lang="en">
   <head>
-    <title>Forums &mdash; Home</title>
+    <title><?php 
+		if (file_exists(__DIR__ . '/config.json')) {
+			$name = json_decode(file_get_contents(__DIR__ . '/config.json'));
+			echo htmlspecialchars($name->forumtitle);
+		}
+	?></title>
 	<?php
-	include('./public/header.php');
-	include('./styles/inject.php');
+	include_once('./public/header.php');
+	include_once('./styles/inject.php');
 	?>
   </head>
   <body>
-    <?php 
-	$login = $_COOKIE['login'];
+    <h2><?php 
+	$login = isset($_COOKIE['login']) ? $_COOKIE['login'] : "";
 	if ($login != "") {
-		echo "Welcome, ".htmlspecialchars(getname()).'! We&apos;re glad to have you. Choose a room to join. (<a href="create.php">new topic</a>)';
+		echo "Welcome, ".htmlspecialchars(getname()).'!</h2> We&apos;re glad to have you. Choose a room to join. (<a href="create.php">new topic</a>)';
 	} else {
-		echo "You are not logged in. You will not be able to post any messages.";
+		echo "You are not logged in.</h2> You will not be able to post any messages.";
 	}
-	include('./libraries/listroom.php');
-	include('./public/footer.php');
+	include_once('./libraries/listroom.php');
+	include_once('./public/footer.php');
 	?>
   </body>
 </html>

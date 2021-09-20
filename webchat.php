@@ -16,13 +16,13 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html>
+?><html lang="en">
   <head>
-  <?php 	include('./public/header.php'); ?>
+  <?php 	include_once('./public/header.php'); ?>
     <title><?php
 	 if (isset($_GET['room'])) { 
 		 // verify that room exists
-		if (file_exists('./data/messages/'.cleanFilename($_GET['room']).'/webchat.txt')) {
+		if (file_exists('./data/messages/'.cleanFilename($_GET['room']).'/config.json')) {
 			echo htmlspecialchars($_GET['room']);
 		} else {
 			echo 'Room not found';
@@ -31,31 +31,67 @@
 		 echo 'Choose a room';
 	 } ?></title>
 	<?php
-	include('./styles/inject.php');
+	include_once('./styles/inject.php');
 	echo '<link rel="stylesheet" href="styles/other/editor.css" />';
-	$GLOBALS['room'] = $_GET['room'];
+	$GLOBALS['room'] = isset($_GET['room']) ? $_GET['room'] : "";
 	if ($room == "") {
 		echo 'You haven\'t specified a room. Here are the available options. If you can\'t find a good room, <a href="create.php">create one.</a>';
-		include('libraries/listroom.php');
-		include('public/footer.php');
+		include_once('libraries/listroom.php');
+		include_once('public/footer.php');
 		echo '<!--';
 		exit(0);
 	}
-	if (!file_exists('data/messages/'.cleanFilename($GLOBALS['room']).'/webchat.txt')) {
+	if (!file_exists('data/messages/'.cleanFilename($GLOBALS['room']).'/config.json')) {
 		echo "No such room, <a href=\"create.php\">create one?</a>";
-		include('public/footer.php');
+		include_once('public/footer.php');
 		exit(0);
 	}
 	?>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	  <div id="offlinemsg">You are offline.</div>
+	  <label hidden="hidden">DO NOT TOUCH!
+	  <textarea id="room" hidden="hidden"><?php echo htmlspecialchars($_GET['room']); ?></textarea></label>
+	  <script>var RoomName = document.getElementById('room').value;</script>
+
+	<script>window.addEventListener('load', function(e) {
+  if (!navigator.onLine) {
+    document.getElementById('offlinemsg').style.display = 'block';
+  } else {
+    document.getElementById('offlinemsg').style.display = 'none';
+  }
+}, false);
+
+window.addEventListener('online', function(e) {
+  document.getElementById('offlinemsg').style.display = 'none';
+}, false);
+
+window.addEventListener('offline', function(e) {
+  document.getElementById('offlinemsg').style.display = 'block';
+}, false);</script>
   </head>
   <body>
+  <h2><?php echo htmlspecialchars($_GET['room']); ?></h2>
+  <?php 
+	$obj = json_decode(file_get_contents(__DIR__.'/data/messages/'.cleanFilename($GLOBALS['room']).'/config.json'));
+	$obj->views = intval($obj->views) + 1;
+	$file = fopen(__DIR__.'/data/messages/'.cleanFilename($GLOBALS['room']).'/config.json', 'w+');
+	fwrite($file, json_encode($obj)) or die('fail');
+	fclose($file);
+  ?>
+  <style>#flex-gallery{display:flex;}#flex-gallery>p{margin:3px;}#offlinemsg{display:none;background-color:pink;}</style>
+  <div id="flex-gallery">
+  <p><strong>Views</strong> <?php echo $obj->views; ?></p>
+  <p><strong>Created</strong> <?php echo date('Y-m-d H:i:s', $obj->creationTime);?></p>
+  <p><strong>Author</strong> <a href="account/viewuser.php?user=<?php echo htmlspecialchars(urlencode($obj->author)); ?>"><?php echo htmlspecialchars($obj->author); ?></a></p>
+  </div>
+  <hr />
 <script>window.scrollTo(0,document.body.scrollHeight);
 function update() {
     const exist = globalThis.currentValue;
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", "data/messages/<?php echo cleanFilename($GLOBALS['room']); ?>/webchat.txt");
-    xhr.send();
+    xhr.open("POST", "data/getmsg.php");
+	var data = new FormData();
+	data.append("room", RoomName);
+	xhr.send(data);
     xhr.onload = function () {
         if (xhr.status != 200) {
             document.getElementById("status").innerHTML = `Error ${xhr.status}:${xhr.statusText}`;
@@ -71,19 +107,19 @@ function update() {
                 document.getElementById("message").innerHTML = text;
 				globalThis.currentValue = text;
 				hljs.highlightAll();
+				if (window.bottom) {
+					window.scrollTo(window.scrollY, document.body.scrollHeight);
+				}
             } else {
-                document.getElementById("status").innerHTML = "The same.";
-            }
-            if (window.bottom) {
-                window.scrollTo(0, document.body.scrollHeight);
+                document.getElementById("status").innerHTML = "No new messages found";
             }
         }
     };
     xhr.onprogress = function (event) {
         if (event.lengthComputable) {
-            document.getElementById("status").innerHTML = `Received ${event.loaded}of ${event.total}bytes`;
+            document.getElementById("status").innerHTML = `Received ${event.loaded} of ${event.total}bytes`;
         } else {
-            document.getElementById("status").innerHTML = `Received ${event.loaded}bytes`;
+            document.getElementById("status").innerHTML = `Received ${event.loaded} bytes`;
         }
     };
     xhr.onerror = function () {
@@ -111,7 +147,7 @@ function post() {
         document.getElementById("status").innerHTML = '<span style="color:red;"><strong>Your post has no text, try adding some.</strong></span>';
     }
 }
-var refresh = setInterval(update, 1000);
+var refresh = setInterval(update, 10000);
 function insertAtCursor(myField, myValue) {
     if (document.selection) {
         myField.focus();
@@ -158,12 +194,14 @@ var enterPressed = function (event) {
     }
 };
 
-</script><div id="message" style="font-family:inherit;"><?php echo file_get_contents('data/messages/'.cleanFilename($GLOBALS['room']).'/webchat.txt'); ?></div>
-	<details style="position:sticky; bottom:0; background-color:lightblue; overflow-y:scroll;max-height:calc(100% - 7em);">
+</script><div id="message" style="font-family:inherit;"><?php 
+include_once('data/getmsg.php');
+getMsg($_GET['room']);
+?></div>	<details style="position:sticky; bottom:0; background-color:lightblue; overflow-y:scroll;max-height:calc(100% - 7em); color: black;">
 	<summary style="list-style: none;padding-left:10;">-<span></span>-> Reply</summary>
 	<span id="status">loading status</span><br />
 	<form action="javascript:void(0);" id="compose" onsubmit="post();">
-	<span><input checked="checked" type="radio" name="mode" id="quick" />
+	<div id="load-js" hidden="hidden"><span><input checked="checked" type="radio" name="mode" id="quick" />
 	<label for="quick">Quick chat (enter = send)</label></span>
 	<span><input type="radio" name="mode" id="nonquick" />
 	<label for="nonquick">Detailed chat (click send = send)</label></span>
@@ -171,8 +209,10 @@ var enterPressed = function (event) {
 	<label for="messages">message (markdown allowed, no spam please), <button type="button" onclick="preview()">preview</button></label><textarea rows="7" <?php if ($_COOKIE['login']==''){echo 'disabled="disabled"'; }?> onkeydown="enterPressed(event)" name="message" id="messages" style="width:100%;" required="required" placeholder="Type here"></textarea><br>
 	<div id="previewHTML" style="display:none;">Click 'preview'!</div>
 	<label for="attach">Attachment filename (<button onclick="window.open('files/', 'upload', 'width=600,height=600');" type="button">upload</button>)</label>
-	<input type="text" id="attach" name="attach" placeholder="sample.txt" />
-	<input type="hidden" name="room" value="<?php echo $GLOBALS['room']; ?>" /><br>
+	<input type="text" id="attach" name="attach" placeholder="sample.txt" /><br />
+	<label>Reply to: <input type="text" name="reply" placeholder="admin" /></label>
+	<input type="hidden" name="room" value="<?php echo htmlspecialchars($GLOBALS['room']); ?>" /><br />
+	<input type="hidden" name="js" value="a" />
 	<?php
 	$name = $_COOKIE['login'];
 	if ($name != "") {
@@ -183,10 +223,12 @@ var enterPressed = function (event) {
 		echo "You have to log in to post messages.";
 	}
 	?>
-	</form>
+	</div></form>
+	<noscript>JavaScript is disabled. Please use the <a href="reply.php?room=<?php echo htmlspecialchars(urlencode($_GET['room'])); ?>">reply form</a> instead.</noscript>
 	</details>
 	<script>
 update();
+$("#load-js").css('display', 'block');
 </script>
 <div class="blanket" id="overlay" style="display: none;width:100vw;height:100vw;">
 	<div class="overlay" style="display:block;">
@@ -198,3 +240,4 @@ update();
 		<input type="button" onclick="this.parentNode.parentNode.style.display = 'none';" value="close" />
 	</div>
 </div>
+<?php include_once('./public/footer.php'); ?>

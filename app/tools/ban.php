@@ -1,6 +1,11 @@
-<?php include('header.php');
+<?php include_once('header.php');
 ?>
 <h2>Ban Users</h2>
+<ul>
+	<li><a href="app/tools/users.php">&raquo; User Removal</a></li>
+	<li>&raquo; User Bans</li>
+	<li><a href="app/tools/unban.php">&raquo; User Unbans</a></li>
+</ul>
 <a href="app/tools/unban.php">Unban users &raquo;</a>
 <p>You can't ban yourself, so your name has been hidden from this list.</p>
 

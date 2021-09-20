@@ -16,12 +16,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html>
+?><html lang="en">
   <head>
 	<base href="../" />
-    <title>Forums &mdash; Installation</title>
+    <title>Installation</title>
 	<?php
-	include('../styles/inject.php');
+	include_once('../styles/inject.php');
 	?>
   </head>
   <body>
@@ -34,10 +34,12 @@
 		class Installation {
 			public $forumtitle = "default";
 			public $tags = array();
+			public $creationTime = null;
 		}
 		$install = new Installation;
 		$install->forumtitle = $title;
 		$install->tags = explode(" ", $_POST['tags']);
+		$install->creationTime = time();
 		$json = json_encode($install);
 		$handle = fopen("../config.json", 'w+');
 		$status = fwrite($handle, $json);

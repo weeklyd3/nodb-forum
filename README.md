@@ -9,7 +9,7 @@
 
 I hope you enjoy it! I had fun developing it, and you can have fun chatting.
 ## Installation
-**Note**: You need to be logged in as `admin` for administrator functions such as uninstallation.
+**Note**: You need to be logged in as `admin` for administrator functions such as uninstallation. After your initial login, go to /app/tools/admins.php to add additional admins, and (maybe) delete `admin`.
 
 1. Upload all files to the Web server.
 2. Save the files (if needed).
@@ -25,6 +25,21 @@ I hope you enjoy it! I had fun developing it, and you can have fun chatting.
 7. Register an account using your information.
 8. \[Optional] If you wish to close account registration, comment out the code on account/signup.php and replace with a notice saying signups are closed.
 
+## Features
+ - Live refresh for chat
+ - Accessibility
+   - All form fields have labels
+   - [Placeholders are not used in place of labels](https://www.smashingmagazine.com/2018/06/placeholder-attribute/)
+ - Easy account setup 
+ - Easy installation, only requires extensions that are enabled by default:
+   - arrays
+   - json
+ - AGPL 3.0 license ([view license](https://www.gnu.org/licenses/agpl-3.0.txt))
+
+## Screenshots
+![private messages](https://user-images.githubusercontent.com/79176077/134054046-5c3dacd9-df87-4373-ade6-325e970400e4.png)  
+![home page](https://user-images.githubusercontent.com/79176077/134054392-6b562c0c-a581-41d9-9455-d878982c3fe6.png)  
+![tags](https://user-images.githubusercontent.com/79176077/134054532-1c8f5d6c-0ce4-4527-96d8-e0c512c0561a.png)
 ## Licensing
 ### nodb-forum
 nodb-forum Forum Software.  

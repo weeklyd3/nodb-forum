@@ -19,7 +19,7 @@
 ?><html>
   <head>
 	<base href=".." />
-    <title>Forums &mdash; Markdown</title>
+    <title>Markdown</title>
 	<?php
 	include('../styles/inject.php');
 	?>
@@ -74,6 +74,9 @@
 				<pre>```<br />#include <?php echo htmlspecialchars('<stdio.h>'); ?><br />int main() {<br />    printf("Hello World");<br />}<br />```</pre>
 				If you don't want a code block, just use a single <code id="inlinecode">`</code>:
 				<code>You can use a `div` tag for this.</code>
+				<p><strong>Note:</strong> Markdown and HTML are off in code blocks.
+				</p>
+				<pre>    &lt;strong&gt;this is not bold&lt;/strong&gt;</pre>
 			</div>
 			<div>
 				<h2 id="link">Links</h2>

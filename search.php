@@ -18,68 +18,84 @@
 */
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-?><html>
+?><html lang="en">
   <head>
     <title>Searching for <?php echo htmlspecialchars($_GET['query']); ?></title>
 	<?php
-	include('./public/header.php');
-	include('./styles/inject.php');
+	include_once('./public/header.php');
+	include_once('./styles/inject.php');
 	?>
   </head>
   <body>
   <?php if (!isset($_GET['query']) || $_GET['query'] == '') {
-	  echo "Type query first.";
-	  include('./public/footer.php');
+	  ?><!-- no query -->
+	  <h2>Search Here</h2>
+	  <center>
+	  <form action="search.php" method="GET">
+	  <label style="display:none;" for="query">Search query:</label><input type="search" id="query" name="query" placeholder="What are you looking for?" style="font-size:30px; width: 80%; text-align:center;"/>
+	  <input type="submit" value="&gt;" style="font-size:30px;" />
+	  </form>
+	  </center>
+	  <h2>How to Search</h2>
+	  <p>Enter your search terms, split by spaces, and press <kbd>></kbd> or hit <kbd>Enter</kbd>.</p>
+	  <?php
+	  include_once('./public/footer.php');
 	  exit(0);
+  }
+  function getmsg($room) {
+	  $config = json_decode(file_get_contents(__DIR__ . '/data/messages/' . cleanFilename($room) . '/config.json'));
+	  $string = $config->author . ' on ' . friendlyDate($config->creationTime) . ' [first message]: ' . strip_tags($config->description_html) . ', ';
+	  $msgs = json_decode(file_get_contents(__DIR__ . '/data/messages/' . cleanFilename($room) . '/msg.json'));
+	  foreach ($msgs as $msg) {
+		  $string .= $msg->author . " on " . friendlyDate($msg->time) . ': ' . strip_tags($msg->html) . ", ";
+	  }
+	  return $string;
   }
   ?>
   <table style="width:100%;">
   <tr style="background-color:#f1c1e6;"><td>Search Results for "<?php echo htmlspecialchars($_GET['query']); ?>"</td></tr>
   <?php 
-		if ($handle = scandir('data/messages')) {
-			natcasesort($handle);
-			$stuff = array();
-			foreach ($handle as $key => $entry)
-				if (custom_substr_count(strtoupper(strip_tags(file_get_contents('data/messages/'.$entry.'/webchat.txt'))), explode(" ", $_GET['query'])) > 0) $stuff[(string) custom_substr_count(strtoupper(strip_tags(file_get_contents('data/messages/'.$entry.'/webchat.txt'))), explode(" ", $_GET['query']))] = $entry;
-			ksort($stuff);
-			$stuff = array_reverse($stuff);
-		foreach ($stuff as $key => $entry) {
-			if (!file_exists('data/messages/'.$entry.'/config.json')) continue;
-			$name = json_decode(file_get_contents("data/messages/".$entry."/config.json"));
-			if ((!empty($name->title) && 
-				$entry != "" && $entry != "." && $entry != ".." 
-				&& file_exists('data/messages/'.$entry.'/config.json')
-				 && (contains($name->title, explode(" ", $_GET['query'])) || contains($name->description, explode(" ", $_GET['query'])))) || $_GET['query'] == "") {
-
-				echo '<tr><td style="background:white;color:black;border-radius:3px;"><h3><a href="webchat.php?room='.htmlspecialchars($name->title).'">'.htmlspecialchars($name->title)."</a>";
-				?> <em><?php echo custom_substr_count(strip_tags(file_get_contents('data/messages/'.$entry.'/webchat.txt')), explode(" ", $_GET['query'])); ?> match(es)</em><?php
-				echo "</h3>";
-				?><ul><li>Created <?php
-				echo date('Y-m-d H:i:s', $name->creationTime);
-				?></li><li>by <?php
-				echo htmlspecialchars($name->author);
-				?></li><li><strong>Hit:</strong><br /><?php 
-					$chat = htmlspecialchars_decode(strip_tags(file_get_contents('data/messages/'.$entry.'/webchat.txt')));
-					$chat = str_ireplace(array("\r", "\n", "\r\n"), " ", $chat);
-					$index = stripos($chat, $_GET['query']) ? stripos($chat, $_GET['query']) : 0;
-					$max = 50;
-					if ($index < $max)
-						$index = 0;
-					else 
-						$index -= $max;
-					$extract = substr($chat, $index, 750);
-					$regexp = array();
-					foreach (explode(" ", $_GET['query']) as $value) 
-						array_push($regexp, preg_quote($value, '/'));
-					$regexp = implode("|", $regexp);
-					echo "<!-- regular expression is /(".htmlspecialchars($regexp).')/i -->';
-					$extract = preg_replace("/(".$regexp.")/i", "<span style=\"font-weight:bold;background-color:lightblue;border-radius:3px;\" class=\"hit\">$0</span>", $extract);
-					echo $extract;
-				?></li></ul><?php
-				echo "</td></tr>";
-			}
+	$entries = array_diff(scandir(__DIR__ . '/data/messages', SCANDIR_SORT_NONE), array('..', '.', 'index.php'));
+	$searchterms = array_unique(
+		array_filter(explode(" ", $_GET['query']),
+		function($string) {
+			return !($string === '');
+		})
+	);
+	$results = array();
+	// Change dir to avoid many occurrences of
+	//     __DIR__ . '/data/messages'
+	// in the code.
+	chdir(__DIR__ . '/data/messages/');
+	foreach ($entries as $entry) {
+		if (!is_dir($entry)) continue;
+		$config = json_decode(file_get_contents($entry . '/config.json'));
+		$titleContains = contains($config->title, $searchterms);
+		$bodyContains = custom_substr_count(html_entity_decode(getmsg($entry)), $searchterms);
+		if ($titleContains || ($bodyContains != 0)) {
+			$results[$config->title] = $bodyContains;
 		}
+	}
+    arsort($results, SORT_NUMERIC);
 
+	$page = isset($_GET['page']) ? (is_numeric($_GET['page']) ? $_GET['page'] : 1) : 1;
+	$pagesize = 15;
+
+	foreach ($results as $roomname => $value) {
+		$config = json_decode(file_get_contents(cleanFilename($roomname) . '/config.json'));
+		?><tr class="found"><td><h3><a href="webchat.php?room=<?php echo htmlspecialchars(urlencode($config->title)); ?>"><?php echo htmlspecialchars($config->title); ?></a> (match count: <?php echo custom_substr_count(getmsg($roomname), $searchterms); ?>)</h3><p><?php
+			$msgs = html_entity_decode(getmsg($roomname));
+			$pos = custom_stripos($msgs, $searchterms);
+			if ($pos > 30) $view = substr($msgs, $pos - 30, 400);
+			if ($pos <= 30) $view = substr($msgs, 0, 400);
+			$hlterms = array_map(function($input) {
+				return preg_quote(htmlspecialchars($input), '/');
+			}, $searchterms);
+			$regex = "/(" . implode("|", $hlterms) . ")/i";
+			$preg = preg_replace($regex, '<span class="hit">$0</span>', htmlspecialchars($view));
+			echo $preg;
+
+		?></p></td></tr><?php
 	}
   ?>
   <tr style="background-color:#f1c1e6;"><td>Search Results for "<?php echo htmlspecialchars($_GET['query']); ?>"</td></tr>
@@ -87,6 +103,7 @@ error_reporting(E_ALL);
   <small><em>Can't find what you're looking for? <strong><?php 
   $tips = array("Try less search terms.", "Check for typos.", "Try different search terms.", "Include terms in the posts.", "Use your browser's find on page feature on this page.", "Wait a few minutes if it was recently created.", "It might have been deleted.", "Check the related tags.", "Create it!");
   shuffle($tips);
+
   echo $tips[array_rand($tips)]; ?></strong></em></small>
   <style>
   body, html {
@@ -95,14 +112,27 @@ error_reporting(E_ALL);
 	background: -webkit-linear-gradient(0deg, rgba(218,166,245,1) 0%, rgba(45,231,253,1) 100%);
 	background: linear-gradient(0deg, rgba(218,166,245,1) 0%, rgba(45,231,253,1) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#daa6f5",endColorstr="#2de7fd",GradientType=1);
-}</style>
+}
+.hit {
+	background-color: #00ff00;
+	font-weight: bold;
+	border-radius: 3px;
+}
+.found {
+	background-color: white;
+	color: black;
+	border-radius: 3px;
+}
+</style>
 <script> 
 function clearMark() {
-	const links = document.getElementsByClassName('hit');
-	for (const value of links) {
-		value.setAttribute('style', '');
+	const links = document.querySelectorAll('span.hit');
+	for (var i = 0; i < links.length; i++) {
+		links[i].removeAttribute('class');
 	}
 }
 </script>
 <a href="javascript:;" onclick="clearMark()">Clear all marks</a>
-<?php include('./public/footer.php'); ?>
+<?php 
+chdir(__DIR__);
+include_once('./public/footer.php'); ?>

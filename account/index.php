@@ -16,13 +16,13 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html>
+?><html lang="en">
   <head>
     <base href=".." />
-    <title>Forums &mdash; My Account</title>
+    <title>My Account</title>
 	<?php
-	include('../public/header.php');
-	include('../styles/inject.php');
+	include_once('../public/header.php');
+	include_once('../styles/inject.php');
 	?>
   </head>
   <body>
@@ -30,6 +30,10 @@
 	if ($_COOKIE['login']) {
 		echo "<h2>".htmlspecialchars(getname()).'</h2>';
 	?>
+	<div style="border-bottom:1px solid;">
+		<span style="border-radius:3px 3px 0px 0px; text-decoration:none;border:1px solid;border-bottom:1px solid pink;">Account Options</span>
+		<a href="messages/">Private Messages</a>
+	</div>
 	<details open="open">
 		<summary>Account Options</summary>
 		<button onclick="window.location.assign('account/changepass.php');">Change Password</button><br />
@@ -40,4 +44,4 @@
 	} else {
 		echo "You are not logged in.";
 	}
-	include('../public/footer.php'); ?>
+	include_once('../public/footer.php'); ?>

@@ -17,29 +17,20 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 ?>
-<table id="header" style="width:100%; position:sticky; top:0px; background-color:blue;z-index:10;">
+<div id="keyboard-focus" style="z-index:999;">
+	<a id="link" href="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>#mainContent" style="background-color:black;">Skip to main content</a>
+</div>
+  <div id="inbox-blanket" class="blanket">
+	<div class="overlay" id="inbox-overlay" style="display:none;position:fixed;top:50%;left:50%;transform: translate(-50%,-50%); ">
+		<table height="100%"><tr><td><p id="loading" style="color:black;">loading...</p><iframe src="about:blank" onload="document.getElementById('loading').style.display = 'none';" id="notification-iframe" frameBorder="0" style="height:600px;max-height:75vh;"></iframe></td></tr><tr><td><button onclick="this.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = 'none';document.getElementById('loading').style.display = 'block';document.getElementById('notification-iframe').src = '';">Close</button></td></tr></table>
+	</div>
+  </div>
+<table id="header" style="width:100%; background-color:#7AD7FF;color:black;z-index:10;">
 <tr><td><h1 style="display:inline;"><span id="menubutton" style="cursor:pointer;"><img src="img/menu.png" alt="≡" /></span> <a style="text-decoration:none !important;" href="./"><img alt="Forum Logo" src="./img/logo.png" /><span id="TitleText">
 <?php
-include(__DIR__ . '/../libraries/lib.php');
+include_once(__DIR__ . '/../libraries/lib.php');
 if (!file_exists(__DIR__ ."/../config.json")) {
 	header("Location: /app/install.php");
-}
-function getname() {
-	if (isset($_COOKIE['login'])) {
-		$COOK = $_COOKIE['login'];
-		$STATS = explode("\0", $COOK);
-		$path = cleanFilename($STATS[0]);
-		$path = __DIR__ . '/../data/accounts/'.$path;
-		$hash = file_get_contents($path . '/psw.txt');
-		if ($COOK != '') {
-			if (password_verify($STATS[1], $hash)) {
-				$match = true;
-			} else {
-				header('Location: '.$SERVER['DOCUMENT_ROOT'].'/invalidpass.php');
-			}
-			return $STATS[0];
-		}
-	}
 }
 $object = json_decode(file_get_contents(__DIR__ ."/../config.json"));
 echo $object->forumtitle."</span></a></h1></td>";
@@ -48,14 +39,20 @@ if (!getname()) {
 	echo '<td><a href="account/signup.php">sign up</a></td>';
 	echo '<td><a href="account/login.php">log in</a></td>';
 } else {
-	echo '<td><a href="account/">'.htmlspecialchars(getname()).'</a></td>';
+	echo '<td><a href="inbox.php" id="notification-button">notifications</a></td><td><a href="account/">'.htmlspecialchars(getname()).'</a></td>';
 	echo '<td>(<a href="account/logout.php">log out</a>)</td></tr>';
-}
-if (file_exists(__DIR__ . '/../data/accounts/'.cleanFilename(getname()).'/ban.txt') && $_SERVER['REQUEST_URI'] != '/banned.php') {
-	header('Location: /banned.php');
 }
 ?>
 <script>
+	if (document.getElementById('notification-button') != null) {
+		document.getElementById('notification-button').addEventListener('click', function(event) {
+			document.getElementById('notification-iframe').src = '';
+			event.preventDefault();
+			document.getElementById('inbox-overlay').style.display = 'block';
+			document.getElementById('loading').style.display = 'block';
+			document.getElementById('notification-iframe').src = 'inbox.php';
+		});
+	}
 	document.querySelector('html')
 		.addEventListener('keydown',
 			function(event) {
@@ -66,17 +63,17 @@ if (file_exists(__DIR__ . '/../data/accounts/'.cleanFilename(getname()).'/ban.tx
 			}
 		);
 </script>
-<tr><td>&nbsp;</td><td rowspan="2" align="right"><form action="search.php" method="GET"> <input type="search" id="query" name="query" placeholder="search rooms" value="<?php if (isset($_GET['query'])) { echo htmlspecialchars($_GET['query']); } ?>" /> <input type="submit" value=">" /></form></td><td></td></tr>
+<tr><td>&nbsp;<label for="query" style="display:none;">Search query:</label></td><td rowspan="3" align="right"><form action="search.php" method="GET"> <input type="search" id="query" name="query" placeholder="search rooms" value="<?php if (isset($_GET['query'])) { echo htmlspecialchars($_GET['query']); } ?>" /> <input type="submit" value=">" /></form></td><td></td></tr>
 </table>
 <div id="banner" style="width:100%;background-color:gold;color:black;text-align:center;"><?php 
 require(__DIR__ . '/../libraries/parsedown.php');
 	if (isset($object->banner)) {
 		$parse = new Parsedown;
-		echo $parse->text($object->banner);
-		?><a href="javascript:;" onclick="this.parentNode.style.display = 'none';">&times;</a><?php
+		echo $parse->line($object->banner);
+		?> <a href="javascript:;" onclick="this.parentNode.style.display = 'none';">&times;</a><?php
 	}
 ?></div>
-<div id="menu" style="resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#e2ccf5; display:none; position:fixed; top:0; left:0; overflow-y:scroll;">
+<div id="menu" style="resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#e2ccf5; display:none; position:fixed; top:0; left:0; overflow-y:scroll;color:black;">
 <p id="drag" style="text-align:right;cursor:move;"><span style="text-align:left;">Menu</span> <span onclick="document.getElementById('menu').style.display='none';" style="cursor:pointer;">&times;</span></p>
 <ul style="list-style:none; padding:7px;">
 <li><a href="./">Home</a></li>
@@ -97,7 +94,7 @@ $link .= $_SERVER['HTTP_HOST'];
 $link .= $_SERVER['REQUEST_URI'];
 echo $link;
 ?><br><br>
-<strong><a href="javascript:;" onclick="document.getElementById('menu').setAttribute('style', 'resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#e2ccf5; display:block; position:fixed; top:0; left:0; overflow-y:scroll;');">Reset menu position</a></strong></em></center>
+<strong><a href="javascript:;" onclick="document.getElementById('menu').setAttribute('style', 'resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#e2ccf5; display:block; position:fixed; top:0; left:0; overflow-y:scroll;color:black;');">Reset menu position</a></strong></em></center>
 </div>
 <script>
 document.querySelector("#query").onfocus = function() {
@@ -176,3 +173,10 @@ window.addEventListener('click', function(e) {
 
 makeDraggable("#drag", "div");
 </script>
+<?php
+if (file_exists(__DIR__ . '/../data/accounts/'.cleanFilename(getname()).'/ban.txt') && $_SERVER['REQUEST_URI'] != '/banned.php') {
+	require __DIR__ . '/../banned.php';
+	exit(0);
+}
+?>
+<div id="mainContent">

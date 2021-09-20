@@ -1,15 +1,11 @@
-<?php include('header.php');
+<?php include_once('header.php');
 echo '<h2>Users</h2>';
-function delTree($dir) { 
-	$files = array_diff(scandir($dir), array('.', '..')); 
-
-	foreach ($files as $file) { 
-		(is_dir("$dir/$file") && !is_link("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file"); 
-	}
-
-	return rmdir($dir); 
-} 
 ?>
+<ul>
+	<li>&raquo; User Removal</li>
+	<li><a href="app/tools/ban.php">&raquo; User Bans</a></li>
+	<li><a href="app/tools/unban.php">&raquo; User Unbans</a></li>
+</ul>
 You may remove them here. <em>Do not remove users unless they seriously posted abusive content!</em>
 <ul>
 <?php 

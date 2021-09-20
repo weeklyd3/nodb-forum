@@ -919,8 +919,13 @@ class Parsedown
 
                     $HeaderElement['attributes'] = array(
                         'style' => 'text-align: '.$alignment.';',
+						'class' => 'table',
                     );
-                }
+                } else {
+					$HeaderElement['attributes'] = array(
+						'class' => 'table',
+					);
+				}
 
                 $HeaderElements []= $HeaderElement;
             }
@@ -989,6 +994,7 @@ class Parsedown
                 {
                     $Element['attributes'] = array(
                         'style' => 'text-align: '.$Block['alignments'][$index].';',
+						'class' => 'table',
                     );
                 }
 

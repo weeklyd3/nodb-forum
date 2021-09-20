@@ -16,15 +16,15 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html>
+?><html lang="en">
   <head>
 	<?php
-	include('./public/header.php');
-	include('./styles/inject.php');
+	include_once('./public/header.php');
+	include_once('./styles/inject.php');
 	$Parsedown = new Parsedown;
 	
 	if (!isset($_GET['tag'])) die("No tag specified"); ?>
-    <title>Forums &mdash; Topics Tagged "<?php echo htmlspecialchars($_GET['tag']); ?>"</title>
+    <title>Topics Tagged "<?php echo htmlspecialchars($_GET['tag']); ?>"</title>
   </head>
   <body>
 	<h2>Showing: Topics Tagged <span class="tag"><?php echo htmlspecialchars($_GET['tag']); ?></span> (<a href="tags.php">all tags</a>)</h2>
@@ -48,8 +48,7 @@
 	</div>
 	<ul style="list-style:none;padding:0;">
 		<?php 
-			$all = scandir("./data/messages");
-			natcasesort($all);
+			$all = scan_dir("./data/messages");
 			$names = array();
 			foreach ($all as $key => $value) {
 				$config = json_decode(file_get_contents('./data/messages/'.$value.'/config.json'));
@@ -76,4 +75,4 @@
 			}
 		?>
 	</ul>
-	<?php include('./public/footer.php'); ?>
+	<?php include_once('./public/footer.php'); ?>

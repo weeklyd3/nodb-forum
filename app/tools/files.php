@@ -1,4 +1,4 @@
-<?php include('header.php'); ?>
+<?php include_once('header.php'); ?>
 <h2>Files</h2>
 <ul>
 <?php 
@@ -45,12 +45,39 @@ function select($text) {
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 <input type="hidden" id="role" name="role" />
 <input type="submit" value="Delete" onclick="document.getElementById('role').value='delete';" />
-<input type="number" required="required" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="7" name="ch1" min="0" max="7" />
-<input type="number" required="required" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="7" name="ch2" min="0" max="7" />
-<input type="number" required="required" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="7" name="ch3" min="0" max="7" />
+<select name="ch1" id="ch1" onkeyup="document.getElementById('ch2').focus();">
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7" selected="selected">7</option>
+</select>
+<select name="ch2" id="ch2" onkeyup="document.getElementById('ch3').focus();">
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7" selected="selected">7</option>
+</select>
+<select name="ch3" id="ch3">
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7" selected="selected">7</option>
+</select>
 <input type="submit" value="CHMOD" onclick="document.getElementById('role').value='chmod';" />
 <table>
-<tr><th>Check</th> <th>Name</th> <th>Created (Windows) or Modified (Others)</th> <th>Size (bytes)</th> <th>View</th> <th>Download</th> <th>Permissions</th></tr>
+<tr><th>Check</th> <th>Name</th> <th>Modified</th> <th>Size (bytes)</th> <th>View</th> <th>Download</th> <th>Permissions</th></tr>
 <?php
 if ($handle = opendir('../../files/uploads')) {
     while (false !== ($entry = readdir($handle))) {
@@ -59,8 +86,8 @@ if ($handle = opendir('../../files/uploads')) {
 			echo $entry;
 			echo "\n";
 			echo '</label></td><td>';
-			$timestamp = filectime('../../files/uploads/'.$entry);
-			echo gmdate("Y-m-d H:i:s", $timestamp);
+			$timestamp = filemtime('../../files/uploads/'.$entry);
+			echo friendlyDate($timestamp);
 			echo '</td><td>';
 			echo strlen(file_get_contents('../../files/uploads/'.$entry));
 			echo '</td><td>';

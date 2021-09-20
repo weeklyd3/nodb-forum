@@ -8,6 +8,7 @@
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,20 +17,19 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html>
+?><html lang="en">
   <head>
     <title>Forums &mdash; Create Chat Room</title>
 	<?php
-	include('./public/header.php');
-	include('./styles/inject.php');
+	include_once('./public/header.php');
+	include_once('./styles/inject.php');
 	?>
   </head>
   <body>
   <?php 
-  error_reporting(E_ALL);
-  if (!$_COOKIE['login']) {
+  if (!isset($_COOKIE['login'])) {
 	  echo 'You need to log in to create rooms.';
-	  include('./public/footer.php');
+	  include_once('./public/footer.php');
 	  exit(0);
   }
 		if (isset($_POST['roomtitle'])) {
@@ -44,6 +44,7 @@
 				public $author = null;
 				public $creationTime = null;
 				public $tags = array();
+				public $flags = null;
 			}
 			$room = new Room("-<span></span>-> constructed template");
 			$room->title = $_POST['roomtitle'];
@@ -51,10 +52,10 @@
 			$room->description_html = $parsedown->text($room->description);
 			$room->author = getname();
 			$room->creationTime = time();
-			$room->tags = implode(" ", array_filter(array_unique(explode(" ", $_POST['tags']))));
+			$room->tags =implode(" ", array_map('strtolower', array_filter(array_unique(explode(" ", $_POST['tags'])))));
 
 			$exist = json_decode(file_get_contents('config.json'))->tags;
-			foreach (explode(" ", $_POST['tags']) as $key => $value) {
+			foreach (array_map('strtolower', array_filter(array_unique(explode(" ", $_POST['tags'])))) as $key => $value) {
 				if (!in_array($value, $exist)) {
 					array_push($exist, $value);
 				}
@@ -73,9 +74,7 @@
 					$filename = 'data/messages/'.cleanFilename($room->title) . '/config.json';
 					$handle = fopen($filename, 'w+');
 					$one = fwrite($handle, json_encode($room));
-					$filename = 'data/messages/'.cleanFilename($room->title) . '/webchat.txt';
-					$handle = fopen($filename, 'w+');
-					$two = fwrite($handle, $room->description_html);
+					$two = fwrite(fopen(__DIR__ . '/data/messages/'.cleanFilename($room->title).'/msg.json', 'w+'), "{}");
 					if ($one && $two) {
 						echo "Created";
 					}
@@ -86,7 +85,7 @@
  		}
 	?>
 	<form id="form" action="<?php echo $_SERVER['PHP_SELF']; echo '" '; if(isset($_POST['roomtitle'])) { echo 'style="display:none;"'; }?> method="post">
-    	<strong>WARNING: Only create new rooms if you absolutely need to!</strong>
+    	<strong>WARNING: Only create new rooms if you absolutely need to!</strong> If the topic already exists, do not re-post it.
 		<br />
 		<label for="roomtitle">Room title:</label>
 		<input type="text" id="roomtitle" name="roomtitle" required="required" />

@@ -1,20 +1,12 @@
-<?php include('header.php');
+<?php include_once('header.php');
 ?>
 <h2>Topics</h2>
-Remove them if they are being abusive or are all consisted of low quality posts.
+<p>
+Remove them if they are being abusive or are all consisted of low quality posts.</p>
 <ul>
 <?php 
-function delTree($dir) { 
-	$files = array_diff(scandir($dir), array('.', '..')); 
-
-	foreach ($files as $file) { 
-		(is_dir("$dir/$file") && !is_link("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
-	}
-
-	return rmdir($dir); 
-} 
-foreach( $_POST as $stuff ) {
-    if (is_dir('../../data/messages/'.cleanFilename($stuff))) {
+foreach( $_POST as $name => $stuff ) {
+	if (is_dir('../../data/messages/'.cleanFilename($stuff))) {
 		$rm = delTree('../../data/messages/'.cleanFilename($stuff));
 		if ($rm) {
 			echo '<li>Room '.htmlspecialchars($stuff).' deleted.</li>';
@@ -34,7 +26,7 @@ if ($handle = opendir('../../data/messages/')) {
 			echo '<div><input type="checkbox" name="'.htmlspecialchars($entry).'" value="'.htmlspecialchars($entry).'" id="'.htmlspecialchars($entry).'" /><label for="'.htmlspecialchars($entry).'">';
 			$config = file_get_contents('../../data/messages/'.$entry.'/config.json');
 			$config = json_decode($config);
-			echo $config->title;
+			echo htmlspecialchars($config->title);
 			echo "\n";
 			echo '</label></div>';
 		}

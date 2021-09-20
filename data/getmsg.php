@@ -20,7 +20,11 @@ function getMsg($room) {
 	if (!isset($room)) die("Specify a room!");
 	if (!file_exists(__DIR__ . '/../data/messages/'.cleanFilename($room) . '/msg.json')) die("Bad room");
 	foreach ($msgs as $key => $value) {
-		?><tr><td id="nodb-forum-message-<?php echo htmlspecialchars($key); ?>" style="vertical-align:top;" rowspan="3"><?php echo $value->html; ?> <hr /><?php if (getname()) { ?><a href="flag_post.php?room=<?php echo htmlspecialchars(urlencode($room)); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">flag</a> <?php } ?></td><td style="width:0px;" id="nodb-forum-user-<?php echo htmlspecialchars($key); ?>"><?php 
+		?><tr><td id="nodb-forum-message-<?php echo htmlspecialchars($key); ?>" style="vertical-align:top;" rowspan="3"><?php
+		if (isset($value->reply)) {
+			?><span style="color:black;background-color:#ffcccb;">@<?php echo htmlspecialchars($value->reply); ?></span><?php
+		}
+		echo $value->html; ?> <hr /><?php if (getname()) { ?><a href="flag_post.php?room=<?php echo htmlspecialchars(urlencode($room)); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">flag</a> <?php } ?></td><td style="width:0px;" id="nodb-forum-user-<?php echo htmlspecialchars($key); ?>"><?php 
 			if (file_exists(__DIR__ . '/accounts/'.cleanFilename($value->author) . '/psw.txt')) {
 				?><a href="account/viewuser.php?user=<?php echo htmlspecialchars(urlencode($value->author)); ?>"><img src="./data/accounts/<?php echo htmlspecialchars(cleanFilename($value->author)); ?>/avatar.png" alt="Avatar image for <?php echo htmlspecialchars($value->author); ?>" /> <br /><?php echo htmlspecialchars($value->author); ?></a><?php
 			} else {

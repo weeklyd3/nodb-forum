@@ -16,12 +16,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html>
+?><html lang="en">
   <head>
 	<base href="../" />
-    <title>Forums &mdash; Uninstallation</title>
+    <title>Uninstallation</title>
 	<?php
-	include('../styles/inject.php');
+	include_once('../styles/inject.php');
 	?>
   </head>
   <body>
@@ -43,7 +43,7 @@
 			$pass = $login[1];
 			$firstlogin = $login[0];
 			$actual = file_get_contents("../data/accounts/".cleanFilename($firstlogin) . '/psw.txt');
-			if (password_verify($pass, $actual) && ($firstlogin == 'admin')) {
+			if (password_verify($pass, $actual) && (verifyAdmin())) {
 				return true;
 			} else {
 				return false;

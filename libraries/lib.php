@@ -17,6 +17,13 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 ?><?php
+if (!class_exists('emptyClass')) {
+	class emptyClass {
+		function _copyright() {
+			return "    Forum Software\n    Copyright (C) 2021 contributors\n\n    This program is free software: you can redistribute it and/or modify\n    it under the terms of the GNU Affero General Public License as published by\n    the Free Software Foundation, either version 3 of the License, or\n    (at your option) any later version.\n\n    This program is distributed in the hope that it will be useful,\n    but WITHOUT ANY WARRANTY; without even the implied warranty of\n    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n    GNU Affero General Public License for more details.\n\n    You should have received a copy of the GNU Affero General Public License\n    along with this program.  If not, see <https://www.gnu.org/licenses/>.";
+		}
+	}
+}
 function endsWith($haystack, $needle) {
     $length = strlen($needle);
     if(!$length) {
@@ -40,11 +47,11 @@ function str_replace_first($from, $to, $content) {
 
     return preg_replace($from, $to, $content, 1);
 }
-function scan_dir($dir) {
+function scan_dir(string $dir): ?array {
     $ignored = array();
     $files = array(); 
     foreach (scandir($dir) as $file) {
-        if ($file[0] === '.') continue; 
+        if ($file === '.' || $file === '..') continue; 
         if (in_array($file, $ignored)) continue; 
         $files[$file] = filemtime($dir . '/' . $file);
     }
@@ -54,15 +61,157 @@ function scan_dir($dir) {
 }
 function contains($str, $arr) {
     foreach($arr as $a) {
-        if (!(stripos($str, $a) === false)) return true;
+        if (stripos($str, $a) !== false) return true;
     }
     return false;
 }
 function custom_substr_count($str, $arr) {
 	$i = 0;
     foreach($arr as $a) {
-        if (substr_count(strtoupper($str), strtoupper($a))) $i+=substr_count(strtoupper($str), strtoupper($a));
+        $i += substr_count(strtoupper($str), strtoupper($a));
     }
     return $i;
+}
+function getname() {
+	if (isset($_COOKIE['login'])) {
+		$COOK = $_COOKIE['login'];
+		$STATS = explode("\0", $COOK);
+		$path = cleanFilename($STATS[0]);
+		$path = __DIR__ . '/../data/accounts/'.$path;
+		$hash = file_get_contents($path . '/psw.txt');
+		if ($COOK != '') {
+			if (password_verify($STATS[1], $hash)) {
+				$match = true;
+			} else {
+				?></table><?php
+				require_once __DIR__ . '/../invalidpass.php';
+				chdir(__DIR__);
+				exit(0);
+			}
+			return $STATS[0];
+		}
+	}
+}
+function custom_stripos(string $haystack, array $needle) {
+	$record = strlen($haystack) + 1;
+	foreach ($needle as $entry) {
+		$currentpos = stripos($haystack, $entry);
+		if ((is_numeric($currentpos) && $currentpos < $record) || !isset($record)) {
+			$record = $currentpos;
+		}
+	}
+	return $record;
+}
+function verifyAdmin() {
+	$config = json_decode(file_get_contents(__DIR__ . '/../config.json'));
+	return in_array(getname(), $config->admins);
+}
+function getDirSize(string $dir): ?int {
+	$files = array_diff(scandir($dir), array('.', '..'));
+	$size = 0;
+	foreach ($files as $file) {
+		if (is_dir($dir . '/' . $file)) {
+			$size += getDirSize($dir . '/' . $file);
+		} else {
+			$filesize = filesize($dir . '/' . $file);
+			if ($filesize === false) {
+				return false;
+			} else {
+				$size += $filesize;
+			}
+		}
+	}
+	return $size;
+}
+function delTree($dir) { 
+	$files = array_diff(scandir($dir), array('.', '..')); 
+
+	foreach ($files as $file) { 
+		(is_dir("$dir/$file") && !is_link("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file"); 
+	}
+
+	return rmdir($dir); 
+} 
+function friendlyDate(int $timestamp) {
+	$friend   = array();
+	// for the date given...
+	$year     = (int) date("Y", $timestamp);
+	$month    = (int) date("m", $timestamp);
+	$day      = (int) date("d", $timestamp);
+	$hour     = (int) date("H", $timestamp);
+	$minute   = (int) date("i", $timestamp);
+	$second   = (int) date("s", $timestamp);
+	// now... = (int) <-- to keep the column
+	$time    = (int) time();
+	$nyear    = (int) date("Y", $time);
+	$nmonth   = (int) date("m", $time);
+	$nday     = (int) date("d", $time);
+	$nhour    = (int) date("H", $time);
+	$nminute  = (int) date("i", $time);
+	$nsecond  = (int) date("s", $time);
+
+	$months = array(
+		"Jan",
+		"Feb",
+		"Mar",
+		"Apr",
+		"May",
+		"Jun",
+		"Jul",
+		"Aug",
+		"Sep",
+		"Oct",
+		"Nov",
+		"Dec",
+	);
+
+	if ($month != $nmonth || $day != $nday) {
+		array_push($friend, $months[$month - 1]);
+		array_push($friend, $day);
+	} 
+	
+	if ($year != $nyear) {
+		if ($nyear - $year < 100) {
+			array_push($friend, "'" . substr((string) $year, -2));
+		} else {
+			array_push($friend, $nyear);
+		}
+	}
+
+	if ($month != $nmonth || $day != $nday) {
+		array_push($friend, "@");
+	} 
+
+	$newminute = str_repeat("0", 2 - strlen((string) $minute)) . $minute;
+
+	$times = $hour . ":" . $newminute;
+
+	array_push($friend, $times);
+
+	return implode(" ", $friend);
+}
+function colorNum(int $num): string {
+	$number = $num;
+	if ($num < 5) {
+		return '<span>' . $num . '</span>';
+	}
+	if ($num >= 5 && $num < 15) {
+		return '<span style="color:hsl(27,90%,45%);">' . $num . '</span>';
+	}
+	if ($num >= 15 && $num < 100) {
+		return '<span style="color:hsl(27,90%,50%);">' . $num . '</span>';
+	}
+	if ($num >= 100 && $num < 1000) {
+		return '<span style="color:hsl(27,90%,55%);">' . $number . '</span>';
+	}
+	if ($num >= 1000) {
+		if ($num >= 1000) {
+			$number = round(($num / 1000), 1) . 'k';
+		}
+		if ($num >= 1000000) {
+			$number = round(($num / 100000), 1) . 'm';
+		}
+		return '<span style="color:hsl(27,90%,55%);">' . $number . '</span>';
+	}
 }
 ?>

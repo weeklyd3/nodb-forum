@@ -16,16 +16,17 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html>
+?><html lang="en">
   <head>
     <title>Forums</title>
 	<?php
-	include('./styles/inject.php');
+	chdir(__DIR__);
+	include_once('./styles/inject.php');
 	?>
   </head>
   <body>
   <?php 
-  include('./libraries/lib.php');
+  include_once('./libraries/lib.php');
   if (isset($_POST['login'])) {
 	if (file_exists('./data/accounts/'.cleanFilename($_POST['user']).'/psw.txt')) {
 		$USER = $_POST['user'];

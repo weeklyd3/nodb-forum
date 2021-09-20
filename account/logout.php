@@ -16,7 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html>
+?><html lang="en">
   <head>
 	<base href="../" />
     <title>Logging Out...</title>
@@ -29,7 +29,8 @@
 	<?php
 	ob_start();
 	echo '<em>Please wait...</em>';
-	setcookie('login', false, time() - 3600, '/');
+	setcookie('login', false, time() + 72000, '/');
+	setcookie('login', false, time() + 72000);
 	unset($_COOKIE['login']);
 	echo '<p>Logged out!</p>';
 	include('../public/footer.php');

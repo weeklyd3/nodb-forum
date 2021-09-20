@@ -16,7 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html>
+?><html lang="en">
   <head>
     <title>Board FAQ</title>
 	<?php
@@ -25,7 +25,7 @@
 	?>
   </head>
   <body>
-  <style>.answer { background-color: #61ff9e; width: 45%; height: 25vw; margin: 5px; overflow-y: scroll; min-width: 360px; max-width: 100%; } </style>
+  <style>.answer { min-height: 300px; color:black; background-color: #61ff9e; width: 45%; height: 25vw; margin: 5px; overflow-y: scroll; min-width: 360px; max-width: 100%; } .answer * { color: black; }</style>
   <div id="contents"><ul>
   <li><a href="#register">Why Register?</a></li>
   <li><a href="#price">How much does it cost?</a></li>
@@ -44,6 +44,8 @@
   <tr><td>Read chat</td><td>yes</td><td>yes</td></tr>
   <tr><td>Create topics</td><td>no</td><td>yes</td></tr>
   <tr><td>Participate in Chat</td><td>no</td><td>yes</td></tr>
+  <tr><td>Create tags</td><td>no</td><td>yes</td></tr>
+  <tr><td>Upload files</td><td>no</td><td>yes</td></tr>
   </table>
   You can register for free by clicking 'Sign Up' on the top bar.
   </div>

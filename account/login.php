@@ -16,7 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html>
+?><html lang="en">
   <head>
 	<base href="../" />
     <title>Log In</title>
@@ -33,9 +33,10 @@
 		$hash = file_get_contents($hashfile);
 		$PASSHASH = password_hash($PASS, PASSWORD_DEFAULT);
 		echo "<br>";
+		$expiry = is_numeric($_POST['expiry']) ? (int) $_POST['expiry'] : 72000;
 		if (password_verify($PASS, $hash)) {
 			$COOK = $USER . "\0" . $PASS;
-			setcookie('login', $COOK, time() + 72000, '/');
+			setcookie('login', $COOK, time() + $expiry, '/');
 			echo "<script>location.href='/';</script>";
 		} else {
 			echo "Bad password!<br>";
@@ -59,8 +60,13 @@
   <button type="button" onclick="if(document.getElementById('psw').type=='text'){document.getElementById('psw').type='password';}else{document.getElementById('psw').type='text';}">Show/Hide</button>
   <br>
   <br>
+  <p><details id="hide"><summary id="more">Advanced</summary><label>Log out after seconds: <input type="number" name="expiry" /></label></details></p>
+  <style>#hide[open] > #more {
+	  display: none;
+  }
+  #hide { list-style: none; }</style>
   <input type="submit" value="Log In" />
-  </form></center>
+  </form><small>Note: By default you will stay logged in for 20 hours. You can change this through "Advanced".</small></center>
   <h3>Forgetful?</h3>
   <ul>
   <li><a href="javascript:;" onclick="document.getElementById('overlay').style.display = 'block';">Forgot user name?</a></li>

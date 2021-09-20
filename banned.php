@@ -16,14 +16,15 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html>
+?><html lang="en">
   <head>
-    <title>Forums &mdash; Banned</title>
+    <title>Banned</title>
 	<?php
+	chdir(__DIR__);
 	echo '<!--';
-	include('./public/header.php');
+	include_once('./public/header.php');
 	echo '-->';
-	include('./styles/inject.php');
+	include_once('./styles/inject.php');
 	if (!(file_exists('./data/accounts/'.cleanFilename(getname()).'/ban.txt'))) {
 		echo '<script>location.href="/";</script>';
 	}
@@ -36,7 +37,7 @@
 	  The administrator can lift the ban.
 	  <section><?php 
 	  if (file_exists('./extensions/nodb-forum-ban-appeal/index.php')) {
-		  include('./extensions/nodb-forum-ban-appeal/index.php');
+		  include_once('./extensions/nodb-forum-ban-appeal/index.php');
 	  }
 	  ?></section>
   </body>

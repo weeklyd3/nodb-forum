@@ -114,8 +114,7 @@ input[type="checkbox"]:disabled {
   color: gray;
 }
 :focus {
-	outline: none;
-	border:2px solid;
+	outline: 2px solid;
 }
 .gallery {
 	margin:2px;
@@ -179,6 +178,7 @@ table, table>tr, table>td {
 	border-radius: 3px;
 	text-decoration: none !important;
 	cursor: default;
+	color: black;
 }
 .tag:hover {
 	background-color: #6c9ce6;
@@ -191,4 +191,22 @@ details {
 }
 summary {
 	margin-left: -10px;
+}
+#keyboard-focus {
+	position: absolute;
+	top: -1200px;
+}
+#link:focus {
+	position: absolute;
+	top: 1200px !important;
+}
+input:not([type="radio"]) {
+	border-radius: 0px !important;
+	-webkit-appearance: none;
+}
+input:disabled, textarea:disabled {
+	background-color: lightgray;
+}
+input, textarea, select {
+	max-width: 100%;
 }

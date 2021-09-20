@@ -25,7 +25,7 @@
 			header('location: ../users.php');
 	?>
 	<base href="../" />
-    <title>Forums &mdash; User <?php echo htmlspecialchars($username); ?></title>
+    <title>User <?php echo htmlspecialchars($username); ?></title>
 	<?php
 	include('../public/header.php');
 	include('../styles/inject.php');
@@ -46,7 +46,7 @@
 	   } else {
 		   ?><span style="color:#eeeeee;">This user has not filled it in. Time to get a detective to find out their profile!</span><?php
 	   } ?>
-	  </td><td title="Personal Web Site" style="max-width:50%;"><?php 
+	  </td><td title="Personal Web Site" style="width:0px;"><?php 
 	  	if (filter_var($json->site, FILTER_VALIDATE_URL)) {
 			  ?>
 			  <a href="<?php echo htmlspecialchars($json->site); ?>"><?php 
@@ -61,7 +61,7 @@
 			  echo 'None';
 		  }
 	  ?></td>
-	  <tr><td width="300" style="max-width:50%;" title="GitHub link">
+	  <tr><td style="width:0px;" title="GitHub link">
 		<a href=<?php 
 			if ($json->github) {
 				?>"https://github.com/<?php echo htmlspecialchars($json->github); ?>"<?php

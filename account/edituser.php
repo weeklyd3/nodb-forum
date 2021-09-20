@@ -16,13 +16,13 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html>
+?><html lang="en">
   <head>
     <base href=".." />
-    <title>Forums &mdash; Edit My Account</title>
+    <title>Edit My Account</title>
 	<?php
-	include('../public/header.php');
-	include('../styles/inject.php');
+	include_once('../public/header.php');
+	include_once('../styles/inject.php');
 	ini_set('display_errors', 1);
 	error_reporting(E_ALL);
 	?>
@@ -36,7 +36,7 @@
 			$enc = json_encode($obj);
 			$dir = fopen($dir.'/user.json', 'w+');
 			if (fwrite($dir, $enc)) {
-				echo 'Profile saved, <a href="account/viewuser.php?user='.htmlspecialchars(getname()).'">view it now?</a>';
+				echo 'Profile saved, <a href="account/viewuser.php?user='.htmlspecialchars(urlencode(getname())).'">view it now?</a>';
 			} else {
 				echo 'Cannot save profile';
 			}
@@ -49,7 +49,7 @@
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 	<label>About me:<br /><textarea name="text" rows="10" style="width:100%;" placeholder="Write about me."><?php if (isset($obj->text)) { echo htmlspecialchars($obj->text); } ?></textarea></label>
 	<br /><br />
-	<label>GitHub link: <span style="cursor:text;background-color:white;color:black;border:1px solid;padding:7px;">https://github.com/<input value="<?php if (isset($obj->github)) { echo htmlspecialchars($obj->github); } ?>" type="text" name="github" style="margin:none;border:0px solid;padding:0px;" /></span></label>
+	<label>GitHub link: <br /><span style="cursor:text;background-color:white;color:black;border:1px solid;padding:7px;max-width:100%;">https://github.com/<input value="<?php if (isset($obj->github)) { echo htmlspecialchars($obj->github); } ?>" type="text" name="github" style="outline:none;margin:none;border:0px solid;padding:0px;" /></span></label>
 	<br /><br />
 	<label>Personal site: <input value="<?php if (isset($obj->text)) { echo htmlspecialchars($obj->site); } ?>" type="url" name="site" /></label>
 	<br />
