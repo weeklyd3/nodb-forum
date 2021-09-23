@@ -1,5 +1,5 @@
 # Weekly D3 Forum Software
-**Note**: It is recommended to install on a 64 bit system. If you install on a 32-bit system, the [2038 problem](https://en.wikipedia.org/wiki/2038_Problem) will strike in, and all your dates tracked after 03:14:07 1-19-2038 will reset to 1901! So, if you want a ***really future proof*** version, use a 64-bit system!
+**Note**: It is recommended to install on a 64 bit system. If you install on a 32-bit system, the [2038 problem](https://en.wikipedia.org/wiki/2038_Problem) will strike in, and all your dates tracked after 03:14:07 1-19-2038 will reset to 1901! So, if you want to last until 2486, use a 64-bit system!
 
 **WARNING: DO NOT INSTALL WITH THE REPO CODE. DOWNLOAD A STABLE RELEASE INSTEAD. DEV VERSION IS VERY UNSTABLE.**
 
