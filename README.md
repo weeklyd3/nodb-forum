@@ -38,6 +38,8 @@ and install again. User data will not be deleted, only tags and configuration wi
  - Press <kbd>Upload</kbd> to upload a file if you want to. When uploaded, type the file name into the "Attachment" box.
  - Press "Send".
  - If your message does not appear within 10 seconds, reload and see if it appeared. If not, tell your administrator.
+### Then, it should look something like...
+![home page](https://user-images.githubusercontent.com/79176077/136676121-f45bec9e-6aec-4133-99c5-f8738baa78be.png)
 ## Features
  - Live refresh for chat
  - Accessibility
