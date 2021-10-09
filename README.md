@@ -25,7 +25,19 @@ I hope you enjoy it! I had fun developing it, and you can have fun chatting.
 6. Click "Sign Up" at the top bar when visiting the site.
 7. Register an account using your information.
 8. \[Optional] If you wish to close account registration, comment out the code on account/signup.php and replace with a notice saying signups are closed.
+9. \[Optional] Add a topic:  
+   <sub>Note: To see the source of this, click on the <kbd>edit</kbd> button, copy the source, and then hit <kbd>Cancel</kbd>.</sub>
+###  Sample placeholder topic
+Welcome! There is nothing to talk about here. You can use this topic as a formatting sandbox. However, if you get an error while creating or replying to this topic, verify that your installation was done correctly. If you're an administrator and intallation failed, then try visiting
+ - `app/uninstall.php`
+ - `app/install.php`
 
+and install again. User data will not be deleted, only tags and configuration will be reset. If you are an end user, though, you have to send a private message to your administrators (a list can be viewed at /app/tools) and wait for them to finish their snack so they can help you. To reply:
+ - Press <kbd>Reply</kbd> at the bottom, if you do not see a text box.
+ - Type your reply in the text box.
+ - Press <kbd>Upload</kbd> to upload a file if you want to. When uploaded, type the file name into the "Attachment" box.
+ - Press "Send".
+ - If your message does not appear within 10 seconds, reload and see if it appeared. If not, tell your administrator.
 ## Features
  - Live refresh for chat
  - Accessibility
