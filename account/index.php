@@ -44,4 +44,3 @@
 	} else {
 		echo "You are not logged in.";
 	}
-	include_once('../public/footer.php'); ?>

@@ -68,6 +68,8 @@ Click the 'Log Out' link at the top:
 	<ul style="list-style:none; padding:0;">
 		<li>Clear file cache: <input type="submit" value="Go" onclick="document.getElementById('action').value='clearstatcache';" /></li>
 		<li>Update board setup date to now: <input type="submit" value="Go" onclick="document.getElementById('action').value='updatetime';" /></li>
+		<li>Filtering common words from search is currently <strong><?php 
+			echo isset($config->searchFilter) ? "enabled" : "disabled"; ?></strong>. <a href="app/tools/searchfilter.php">Search filter settings</a></li>
 		<div style="background-color:#ff6464;">
 		<h4>Danger Zone</h4>
 		<li>Clear installation data: <input type="submit" value="Go" onclick="if(!confirm('WARNING (1): All installation data will be lost! You will need to set up the board again.\n\nWARNING (2): After you uninstall anyone can set up the board.\n\nIf you do not want to uninstall then click Cancel!')){event.preventDefault();}else{document.getElementById('action').value='uninstall';}" /></li>

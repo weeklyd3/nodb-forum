@@ -75,9 +75,19 @@
 			 echo 'No GitHub link specified';
 		 } ?></a>
 	  </td></tr></table>
+	  <h3>Votes</h3>
+	  <table><tr><th>Topic name</th><th>Time</th></tr><?php 
+	  	if (!file_exists('../data/accounts/'.cleanFilename($username).'/votes.json')) {
+			  ?><tr><td rowspan="2">No votes</td></tr><?php
+		  } else {
+			  $v = json_decode(file_get_contents(__DIR__ . "/../data/accounts/" . cleanFilename($username) . "/votes.json"));
+		      foreach (array_reverse($v->votes) as $o) {
+		  ?><tr><td><strong><?php echo $o->way ? "up" : "down"; ?>vote</strong> on <strong><?php echo htmlspecialchars($o->topicName); ?></strong></td><td><?php echo friendlyDate($o->time); ?></td></tr><?php
+			  }
+		  }
+	  ?></table>
 	  <script>hljs.highlightAll();</script>
 	  <?php
   } else {
 	  echo 'Bad user name';
   }
-  include('../public/footer.php');

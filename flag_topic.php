@@ -35,9 +35,16 @@
 	}
 	if (isset($_POST['flag'])) {
 		?><p>You have raised flag: <strong><?php echo htmlspecialchars($_POST['flag']); ?></strong></p><?php
+		if (!isset($config->flags)) $config->flags = json_decode("{}");
 		$config->flags->$name = new Flagged;
 		$config->flags->$name->reason = $_POST['flag'];
 		if (isset($_POST['input'])) $config->flags->$name->modText = $_POST['input'];
+		if (count((array) $config->flags) === 2) {
+			$deleted = new stdClass;
+			$deleted->reason = "This topic has accumulated enough flags and has been deleted.";
+			$deleted->time = time();
+			fwrite(fopen(__DIR__ . '/data/messages/' . cleanFilename($_GET['room']) . '/del.json', 'w+'), json_encode($deleted));
+		}
 		fwrite(fopen(__DIR__ . '/data/messages/' . cleanFilename($_GET['room']) . '/config.json', 'w+'), json_encode($config));
 	}
 	?>

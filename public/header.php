@@ -16,6 +16,9 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+register_shutdown_function(function() {
+	require_once __DIR__ . '/footer.php';
+});
 ?>
 <div id="keyboard-focus" style="z-index:999;">
 	<a id="link" href="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>#mainContent" style="background-color:black;">Skip to main content</a>
@@ -26,7 +29,7 @@
 	</div>
   </div>
 <table id="header" style="width:100%; background-color:#7AD7FF;color:black;z-index:10;">
-<tr><td><h1 style="display:inline;"><span id="menubutton" style="cursor:pointer;"><img src="img/menu.png" alt="≡" /></span> <a style="text-decoration:none !important;" href="./"><img alt="Forum Logo" src="./img/logo.png" /><span id="TitleText">
+<tr><td><h1 style="display:inline;"><span id="menubutton" style="cursor:pointer;" tabindex="0"><img src="img/menu.png" alt="≡" /></span> <a style="text-decoration:none !important;" href="./"><img alt="Forum Logo" src="./img/logo.png" /><span id="TitleText">
 <?php
 include_once(__DIR__ . '/../libraries/lib.php');
 if (!file_exists(__DIR__ ."/../config.json")) {
@@ -77,7 +80,7 @@ require(__DIR__ . '/../libraries/parsedown.php');
 <p id="drag" style="text-align:right;cursor:move;"><span style="text-align:left;">Menu</span> <span onclick="document.getElementById('menu').style.display='none';" style="cursor:pointer;">&times;</span></p>
 <ul style="list-style:none; padding:7px;">
 <li><a href="./">Home</a></li>
-<li><a href="./webchat.php">Chat room</a></li>
+<li><a href="./viewtopic.php">Chat room</a></li>
 <li><a href="./articles">Articles</a>
 <br>
 <li><a href="./account/">My Account</a></li>
@@ -173,10 +176,4 @@ window.addEventListener('click', function(e) {
 
 makeDraggable("#drag", "div");
 </script>
-<?php
-if (file_exists(__DIR__ . '/../data/accounts/'.cleanFilename(getname()).'/ban.txt') && $_SERVER['REQUEST_URI'] != '/banned.php') {
-	require __DIR__ . '/../banned.php';
-	exit(0);
-}
-?>
 <div id="mainContent">

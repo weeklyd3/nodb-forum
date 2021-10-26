@@ -33,7 +33,6 @@
 	setcookie('login', false, time() + 72000);
 	unset($_COOKIE['login']);
 	echo '<p>Logged out!</p>';
-	include('../public/footer.php');
 	echo '<script>location.href="/";</script>';
 	?>
 	</body>

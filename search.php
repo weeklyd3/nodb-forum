@@ -27,9 +27,18 @@ error_reporting(E_ALL);
 	?>
   </head>
   <body>
-  <?php if (!isset($_GET['query']) || $_GET['query'] == '') {
+  <?php 
+  	$searchterms = array_unique(
+		array_filter(explode(" ", $_GET['query']),
+		function($string) {
+			return !($string === '');
+		})
+	);
+	if (isset($object->searchFilter)) $searchterms = array_values(array_udiff($searchterms, $obj->filterWords, 'strcasecmp'));
+  if (!isset($_GET['query']) || $_GET['query'] == '' || (isset($_GET['query']) && count($searchterms) === 0)) {
 	  ?><!-- no query -->
 	  <h2>Search Here</h2>
+	  <p>Either you entered nothing, or your search consisted only of too common words.</p>
 	  <center>
 	  <form action="search.php" method="GET">
 	  <label style="display:none;" for="query">Search query:</label><input type="search" id="query" name="query" placeholder="What are you looking for?" style="font-size:30px; width: 80%; text-align:center;"/>
@@ -56,12 +65,7 @@ error_reporting(E_ALL);
   <tr style="background-color:#f1c1e6;"><td>Search Results for "<?php echo htmlspecialchars($_GET['query']); ?>"</td></tr>
   <?php 
 	$entries = array_diff(scandir(__DIR__ . '/data/messages', SCANDIR_SORT_NONE), array('..', '.', 'index.php'));
-	$searchterms = array_unique(
-		array_filter(explode(" ", $_GET['query']),
-		function($string) {
-			return !($string === '');
-		})
-	);
+
 	$results = array();
 	// Change dir to avoid many occurrences of
 	//     __DIR__ . '/data/messages'
@@ -83,7 +87,15 @@ error_reporting(E_ALL);
 
 	foreach ($results as $roomname => $value) {
 		$config = json_decode(file_get_contents(cleanFilename($roomname) . '/config.json'));
-		?><tr class="found"><td><h3><a href="webchat.php?room=<?php echo htmlspecialchars(urlencode($config->title)); ?>"><?php echo htmlspecialchars($config->title); ?></a> (match count: <?php echo custom_substr_count(getmsg($roomname), $searchterms); ?>)</h3><p><?php
+		$del = file_exists(cleanFilename($roomname) . '/del.json');
+		if ($del) {
+			if (!verifyAdmin() && $config->author !== getname()) continue;
+		}
+		?><tr class="found"<?php 
+			if ($del) {
+				?> style="background-color:rgb(255, 221, 221);"<?php
+			}
+		?>><td><h3><a href="viewtopic.php?room=<?php echo htmlspecialchars(urlencode($config->title)); ?>"><?php echo htmlspecialchars($config->title); ?></a> (match count: <?php echo custom_substr_count(getmsg($roomname), $searchterms); ?>)</h3><p><?php
 			$msgs = html_entity_decode(getmsg($roomname));
 			$pos = custom_stripos($msgs, $searchterms);
 			if ($pos > 30) $view = substr($msgs, $pos - 30, 400);
@@ -135,4 +147,3 @@ function clearMark() {
 <a href="javascript:;" onclick="clearMark()">Clear all marks</a>
 <?php 
 chdir(__DIR__);
-include_once('./public/footer.php'); ?>

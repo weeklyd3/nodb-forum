@@ -12,7 +12,7 @@
 			$config = json_decode(file_get_contents('./' . $topic . '/config.json'));
 			if (isset($config->flags)) {
 				array_push($stack, 'a');
-				?><li><details><summary>Topic: <a href="webchat.php?room=<?php echo htmlspecialchars(urlencode($config->title)); ?>"><?php echo htmlspecialchars($config->title); ?></a></summary><ul><?php 
+				?><li><details><summary>Topic: <a href="viewtopic.php?room=<?php echo htmlspecialchars(urlencode($config->title)); ?>"><?php echo htmlspecialchars($config->title); ?></a></summary><ul><?php 
 					foreach ((array) $config->flags as $author => $flag) {
 						if (isset($flag->helpful)) continue;
 						?><li><strong><?php 
@@ -55,7 +55,7 @@
 		$first = first();
 
 		$msgs = $first !== null ? (array) json_decode(file_get_contents("./$first/msg.json")) : array();
-		foreach ($msgs as $msg) {
+		foreach ($msgs as $id => $msg) {
 			if (isset($msg->flags)) {
 				foreach ((array) $msg->flags as $author => $flag) {
 					?><li><strong><?php
@@ -69,7 +69,7 @@
 				?> <?php echo htmlspecialchars($flag->junkreason);
 						}
 						?>
-					</li><?php	
+					(<a href="app/tools/close_report.php?room=<?php echo htmlspecialchars(urlencode($first)); ?>&user=<?php echo htmlspecialchars(urlencode($author)); ?>&post=<?php echo htmlspecialchars(urlencode($id)); ?>">close</a>)</li><?php	
 				}
 			}
 		}

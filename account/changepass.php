@@ -42,18 +42,23 @@
 			$hash = file_get_contents($hashfile);
 			echo "<br>";
 			if (password_verify($psw, $hash)) {
-				echo '<h2>Change password</h2><form action="'.$_SERVER['PHP_SELF'].'" method="post"><label for="newpass">New password: </label><input name="newpass" id="newpass" type="password" /><br /><input type="hidden" name="pages" value="change" /><input type="submit" value="Change!" /></form>';
+				echo '<h2>Change password</h2><form action="'.$_SERVER['PHP_SELF'].'" method="post"><input type="hidden" name="pass" value="'. htmlspecialchars($_POST['psw']) .'" /><label for="newpass">New password: </label><input name="newpass" id="newpass" type="password" /><br /><input type="hidden" name="pages" value="change" /><input type="submit" value="Change!" /></form>';
 			} else {
 				echo "Bad password!<br>";
 			}
 		}
 		if ($_POST['pages'] == 'change') {
+			$folder = cleanFilename(getname());
+
 			$newpass = $_POST['newpass'];
+			if (!password_verify($_POST['pass'], file_get_contents("../data/accounts/".$folder."/psw.txt"))) {
+				?>Bad request, may have been forged<?php
+				exit(0);
+			}
 			$newhash = password_hash($newpass, PASSWORD_DEFAULT);
 			if (!$newhash) {
 				echo "Bad. no hash created";
 			} else {
-				$folder = cleanFilename(getname());
 				$handle = fopen("../data/accounts/".$folder."/psw.txt", 'w+');
 				$write = fwrite($handle, $newhash);
 				if ($write) {
@@ -66,4 +71,3 @@
 	} else {
 		echo "You are not logged in.";
 	}
-	include('../public/footer.php'); ?>

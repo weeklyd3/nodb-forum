@@ -37,7 +37,7 @@
 	}
 	</style>
 	<h1><?php echo htmlspecialchars($title); ?></h1>
-	<p>This is a printable version of the topic. <a id="return-link" href="webchat.php?room=<?php echo htmlspecialchars(urlencode($title)); ?>">Return to web version</a></p>
+	<p>This is a printable version of the topic. <a id="return-link" href="viewtopic.php?room=<?php echo htmlspecialchars(urlencode($title)); ?>">Return to web version</a></p>
 	<h2>Tags</h2>
 	<p>Tagged: 
 	<?php 
@@ -52,7 +52,7 @@
 			<?php echo $config->description_html; ?>
 		</blockquote></li>
 	<?php 
-		$msgs = json_decode(file_get_contents(__DIR__ . '/data/messages/' . cleanFilename($title) . '/msg.json'));
+		$msgs = (array) json_decode(file_get_contents(__DIR__ . '/data/messages/' . cleanFilename($title) . '/msg.json'));
 		foreach ($msgs as $msg) {
 			?><li><strong><?php echo file_exists(__DIR__ . '/data/accounts/' . cleanFilename($msg->author) . '/psw.txt') ? htmlspecialchars($msg->author) : "&lt;USER REMOVED>"; ?></strong>
 			<blockquote style="border-left:5px solid;margin:15px;padding-left:15px;">

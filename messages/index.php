@@ -38,22 +38,23 @@
 		<table width="100%" class="table">
 			<tr><th>From</th><th>Subject</th><th>Preview</th><th>View</th></tr>
 			<?php 
-				$r = array_reverse((array) json_decode(file_get_contents(__DIR__ . '/msg.json')));
+				if (!file_exists(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . '/msg.json')) {
+					fwrite(fopen(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . '/msg.json', 'w+'), "{}");
+				}
+				$r = array_reverse((array) json_decode(file_get_contents(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . '/msg.json')));
 				foreach ($r as $n => $m) {
-					if (in_array(getname(), $m->people)) {
-						?><tr<?php 
-							if (!in_array(getname(), $m->read)) {
-								?>  style="font-weight:bold;"<?php
-							}
-						?>>
-							<td><?php echo htmlspecialchars($m->from); ?></td>
-							<td><?php echo htmlspecialchars($m->subject); ?></td>
-							<td><?php 
-								echo htmlspecialchars(substr(str_replace(array("\r", "\n"), '', $m->body), 0, 300));
-							?></td>
-							<td><a href="messages/viewmsg.php?id=<?php echo htmlspecialchars(urlencode($n)); ?>">View</a></td>
-						</tr><?php
-					}
+					?><tr<?php 
+						if (!in_array(getname(), $m->read)) {
+							?> style="font-weight:bold;"<?php
+						}
+					?>>
+						<td><?php echo htmlspecialchars($m->from); ?></td>
+						<td><?php echo htmlspecialchars($m->subject); ?></td>
+						<td><?php 
+							echo htmlspecialchars(substr(str_replace(array("\r", "\n"), '', $m->body), 0, 300));
+						?></td>
+						<td><a href="messages/viewmsg.php?id=<?php echo htmlspecialchars(urlencode($n)); ?>">View</a></td>
+					</tr><?php
 				}
 			?>
 			<tr><th>From</th><th>Subject</th><th>Preview</th><th>View</th></tr>

@@ -160,9 +160,4 @@ error_reporting(E_ALL);
 		echo '</center>';
 	}
 ?>
-<?php
-	include('../public/footer.php');
-	?>
 	</form>
-	</body>
-	</html>

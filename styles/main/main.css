@@ -210,3 +210,57 @@ input:disabled, textarea:disabled {
 input, textarea, select {
 	max-width: 100%;
 }
+.vote.up:hover, .vote.down:hover {
+	filter: brightness(85%);
+	cursor: pointer;
+}
+button.vote {
+	background-color: transparent;
+	padding: 0;
+	border: none;
+	margin: none;
+	color: white;
+}
+.inline {
+	display: inline;
+	margin: 0;
+}
+table:not(#header):not(#topics):not(.exempt-from-format) {
+	display: block;
+	max-width: -moz-fit-content;
+	max-width: fit-content;
+	padding: 0;
+	margin: 0 auto;
+	overflow-x: auto;
+	white-space: nowrap;
+	text-align: left;
+}
+.calendar-row {
+	min-height: 100px;
+	width: 100px;
+}
+.calendar-row>td {
+	min-height: 100px;
+	height: 100px;
+}
+.calendar > tbody > tr > th {
+	width: 100px;
+}
+.horizontal-scroll {
+	overflow-x: scroll;
+}
+.bg-skyblue {
+	background-color: skyblue;
+}
+.black {
+	color: black;
+}
+.nobullet {
+	list-style: none;
+	padding: 0;
+	display: inline-block;
+}
+.nobullet.calendar-list > li {
+	border: 1px solid blue;
+	background-color: darkcyan;
+}

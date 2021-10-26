@@ -5,19 +5,28 @@
 Remove them if they are being abusive or are all consisted of low quality posts.</p>
 <ul>
 <?php 
+class Deleted {
+	public function __construct(string $reason) {
+		$this->reason = $reason;
+		$this->time = time();
+		$this->user = getname();
+	}
+}
 foreach( $_POST as $name => $stuff ) {
 	if (is_dir('../../data/messages/'.cleanFilename($stuff))) {
-		$rm = delTree('../../data/messages/'.cleanFilename($stuff));
-		if ($rm) {
-			echo '<li>Room '.htmlspecialchars($stuff).' deleted.</li>';
-		} else {
-			echo '<li>Room '.htmlspecialchars($stuff).' not deleted.</li>';
-		}
+		$d       = new Deleted($_POST['reason']);
+		$address = __DIR__ . '/../../data/messages/' .
+		                     cleanFilename($stuff) . 
+							 "/del.json";
+
+		fwrite(fopen($address, 'w+'), json_encode($d));
+		?><li>Room "<?php echo htmlspecialchars($stuff); ?>" was deleted.</li><?php
 	}
 }
 ?>
 </ul>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+<label>Reason for deletion: <input type="text" name="reason" required="required" /></label><br />
 <input type="submit" value="Remove!" />
 <?php
 if ($handle = opendir('../../data/messages/')) {

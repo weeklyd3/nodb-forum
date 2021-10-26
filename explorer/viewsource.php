@@ -48,7 +48,3 @@ if (file_get_contents('../'.$address)) {
 } else {
 	echo "<span style=\"color:white; background-color:red;\">Error while reading file</span>";
 }
-include('../public/footer.php');
-?>
-</body>
-</html>

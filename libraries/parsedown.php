@@ -41,8 +41,41 @@ class Parsedown
         # trim line breaks
         $markup = trim($markup, "\n");
 
-        return $markup;
+        return strip_tags($markup, "<" . implode("><", $this->tags) . ">");
     }
+
+	# Whitelisted tags 
+	protected $tags = array(
+		"h1",
+		"h2",
+		"h3",
+		"h4",
+		"h5",
+		"h6",
+		"pre",
+		"code",
+		"kbd",
+		"p",
+		"table",
+		"tr",
+		"td",
+		"th",
+		"kbd",
+		"blockquote",
+		"details",
+		"summary",
+		"br",
+		"hr",
+		"strong",
+		"em",
+		"b",
+		"i",
+		"a",
+		"ul",
+		"ol",
+		"li",
+		"img"
+	);
 
     #
     # Setters

@@ -1,10 +1,11 @@
 <?php 
 function getMsg($room) {
-	?>
-	<div id="nodb-forum-firstpost"><?php 
-		include_once(__DIR__ . '/../libraries/lib.php');
+	include_once(__DIR__ . '/../libraries/lib.php');
 
-		$config = json_decode(file_get_contents(__DIR__ . '/../data/messages/'.cleanFilename($room) . '/config.json'));
+	$config = json_decode(file_get_contents(__DIR__ . '/../data/messages/'.cleanFilename($room) . '/config.json'));
+	?>
+	<div id="topic-firstpost"><?php 
+
 		echo $config->description_html;
 		$msgs = (array) json_decode(file_get_contents(__DIR__ . '/../data/messages/'.cleanFilename($room) . '/msg.json'));
 	?>
@@ -20,17 +21,17 @@ function getMsg($room) {
 	if (!isset($room)) die("Specify a room!");
 	if (!file_exists(__DIR__ . '/../data/messages/'.cleanFilename($room) . '/msg.json')) die("Bad room");
 	foreach ($msgs as $key => $value) {
-		?><tr><td id="nodb-forum-message-<?php echo htmlspecialchars($key); ?>" style="vertical-align:top;" rowspan="3"><?php
+		?><tr><td id="topic-message-<?php echo htmlspecialchars($key); ?>" style="vertical-align:top;" rowspan="3"><?php
 		if (isset($value->reply)) {
 			?><span style="color:black;background-color:#ffcccb;">@<?php echo htmlspecialchars($value->reply); ?></span><?php
 		}
-		echo $value->html; ?> <hr /><?php if (getname()) { ?><a href="flag_post.php?room=<?php echo htmlspecialchars(urlencode($room)); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">flag</a> <?php } ?></td><td style="width:0px;" id="nodb-forum-user-<?php echo htmlspecialchars($key); ?>"><?php 
+		echo $value->html; ?> <hr /><?php if (getname()) { ?><a href="flag_post.php?room=<?php echo htmlspecialchars(urlencode($room)); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">flag</a> <?php } ?></td><td style="width:0px;" id="topic-user-<?php echo htmlspecialchars($key); ?>"><?php 
 			if (file_exists(__DIR__ . '/accounts/'.cleanFilename($value->author) . '/psw.txt')) {
-				?><a href="account/viewuser.php?user=<?php echo htmlspecialchars(urlencode($value->author)); ?>"><img src="./data/accounts/<?php echo htmlspecialchars(cleanFilename($value->author)); ?>/avatar.png" alt="Avatar image for <?php echo htmlspecialchars($value->author); ?>" /> <br /><?php echo htmlspecialchars($value->author); ?></a><?php
+				?><a href="account/viewuser.php?user=<?php echo htmlspecialchars(urlencode($value->author)); ?>"><img src="./data/accounts/<?php echo htmlspecialchars(cleanFilename($value->author)); ?>/avatar.png" alt="Avatar image for <?php echo htmlspecialchars($value->author); ?>" width="100"/> <br /><?php echo htmlspecialchars($value->author); ?></a><?php
 			} else {
 				?><span style="color:#cccccc;">&lt;user is deleted></span><?php
 			}
-		?></td></tr><tr><td id="nodb-forum-message-date-<?php echo htmlspecialchars($key); ?>"><?php echo friendlyDate($value->time); ?></td></tr><tr><td id="nodb-forum-attachment-<?php echo htmlspecialchars($key); ?>">Attachment:<br /><span style="text-overflow: ellipsis;"><?php 
+		?></td></tr><tr><td id="topic-message-date-<?php echo htmlspecialchars($key); ?>"><?php echo friendlyDate($value->time); ?></td></tr><tr><td id="topic-attachment-<?php echo htmlspecialchars($key); ?>">Attachment:<br /><span style="text-overflow: ellipsis;"><?php 
 			if (!$value->attach) {
 				?>none<?php
 			} else {

@@ -24,12 +24,16 @@ if (!class_exists('emptyClass')) {
 		}
 	}
 }
-function endsWith($haystack, $needle) {
+function endsWith(string $haystack, string $needle): bool {
     $length = strlen($needle);
     if(!$length) {
         return true;
     }
     return substr($haystack, -$length) === $needle;
+}
+function startsWith(string $haystack, string $needle): bool {
+	$len = strlen($needle);
+	return substr($haystack, 0, $len) === $needle;
 }
 function cleanFilename($stuff) {
 	$illegal = array(" ","?","/","\\","*","|","<",">",'"');
@@ -47,13 +51,16 @@ function str_replace_first($from, $to, $content) {
 
     return preg_replace($from, $to, $content, 1);
 }
-function scan_dir(string $dir): ?array {
+function scan_dir(string $dir, string $fileToCount = ''): ?array {
     $ignored = array();
     $files = array(); 
     foreach (scandir($dir) as $file) {
         if ($file === '.' || $file === '..') continue; 
         if (in_array($file, $ignored)) continue; 
-        $files[$file] = filemtime($dir . '/' . $file);
+        $files[$file] = filemtime(
+			is_dir($dir . '/' . $file) ?
+			"$dir/$file/$fileToCount" : "$dir/$file" 
+		);
     }
     arsort($files); 
     $files = array_keys($files); 
@@ -142,7 +149,7 @@ function friendlyDate(int $timestamp) {
 	$minute   = (int) date("i", $timestamp);
 	$second   = (int) date("s", $timestamp);
 	// now... = (int) <-- to keep the column
-	$time    = (int) time();
+	$time     = (int) time();
 	$nyear    = (int) date("Y", $time);
 	$nmonth   = (int) date("m", $time);
 	$nday     = (int) date("d", $time);
@@ -184,11 +191,20 @@ function friendlyDate(int $timestamp) {
 
 	$newminute = str_repeat("0", 2 - strlen((string) $minute)) . $minute;
 
-	$times = $hour . ":" . $newminute;
+	$newsecond = str_repeat("0", 2 - strlen((string) $second)) . $second;
+
+	$times = $hour . ":" . $newminute . ":" . $newsecond;
 
 	array_push($friend, $times);
 
 	return implode(" ", $friend);
+}
+function dateDiff(int $before, int $after = time) {
+	$bef = new DateTime('now');
+	$now = new DateTime('now');
+	$bef->setTimestamp($before);
+	$now->setTimestamp($after);
+	$dff = $now->diff($bef, true);
 }
 function colorNum(int $num): string {
 	$number = $num;
@@ -196,13 +212,13 @@ function colorNum(int $num): string {
 		return '<span>' . $num . '</span>';
 	}
 	if ($num >= 5 && $num < 15) {
-		return '<span style="color:hsl(27,90%,45%);">' . $num . '</span>';
+		return '<span style="color:#a7510c;">' . $num . '</span>';
 	}
 	if ($num >= 15 && $num < 100) {
-		return '<span style="color:hsl(27,90%,50%);">' . $num . '</span>';
+		return '<span style="color:#da680b;">' . $num . '</span>';
 	}
 	if ($num >= 100 && $num < 1000) {
-		return '<span style="color:hsl(27,90%,55%);">' . $number . '</span>';
+		return '<span style="color:#f48225;">' . $number . '</span>';
 	}
 	if ($num >= 1000) {
 		if ($num >= 1000) {
@@ -211,7 +227,80 @@ function colorNum(int $num): string {
 		if ($num >= 1000000) {
 			$number = round(($num / 100000), 1) . 'm';
 		}
-		return '<span style="color:hsl(27,90%,55%);">' . $number . '</span>';
+		return '<span style="color:#f48225;">' . $number . '</span>';
 	}
+}
+function copyDir(string $dir, string $dest, array $ignored = array(), int $t = 0, bool $header = true): ?string {
+	if (is_dir($dest)) {
+		if (count(scandir($dest, SCANDIR_SORT_NONE)) == 2) {
+			return null;
+		}
+	} else {
+		$m = mkdir($dest, 0777, true);
+		if ($m === false) return null;
+	}
+	$scan = scandir($dir);
+	$count = count($scan) - 2;
+	$i = 0;
+	if ($header) {
+		$log = array("File copy", "  from " . $dir, "  to " . $dest, "Started at " . date("H:i m/d/Y"));
+	} else {
+		$log = array();
+	}
+	foreach ($scan as $file) {
+		$i++;
+		if (in_array($file, array('.', '..'))) {$i--; continue;}
+		if (in_array($file, $ignored)) {
+			$logMsg = "$i of $count: ignored";
+			continue;
+		}
+		$logMsg = str_repeat(" ", $t) . "Copying " . $i . " of " . $count;
+		error_log($logMsg);
+		array_push($log, $logMsg);
+		if (is_dir("$dir/$file")) {
+			$s = copyDir("$dir/$file", "$dest/$file", array(), $t + 4, false);
+			if ($s === false) return null;
+			array_push($log, $s);
+		} else {
+			$s = copy("$dir/$file", "$dest/$file");
+			if ($s === false) return null;
+		}
+	}
+	return implode("\n", $log);
+}
+function recListDIR(string $dir) {
+	$s = array_diff(scandir($dir, SCANDIR_SORT_NONE), array('.', '..'));
+	foreach ($s as $f) {
+		?><details><summary><?php
+		echo htmlspecialchars($f);
+		if (is_dir("$dir/$f")) {
+			echo "/</summary>";
+			recListDIR("$dir/$f");
+		} else {
+			?></summary><pre><code><?php 
+			echo htmlspecialchars(file_get_contents("$dir/$f")); ?></code></pre><?php
+		}
+		?></details><?php
+	}
+}
+function restore(string $bkdir, string $target): ?string {
+	if (!is_dir($bkdir)) return null;
+	if (!is_dir($target)) mkdir($target, 0777, true);
+	foreach (scandir($bkdir) as $f) {
+		if (in_array($f, array('.', '..'))) continue;
+		if (!is_dir("$bkdir/$f")) {
+			$c = file_get_contents("$bkdir/$f");
+			fwrite(fopen("$target/$f", "w+"), $c);
+		} else {
+			restore("$bkdir/$f", "$target/$f");
+		}
+	}
+	return true;
+}
+function startsWithNumber(string $str) {
+    return preg_match('/^\d/', $str) === 1;
+}
+function donothing() {
+	return;
 }
 ?>

@@ -44,4 +44,3 @@
 	?>
 	</ul>
 	<a href="articles/about.php">About the articles</a>
-	<?php include_once('../public/footer.php'); ?>

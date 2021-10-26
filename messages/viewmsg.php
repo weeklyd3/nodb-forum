@@ -28,8 +28,9 @@
 	?>
   </head>
   <body>
-	<?php 
-	$m = json_decode(file_get_contents(__DIR__ . '/msg.json'));
+	<?php
+	if (!file_exists(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . '/msg.json')) die("You do not have any messages.");
+	$m = json_decode(file_get_contents(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . '/msg.json'));
 	$id = $_GET['id'];
 	if (!isset($m->$id)) die("Bad ID");
 	$s = $m->$id;
@@ -54,5 +55,5 @@
 		array_push($s->read, getname()); 
 	}
 	$m->$id = $s;
-	fwrite(fopen(__DIR__ . '/msg.json', 'w+'), json_encode($m));
+	fwrite(fopen(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . '/msg.json', 'w+'), json_encode($m));
 	?>

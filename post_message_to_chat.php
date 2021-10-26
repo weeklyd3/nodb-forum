@@ -72,12 +72,15 @@ if ($name) {
 			$item->read = false;
 			$item->type = "Chat reply";
 			if ($inbox->items == null) $inbox->items = array();
-			$item->url = 'webchat.php?room=' . urlencode($_POST['room']);
+			$item->url = 'viewtopic.php?room=' . urlencode($_POST['room']);
 			array_push($inbox->items, $item);
 			fwrite(fopen(__DIR__ . '/data/accounts/' . cleanFilename($_POST['reply']) . '/inbox.json', 'w+'), json_encode($inbox));
 		}
 	}
 	$pointer = fopen('data/messages/'.cleanFilename($room).'/msg.json', 'w+');
+	$p = json_decode(file_get_contents('data/messages/'.cleanFilename($room).'/config.json'));
+	$p->replies++;
+	fwrite(fopen('data/messages/'.cleanFilename($room).'/config.json', 'w+'), json_encode($p));
 	$write = fwrite($pointer, json_encode($json));
 	$search = fopen(__DIR__ . '/data/messages/'.cleanFilename($_POST['room']).'/webchat.txt', 'a+');
 	fwrite($search, "<div>".htmlspecialchars(getname())." on ".date("Y:m:d H:i:s", time()).":<div>".$Parsedown->text($_POST['message'])."</div>with attachment &quot;".$_POST['attach']."&quot;</div>");
@@ -89,5 +92,5 @@ if ($name) {
 } else {
 	echo '{"status":false}';
 }
-if (!isset($_POST['js'])) header("Location: webchat.php?room=" . urlencode($_POST['room']));
+if (!isset($_POST['js'])) header("Location: viewtopic.php?room=" . urlencode($_POST['room']));
 ?>

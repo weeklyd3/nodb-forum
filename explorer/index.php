@@ -49,8 +49,6 @@ if ($handle = scandir(getcwd() . '/../' . $url)) {
 			?><li><a href="<?php if (is_dir(getcwd() . '/../' . $url.'/'.$entry)) { ?>explorer/?address=<?php echo htmlspecialchars($url.$entry); } else { ?>explorer/viewsource.php?address=<?php echo htmlspecialchars($url.$entry);} ?>"><?php echo htmlspecialchars($entry); ?></a></li><?php
 		}
 	}
-
-	closedir($handle);
 } else {
 	echo '<script>document.getElementById("address").value="'.htmlspecialchars($url).'";</script>';
 	echo "Bad news! You might have a bad address or just simply have specified an extra slash after a filename.";
@@ -58,8 +56,3 @@ if ($handle = scandir(getcwd() . '/../' . $url)) {
 echo "</ul></pre>";
 echo '<script>document.getElementById("address").value="'.htmlspecialchars($url).'";</script>';
 ?>
-	<?php
-	include('../public/footer.php');
-	?>
-</body>
-</html>
