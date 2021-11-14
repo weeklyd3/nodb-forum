@@ -31,8 +31,12 @@
   <li><a href="#price">How much does it cost?</a></li>
   <li><a href="#bad_user">I registered but it says "Bad username"! Now what?</a></li>
   <li><a href="#rules">Are there any board rules?</a></li>
+  <li><a href="#tags">What are tags?</a>
   <li><a href="#license">License for posted content</a></li>
   <li><a href="#admins">Who are the administrators?</a></li>
+  <li><a href="#canibeanadmin">Great. Can I be an admin now?</a></li>
+  <li><a href="#sockpuppetry">I got banned. Can I just create another account?</a></li>
+  <li><a href="#private-messages">What are private messages?</a></li>
   <li><a href="#cp">I'm curious, what does the control panel look like?</a></li>
   </ul></div>
   <div style="display: flex; flex-direction: row; flex-wrap: wrap;">
@@ -63,6 +67,30 @@
   <h2>Are there any board rules?</h2>
   There's the <a href="tos.php">TOS</a>. Note that administrators can edit the TOS at any time, and they should notify the users of a TOS change by creating a topic. (There's a <a href="https://github.com/weeklyd3/nodb-forum/blob/master/tos_raw.php">default TOS</a>, but administrators can edit it to match their rules. Be sure to review it from time to time!)
   </div>
+  <div id="tags" class="answer">
+	<h2>What are tags?</h2>
+	<p>Tags categorize your topic into different categories. A person knowlegeable in one topic might check that tag for interesting topics.</p>
+	<p>Tags look like this in a topic: <?php 
+		$exampleTags = array(
+			"html",
+			"css",
+			"meta",
+			"faq",
+			"announcement",
+			"php"
+		);
+		foreach ($exampleTags as $tag) {
+			?><span class="tag"><?php echo htmlspecialchars($tag); ?></span> <?php
+		}
+	?></p>
+	<p>Tags are not case-sensitive. <span class="tag">PHP</span> is the same as <span class="tag">php</span>.</p>
+	<ul>
+		<li><div class="fakeinput">php sql</div> -> <span class="tag">php</span> <span class="tag">sql</span></li>
+		<li><div class="fakeinput">php sql php</div> -> <span class="tag">php</span> <span class="tag">sql</span></li>
+		<li><div class="fakeinput">PHP sql</div> -> <span class="tag">php</span> <span class="tag">sql</span></li>
+	</ul>
+	<p><strong>One really, really special note:</strong><br />NEVER tag-stuff! That means putting in unrelated tags just to increase your topic's visibility. If you persistently do this, you might get a warning, and if you fail to correct the behavior, you might get banned.</p>
+  </div>
   <div id="license" class="answer">
 	<h2>License for posted content</h2>
 	By default, the license is the Creative Commons Attribution-ShareAlike 4.0 International License &lt;http://creativecommons.org/licenses/by-sa/4.0/>, although administrators can enforce a different one.
@@ -70,6 +98,25 @@
   <div id="admins" class="answer">
 	<h2>Who are the administrators?</h2>
 	The person/people who set the board up. Administrators have access to more tools, so they can: <ul><li>Remove users if they violated the TOS or if the user requested account deletion</li><li>Browse, CHMOD, and delete uploaded files</li><li>Remove abusive content</li><li>Edit the TOS</li></ul>
+  </div>
+  <div id="canibeanadmin" class="answer">
+	<h2>Can I be an admin?</h2>
+	<p>Not right now. You need an administrator to add you manually to the list.</p>
+  </div>
+  <div id="sockpuppetry" class="answer">
+	<h2>Creating multiple accounts</h2>
+	<p>If you're acting as another person, <strong>this is illegal!</strong> If you are circumventing restrictions, it is also illegal.</p>
+  </div>
+  <div id="private-messages" class="answer">
+	<h2>What are private messages?</h2>
+	<p>You can send messages with this feature without exposing it to other users. Beware that because message contents are stored on the server, the owner might be able to see it.</p>
+	<table class="table"><tr>
+	<th>Appropriate for private messages</th>
+	<th>Not appropriate for private messages</th></tr><tr>
+	<td>Open-source code</td>
+	<td>Confidential code</td>
+	</tr><tr><td>Links to not-super-secret topics that you want someone else to hear about</td>
+	<td>Profanity, inappropriate articles, or anything else that would lead to a ban in public</td></tr></table>
   </div>
   <div id="cp" class="answer">
 	<h2>I'm curious, what does the control panel look like?</h2>

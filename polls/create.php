@@ -56,11 +56,11 @@
 	<h2>Question Editor</h2>
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 	<div style="background-color:gold;">
-	<button type="submit" name="create-poll" style="background-color:transparent;border:none;padding:0;" title="Add question"><img src="img/icons/plusicon.png" alt="Add question" /></button>
-	<button type="submit" style="background-color:transparent;border:none;padding:0;" name="save" title="Save"><img src="img/icons/validateform.png" alt="Save" /></button>
+	<button type="submit" name="create-poll" style="background-color:transparent;border:none;padding:0;" title="Add question"><img src="img/icons/plusicon.png" alt="Add question" /> Add question</button>
+	<button type="submit" style="background-color:transparent;border:none;padding:0;" name="save" title="Save"><img src="img/icons/validateform.png" alt="Save" /> Save</button>
 
 	<button type="submit" style="background-color:transparent;border:none;padding:0;" title="Get help" name="get-help"><img src="img/icons/helpicon.png" alt="Get help" /></button>
-	<button type="submit" style="background-color:transparent;border:none;padding:0;" title="Preview" name="preview"><img src="img/icons/preview-icon.png" alt="Preview" /></button>
+	<button type="submit" style="background-color:transparent;border:none;padding:0;" title="Preview" name="preview"><img src="img/icons/preview-icon.png" alt="Preview" /> Preview form</button>
 	</div>
 	<h3>Details</h3>
 	<ul>

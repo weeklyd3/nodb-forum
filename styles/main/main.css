@@ -65,6 +65,7 @@ select {
 }
 button,
 input:not([type="file"]),
+.fakeinput,
 select,
 textarea {
     background-color: white;
@@ -185,6 +186,9 @@ table, table>tr, table>td {
 }
 .tag>a {
 	text-decoration: none;
+}
+.tag::before {
+	content: "#";
 }
 details {
 	margin-left: 10px;

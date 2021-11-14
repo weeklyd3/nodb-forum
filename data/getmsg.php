@@ -41,7 +41,7 @@ function getMsg($room) {
 					$var = (strlen($value->attach) > 30) ? "" : "...";
 					echo $var;
 				} else {
-					?><a download="" href="files/uploads/<?php echo htmlspecialchars(urlencode($value->attach)); ?>"><?php echo htmlspecialchars(substr($value->attach, 0, 30)); ?></a><?php
+					?><a download="" href="files/download.php?filename=<?php echo htmlspecialchars(urlencode($value->attach)); ?>"><?php echo htmlspecialchars(substr($value->attach, 0, 30)); ?></a><?php
 				}
 			}
 		?></span></td></tr><?php

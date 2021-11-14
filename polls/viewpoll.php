@@ -64,7 +64,6 @@
 	?><p>Your response has been submitted. (<a href="polls/poll.php?user=<?php echo htmlspecialchars(urlencode($_GET['user'])); ?>&id=<?php echo htmlspecialchars(urlencode($_GET['id'])); ?>">view results</a>)</p><?php 
 	exit(0);
   }
-  var_dump($_POST);
   if (count($_POST) !== 0) response();
   ?>
   <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="post">
@@ -73,4 +72,5 @@
 	$id = $_GET['id'];
 	if (!isset($json[$name][$id]['questions'])) die("<h2>Invalid details.</h2><p>Invalid name or id.</p>");
 	viewForm($json[$name][$id]['questions']);
-	?><hr />Check your answers to this poll, and then<center><input type="submit" value="send" /></center> it.</form>
+	?><hr /><h3>Done?</h3><p>Your response will be publicly viewable after you submit the form, although it will not be associated with your account. Make sure there is no personal information in this form before submitting it.</p><p>Click to submit: <input type="submit" value="Save response" /></p>
+	<p><small>This content is user-submitted, and the owner of this site does not endorse this content.</small></p>

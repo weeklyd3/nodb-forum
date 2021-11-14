@@ -137,7 +137,6 @@
 	}
   ?>
   </select></label>
-  <?php htmlspecialchars(array(1, 2, 3)); ?>
   <label>Year: <input type="number" name="year" value="<?php echo $info['year']; ?>" /></label>
   <input type="submit" value="Display calendar" />
   </form><?php

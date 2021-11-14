@@ -11,6 +11,9 @@ config.json
 # it for the Repl.it users.
 
 .replit
+
+# Data that I have to delete before pushing:
+
 data/messages/Meta-Discussion/webchat.txt
 data/accounts/admin/avatar.png
 data/accounts/admin/user.txt
