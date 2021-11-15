@@ -38,10 +38,14 @@ function getMsg($room) {
 				if (!file_exists(__DIR__ . '/../files/uploads/'.cleanFilename($value->attach))) {
 					echo "(not found): ";
 					echo htmlspecialchars(substr($value->attach, 0, 30));
-					$var = (strlen($value->attach) > 30) ? "" : "...";
+					$var = (strlen($value->attach) > 30) ? "..." : "";
 					echo $var;
 				} else {
-					?><a download="" href="files/download.php?filename=<?php echo htmlspecialchars(urlencode($value->attach)); ?>"><?php echo htmlspecialchars(substr($value->attach, 0, 30)); ?></a><?php
+					?><a download="" href="files/download.php?filename=<?php echo htmlspecialchars(urlencode($value->attach)); ?>"><?php echo htmlspecialchars(substr($value->attach, 0, 30)); 
+					if (strlen($value->attach) > 30) {
+						?>...<?php
+					}
+					?></a> (<a href="viewfile.php?filename=<?php echo htmlspecialchars($value->attach); ?>">View</a>)<?php
 				}
 			}
 		?></span></td></tr><?php
