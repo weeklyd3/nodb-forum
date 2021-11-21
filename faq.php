@@ -105,7 +105,7 @@
   </div>
   <div id="sockpuppetry" class="answer">
 	<h2>Creating multiple accounts</h2>
-	<p>If you're acting as another person, <strong>this is illegal!</strong> If you are circumventing restrictions, it is also illegal.</p>
+	<p>If you're acting as another person, <strong>this is illegal!</strong> If you are circumventing restrictions, it is also illegal. <a href="files/sockpuppetry.php">Download the sockpuppetry guidelines</a></p>
   </div>
   <div id="private-messages" class="answer">
 	<h2>What are private messages?</h2>
