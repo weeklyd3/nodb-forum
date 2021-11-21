@@ -38,19 +38,23 @@ function viewForm(array $options, bool $print = false): void {
 	$guidelines = array(
 		'dropdown' => "Please select your option",
 		'text' => "Please enter your response",
-		"radio" => "Please fill in the bubble of your answer.",
+		"radio" => "Please select one answer.",
 		"number" => "Please enter a number",
 		"e-mail" => "Please enter an e-mail address.",
 		"textarea" => "Please write your response."
 	);
+	if (isset($options['randomizeQuestions'])) shuffle($options['questions']);
+	if (isset($options['randomizeOptions'])) $ro = true;
 	require_once '../libraries/parsedown.php';
 	?><ol><?php
 	foreach ($options as $number => $question) {
+		if ($ro) { shuffle($question['options']); }
 		?><li><h3>Question <?php echo $number + 1; ?></h3><?php
 		$Parsedown = new Parsedown;
 		echo $Parsedown->text($question['description']);
-		?><hr /><?php
-		if ($print) { echo $guidelines[$question['type']]; }
+		?><p><hr /><?php
+		echo $guidelines[$question['type']];
+		?></p><?php 
 		if ($question['type'] == 'dropdown') {
 			?><label>Your answer: <select<?php if ($print) { ?> size="10"<?php } ?> name="question-<?php echo $number; ?>"<?php
 			if ($question['required']) {

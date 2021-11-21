@@ -44,12 +44,16 @@
 		$title = $name . "|" . time();
 		if (!isset($json->$name)) $json->$name = new stdClass;
 		$json->$name->$title = new stdClass;
+		if (isset($_POST['randomizeOptions'])) 
+			$json->$name->$title->questions->randomizeOptions = true;
+		if (isset($_POST['randomizeQuestions'])) 
+			$json->$name->$title->questions->randomizeQuestions = true;
 		$json->$name->$title->title = $_POST['title'];
 		$json->$name->$title->description = $_POST['description'];
 		$json->$name->$title->questions = new stdClass;
 		$json->$name->$title->questions = $json_contents;
 		fwrite(fopen(__DIR__ . '/polls.json', 'w+'), json_encode($json));
-		?><h2>Link:</h2><p>Copy the link address below.</p><p><a href="polls/viewpoll.php?user=<?php echo htmlspecialchars(urlencode(getname())); ?>&id=<?php echo htmlspecialchars(urlencode($title)); ?>">Link here</a></p><?php
+		?><h2>Link:</h2><p>Copy the link address below.</p><p><a href="polls/poll.php?user=<?php echo htmlspecialchars(urlencode(getname())); ?>&id=<?php echo htmlspecialchars(urlencode($title)); ?>">Link here</a></p><?php
 	}
 	?>
 
@@ -59,14 +63,15 @@
 	<button type="submit" name="create-poll" style="background-color:transparent;border:none;padding:0;" title="Add question"><img src="img/icons/plusicon.png" alt="Add question" /> Add question</button>
 	<button type="submit" style="background-color:transparent;border:none;padding:0;" name="save" title="Save"><img src="img/icons/validateform.png" alt="Save" /> Save</button>
 
-	<button type="submit" style="background-color:transparent;border:none;padding:0;" title="Get help" name="get-help"><img src="img/icons/helpicon.png" alt="Get help" /></button>
+	<button type="submit" style="background-color:transparent;border:none;padding:0;" title="Get help" name="get-help"><img src="img/icons/helpicon.png" alt="Get help" /> Get help</button>
 	<button type="submit" style="background-color:transparent;border:none;padding:0;" title="Preview" name="preview"><img src="img/icons/preview-icon.png" alt="Preview" /> Preview form</button>
 	</div>
 	<h3>Details</h3>
 	<ul>
 		<li><label>Form title: <input type="text" name="title" value="<?php if (isset($_POST['title'])) { echo htmlspecialchars($_POST['title']); } ?>" /></label></li>
 		<li><label>Form description: <textarea name="description"><?php if (isset($_POST['description'])) { echo htmlspecialchars($_POST['description']); } ?></textarea></label></li>
-
+		<li><label>Randomize question order: <input type="checkbox" name="randomizeQuestions" value="yes" <?php if (isset($_POST['randomizeQuestions'])) { ?> checked="checked" <?php } ?>/></label></li>
+		<li><label>Randomize option order: <input type="checkbox" name="randomizeOptions" value="yes" <?php if (isset($_POST['randomizeOptions'])) { ?> checked="checked" <?php } ?>/></label></li>
 	</ul>
 	<?php
 	$a = generateOptions($_POST);
