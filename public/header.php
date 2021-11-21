@@ -42,7 +42,18 @@ if (!getname()) {
 	echo '<td><a href="account/signup.php">sign up</a></td>';
 	echo '<td><a href="account/login.php">log in</a></td>';
 } else {
-	echo '<td><a href="inbox.php" id="notification-button">notifications</a></td><td><a href="account/">'.htmlspecialchars(getname()).'</a></td>';
+	$unread = '>';
+	function determineIfUnread() {
+		$n = json_decode(file_get_contents(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . '/inbox.json'));
+		foreach ($n->items as $item) {
+			if (!$item->read) {
+				return true;
+			}
+		}
+		return false;
+	}
+	if (determineIfUnread()) $unread = ' style="background-color:#ff0000;font-weight:bold;" title="New notifications.">See new ';
+	echo '<td><a href="inbox.php" id="notification-button"' . $unread . 'notifications</a></td><td><a href="account/">'.htmlspecialchars(getname()).'</a></td>';
 	echo '<td>(<a href="account/logout.php">log out</a>)</td></tr>';
 }
 ?>

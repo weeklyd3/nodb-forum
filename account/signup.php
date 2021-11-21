@@ -102,7 +102,7 @@ error_reporting(E_ALL);
 				} else {
 					echo "<br>Bad bad bad. Your personal directory was not created.";
 				}
-
+				fwrite(fopen("../data/accounts/" . $directory . '/inbox.json', 'w+'), '{"items":[{"time":0,"text":"Welcome to this forum! We are glad that you are here.","read":false,"type":"Welcome","url":"welcome.php"}]}');
 				$userinput->answer = $ansHash;
 				$userinputHandle = fopen(__DIR__ . '/../data/accounts/'.$directory.'/question.json', 'w+');
 				$json_encoded = json_encode($userinput);
