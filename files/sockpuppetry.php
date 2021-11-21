@@ -41,7 +41,7 @@
 <h3>Following another user around</h3>
 <p>If a user continues acting with one user, e.g. replying to one single user's topics with perfect solutions, they could be a sockpuppet.</p>
 <h3>Many actions that are minutes apart</h3>
-<p>Same as the one on top, except the timestamps on the actions are available publicly. Thus, it is easier for anyone to catch them (see ยง How do I report a possible sockpuppet?)</p>
+<p>Same as the one on top, except the timestamps on the actions are available publicly. Thus, it is easier for anyone to catch them (see § How do I report a possible sockpuppet?)</p>
 <h2>How to report sockpuppets</h2>
 <p>Send a private message to an administrator. Your private message should include:</p>
 <ul>
