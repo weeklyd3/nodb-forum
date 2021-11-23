@@ -39,7 +39,13 @@
 		<button onclick="window.location.assign('account/changepass.php');">Change Password</button><br />
 		You can edit your user profile:
 		<form action="account/edituser.php" method="get"><input type="submit" value="Edit" /></form>You can view your user profile:
-		<form action="account/viewuser.php" method="get"><input type="hidden" name="user" value="<?php echo htmlspecialchars(getname()); ?>" /><input type="submit" value="View profile" /></form></details>
+		<form action="account/viewuser.php" method="get"><input type="hidden" name="user" value="<?php echo htmlspecialchars(getname()); ?>" /><input type="submit" value="View profile" /></form>
+		
+		If you do not want your account anymore, click below to delete it: <br />
+		<form action="account/deleteaccount.php">
+		<input type="submit" value="Delete Account" />
+		</form>
+		</details>
 	<?php
 	} else {
 		echo "You are not logged in.";

@@ -19,7 +19,7 @@
 ?><html lang="en">
   <head>
     <base href="../" />
-    <title>Change Account Name</title>
+    <title>Change Account Password</title>
 	<?php
 	include('../public/header.php');
 	include('../styles/inject.php');
