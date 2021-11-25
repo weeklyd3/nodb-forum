@@ -28,7 +28,7 @@
   <h2><?php 
   function toolbar($name) {
 	  ?><div class="toolbar-wrapper">
-	  	<div class="name"><?php echo htmlspecialchars($name); ?> (<code><?php echo filesize($name); ?></code> bytes) <span class="float-right"><a download="<?php echo htmlspecialchars($name); ?>" href="files/download.php?filename=<?php echo htmlspecialchars($name); ?>">Download</a> <a href="files/download.php?filename=<?php echo htmlspecialchars($name); ?>" target="_blank">Print</a></span></div>
+	  	<div class="name"><?php echo htmlspecialchars($name); ?> (<code><?php echo filesize($name); ?></code> bytes) <span class="float-right"><a download="<?php echo htmlspecialchars($name); ?>" href="files/download.php?filename=<?php echo htmlspecialchars($name); ?>">Download</a> <a href="files/download.php?filename=<?php echo htmlspecialchars($name); ?>" target="_blank">Open in new tab</a></span></div>
 		  <div class="file-contents"><?php 
 		  return true;
   }

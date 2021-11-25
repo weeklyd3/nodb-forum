@@ -56,7 +56,7 @@
 			$config->description = $_POST['body'];
 
 			fwrite(fopen(__DIR__ . '/data/messages/'.cleanFilename($_GET['name']).'/config.json', 'w+'), json_encode($config));
-			?>Your topic has been saved. <a href="webchat.php?room=<?php echo htmlspecialchars(urlencode($_GET['name'])); ?>">Return to topic</a> <?php
+			?>Your topic has been saved. <a href="viewtopic.php?room=<?php echo htmlspecialchars(urlencode($_GET['name'])); ?>">Return to topic</a> <?php
 		} else {
 			?>You forgot to make changes!<hr /><?php
 		}

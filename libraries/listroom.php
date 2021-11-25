@@ -9,6 +9,8 @@
 				$array = (array) json_decode(file_get_contents(__DIR__.'/../data/community/events/config.json'));
 				foreach ($array as $date => $items) {
 					if (count((array) $items) === 0) continue;
+					// Skip if in past
+					if (strtotime($date) < strtotime(date("m/d/Y"))) continue;
 					?><li><?php echo explode("@", friendlyDate(strtotime($date . " 00:00")))[0]; 
 					?><ul><?php
 					foreach ($items as $item) {
@@ -17,6 +19,7 @@
 					?></ul></li><?php
 				}
 			?>
+			<a href="events/calendar.php">View calendar</a>
 			<?php if (getname()) {?><li><a href="events">Add item</a></li> <?php } ?>
 		</ul>
 	</li></ul>
