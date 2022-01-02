@@ -42,6 +42,7 @@ $Parsedown = new Parsedown;
 			array_push($postcontent->revisions, $rev);
 			$config->$post = $postcontent;
 			fwrite(fopen(__DIR__ . '/data/messages/'.cleanFilename($_GET['topic']).'/msg.json', 'w+'), json_encode($config));
+			?><p>Edit saved. <a href="viewtopic.php?room=<?php echo htmlspecialchars($_GET['topic']); ?>">Return to room?</a></p><?php
 		}
 	?>
   </head>
