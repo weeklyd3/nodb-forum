@@ -22,6 +22,7 @@
 	<?php
 	include('./public/header.php');
 	include('./styles/inject.php');
+require 'libraries/diff.php';
 	if (!isset($_GET['topic'])) die("Specify room first");
 	if (!file_exists(__DIR__ . '/data/messages/'.cleanFilename($_GET['topic']).'/config.json')) die("Bad title");
 	$config = json_decode(file_get_contents(__DIR__ . '/data/messages/'.cleanFilename($_GET['topic']).'/config.json'));
@@ -29,7 +30,7 @@
   </head>
   <body>
   <h2>Revisions</h2>
-  <a href="webchat.php?room=<?php echo htmlspecialchars(urlencode($_GET['topic'])); ?>">Return to topic</a>
+  <a href="viewtopic.php?room=<?php echo htmlspecialchars(urlencode($_GET['topic'])); ?>">Return to topic</a>
   <?php 
   if (!isset($config->revisions)) {
 	  ?><details><summary>1. <strong>Original version</strong> by <a href="account/viewuser.php?user=<?php echo htmlspecialchars(urlencode($config->author)); ?>"><?php echo htmlspecialchars($config->author); ?></a> on <?php echo date("Y-m-d H:i:s", $config->creationTime); ?></summary><?php echo $config->description_html; ?><details><summary>Source</summary><pre><code class="lang-markdown"><?php echo htmlspecialchars($config->description); ?></code></pre></details></details><?php
@@ -37,7 +38,15 @@
 	  $revs = array_reverse($config->revisions);
 
 	  foreach ($revs as $index => $revision) {
-		  ?><details><summary><?php echo count($revs) - $index; ?>. <strong><?php echo htmlspecialchars($revision->summary); ?></strong> by <a href="account/viewuser.php?user=<?php echo htmlspecialchars(urlencode($revision->author)); ?>"><?php echo htmlspecialchars($revision->author); ?></a> on <?php echo date("Y-m-d H:i:s", $revision->time); ?></summary><?php echo $revision->html; ?><details><summary>Source</summary><pre><code class="lang-markdown"><?php echo htmlspecialchars($revision->text); ?></code></pre></details></details><?php
+		  ?><details><summary><?php echo count($revs) - $index; ?>. <strong><?php echo htmlspecialchars($revision->summary); ?></strong> by <a href="account/viewuser.php?user=<?php echo htmlspecialchars(urlencode($revision->author)); ?>"><?php echo htmlspecialchars($revision->author); ?></a> on <?php echo date("Y-m-d H:i:s", $revision->time); ?></summary><?php echo $revision->html; ?><details><summary>Source</summary><pre><code class="lang-markdown"><?php echo htmlspecialchars($revision->text); ?></code></pre></details>
+		  <?php if (isset($revs[$index + 1])) { ?><details>
+			  <summary>Diff</summary>
+			  <?php 
+				  $pre = $revs[$index+1];
+				  diff($pre->text, $revision->text);
+			  ?>
+		  </details>
+		  <?php } ?></details><?php
 	  }
   }
   include('./public/footer.php');

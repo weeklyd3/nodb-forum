@@ -25,7 +25,11 @@ function getMsg($room) {
 		if (isset($value->reply)) {
 			?><span style="color:black;background-color:#ffcccb;">@<?php echo htmlspecialchars($value->reply); ?></span><?php
 		}
-		echo $value->html; ?> <hr /><?php if (getname()) { ?><a href="flag_post.php?room=<?php echo htmlspecialchars(urlencode($room)); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">flag</a> <?php } ?></td><td style="width:0px;" id="topic-user-<?php echo htmlspecialchars($key); ?>"><?php 
+		echo $value->html; ?> <hr /><?php if (getname()) { ?><a href="flag_post.php?room=<?php echo htmlspecialchars(urlencode($room)); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">flag</a> 
+		<?php 
+		if (verifyAdmin() || $value->author === getname()) { ?><a href="edit_post.php?topic=<?php echo htmlspecialchars(urlencode($room)); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">edit</a>
+		<?php } } ?>
+		</td><td style="width:0px;" id="topic-user-<?php echo htmlspecialchars($key); ?>"><?php 
 			if (file_exists(__DIR__ . '/accounts/'.cleanFilename($value->author) . '/psw.txt')) {
 				?><a href="account/viewuser.php?user=<?php echo htmlspecialchars(urlencode($value->author)); ?>"><img src="./data/accounts/<?php echo htmlspecialchars(cleanFilename($value->author)); ?>/avatar.png" alt="Avatar image for <?php echo htmlspecialchars($value->author); ?>" width="100"/> <br /><?php echo htmlspecialchars($value->author); ?></a><?php
 			} else {

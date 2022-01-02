@@ -36,7 +36,7 @@
 	$name = getname();
 	if (!isset($j[$user][$id])) die("<h2>Bad id</h2><p>Invalid ID</p>");
 	$j = $j[$user][$id];
-	?><h2><?php echo htmlspecialchars($j['title']); ?></h2><?php
+	?><h2><?php echo htmlspecialchars($j['title']); ?></h2><?php require 'header.php'; 
 	$Parsedown = new Parsedown;
 	echo $Parsedown->text($j['description']);
 	?>
@@ -94,5 +94,6 @@
 			?>
 			</table></li><?php
 		}
+		?></ol><?php
 	}
 	record($j);

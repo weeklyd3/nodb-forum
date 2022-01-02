@@ -34,8 +34,15 @@ error_reporting(E_ALL);
 			return !($string === '');
 		})
 	);
+	$tagstring = isset($_GET['tags']) ? $_GET['tags'] : '';
+  	$tags = array_unique(
+		array_filter(explode(" ", $tagstring),
+		function($string) {
+			return !($string === '');
+		})
+	);
 	if (isset($object->searchFilter)) $searchterms = array_values(array_udiff($searchterms, $obj->filterWords, 'strcasecmp'));
-  if (!isset($_GET['query']) || $_GET['query'] == '' || (isset($_GET['query']) && count($searchterms) === 0)) {
+  if ((!isset($_GET['query']) || $_GET['query'] == '' || (isset($_GET['query']) && count($searchterms) === 0)) && (!isset($_GET['tags']) || count($tags) === 0)) {
 	  ?><!-- no query -->
 	  <h2>Search Here</h2>
 	  <p>Either you entered nothing, or your search consisted only of too common words.</p>
@@ -76,7 +83,9 @@ error_reporting(E_ALL);
 		$config = json_decode(file_get_contents($entry . '/config.json'));
 		$titleContains = contains($config->title, $searchterms);
 		$bodyContains = custom_substr_count(html_entity_decode(getmsg($entry)), $searchterms);
-		if ($titleContains || ($bodyContains != 0)) {
+		$topictags = explode(" ", $config->tags);
+		$matchedtags = (array_intersect($tags, $topictags) == $tags);
+		if (($titleContains || ($bodyContains != 0)) && $matchedtags) {
 			$results[$config->title] = $bodyContains;
 		}
 	}
@@ -98,8 +107,8 @@ error_reporting(E_ALL);
 		?>><td><h3><a href="viewtopic.php?room=<?php echo htmlspecialchars(urlencode($config->title)); ?>"><?php echo htmlspecialchars($config->title); ?></a> (match count: <?php echo custom_substr_count(getmsg($roomname), $searchterms); ?>)</h3><p><?php
 			$msgs = html_entity_decode(getmsg($roomname));
 			$pos = custom_stripos($msgs, $searchterms);
-			if ($pos > 30) $view = substr($msgs, $pos - 30, 400);
-			if ($pos <= 30) $view = substr($msgs, 0, 400);
+			if ($pos > 30) $view = substr($msgs, $pos - 30, 100);
+			if ($pos <= 30) $view = substr($msgs, 0, 100);
 			$hlterms = array_map(function($input) {
 				return preg_quote(htmlspecialchars($input), '/');
 			}, $searchterms);

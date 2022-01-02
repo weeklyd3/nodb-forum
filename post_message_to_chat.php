@@ -89,6 +89,9 @@ if ($name) {
 	} else {
 		echo '{"status":null}';
 	}
+	$queue = json_decode(file_get_contents("review/items.json"));
+	array_push($queue->items, array("room" => $_POST['room'], "message" => $name));
+	fwrite(fopen("review/items.json", "w+"), json_encode($queue));
 } else {
 	echo '{"status":false}';
 }

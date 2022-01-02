@@ -91,3 +91,6 @@ function viewForm(array $options, bool $print = false): void {
 	}
 	?></ol><?php
 }
+function formatPollLink(string $id, string $user, string $title) {
+	?><a href="polls/poll.php?id=<?php echo htmlspecialchars(urlencode($id)); ?>&user=<?php echo htmlspecialchars(urlencode($user)); ?>"><?php echo htmlspecialchars($title); ?></a><?php
+}

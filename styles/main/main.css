@@ -187,7 +187,7 @@ table, table>tr, table>td {
 .tag>a {
 	text-decoration: none;
 }
-.tag::before {
+.tag:not(.nohash)::before {
 	content: "#";
 }
 details {
@@ -304,4 +304,29 @@ video {
 	padding: 3px;
 	height: 300px;
 	overflow-y: scroll;
+}
+.fakebutton {
+	padding: 7px;
+	text-transform: uppercase;
+	background-color: blue;
+}
+.width-100 {
+	width: 100%;
+}
+.colorpreview::after {
+	content: "\00a0\00a0";
+	display: inline-block;
+	width: 30px;
+}
+.diff-comment {
+	color: #eeeeee;
+	font-style: italic;
+}
+.delete-string {
+	background-color: red;
+	color:white;
+}
+.add-string {
+	background-color: lime;
+	color: black;
 }

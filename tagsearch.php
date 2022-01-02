@@ -16,29 +16,19 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><html lang="en">
+?><html>
   <head>
-    <title><?php 
-		if (file_exists(__DIR__ . '/config.json')) {
-			$name = json_decode(file_get_contents(__DIR__ . '/config.json'));
-			echo htmlspecialchars($name->forumtitle);
-		}
-	?></title>
 	<?php
-	include_once('./public/header.php');
-	include_once('./styles/inject.php');
+	include('./public/header.php');
+	include('./styles/inject.php');
 	?>
+    <title>Search with Tags</title>
   </head>
   <body>
-    <h2><?php 
-	$login = isset($_COOKIE['login']) ? $_COOKIE['login'] : "";
-	if ($login != "") {
-		echo "Welcome, ".htmlspecialchars(getname()).'!</h2> We&apos;re glad to have you. Choose a room to join. (<a href="create.php" class="fakebutton">new topic</a>)';
-	} else {
-		echo "You are not logged in.</h2> You will not be able to post any messages.";
-	}
-	include_once('./libraries/listroom.php');
-	include_once('./public/footer.php');
-	?>
-  </body>
-</html>
+<form action="search.php" method="GET">
+	<fieldset><legend>Tags to add</legend>
+	<label>Search for this: <input type="search" name="query" /></label>... <label>With these space-separated tags: <input type="text" name="tags" /></label>
+	<input type="submit" value="Search" /></fieldset>
+</form>
+	  <p>Tags you search for will show up in the search box.</p>
+<img src="img/tagsearch.png" style="max-width:100%;" alt="Tag search" />

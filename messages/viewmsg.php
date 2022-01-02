@@ -38,6 +38,8 @@
 	?>
 	<p><a href="messages/">Back to Messages Home</a></p>
 	<h2><?php echo htmlspecialchars($s->subject); ?></h2>
+	  <p>View as Markdown: <a href="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>&markdown=on">once</a> <a href="account/#mdmail">always</a></p>
+	  <p><a href="messages/report.php?id=<?php echo htmlspecialchars($_GET['id']); ?>">Is this message inappropriate?</a></p>
 	<ul>
 		<li>Sent: <?php echo friendlyDate($s->time); ?></li>
 		<li>From: <?php echo htmlspecialchars($s->from); ?></li>
@@ -49,7 +51,8 @@
 			}
 		?></ul></li>
 	</ul>
-	<pre><code><?php echo htmlspecialchars($s->body); ?></code></pre>
+	<pre><code<?php 
+if (!isset($_GET['markdown']) && !file_exists("../data/accounts/" . cleanFilename(getname()) . "/mdmail.txt")) { echo ">" . htmlspecialchars($s->body); } else { $Parsedown = new Parsedown; echo " style=\"white-space:normal;\" class=\"nohighlight hljs\">" . $Parsedown->text($s->body); }?></code></pre>
 	<?php 
 	if (!in_array(getname(), $s->read)) {
 		array_push($s->read, getname()); 

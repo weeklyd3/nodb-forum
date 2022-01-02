@@ -45,6 +45,26 @@
 		<form action="account/deleteaccount.php">
 		<input type="submit" value="Delete Account" />
 		</form>
+		<h3>Other settings</h3>
+		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+		<?php if (isset($_POST['save-settings'])) {
+		if (isset($_POST['mdmail'])) {
+			fwrite(fopen("../data/accounts/" . cleanFilename(getname()) . "/mdmail.txt", "w+"), "");
+		} else {
+			unlink("../data/accounts/" . cleanFilename(getname()) . "/mdmail.txt");
+		}
+		if (isset($_POST['increasedfontsize'])) {
+			fwrite(fopen("../data/accounts/" . cleanFilename(getname()) . "/increasedfontsize.txt", "w+"), "");
+		} else {
+			if (file_exists("../data/accounts/" . cleanFilename(getname()) . "/increasedfontsize.txt")) {unlink("../data/accounts/" . cleanFilename(getname()) . "/increasedfontsize.txt");}
+		}
+		?><div style="width:100%;background-color:gold;color:black;text-align:center;padding:7px;">All settings below this message have been saved. You can adjust them again or leave this page. If you adjusted any settings marked with <sup>*</sup>, you will have to reload the page to see the effects. <a class="fakebutton" href="account/" style="color:white;padding:0;">Reload now</a></div><?php
+	} ?>
+		<label id="mdmail"><input type="checkbox" name="mdmail" <?php if (file_exists("../data/accounts/" . cleanFilename(getname()) . "/mdmail.txt")) { ?>checked="checked" <?php } ?>/> Force mail to render as Markdown</label><br />
+			<label id="increasedfontsize"><input type="checkbox" name="increasedfontsize" <?php if (file_exists("../data/accounts/" . cleanFilename(getname()) . "/increasedfontsize.txt")) { ?>checked="checked" <?php } ?>/> Increased font size</label><sup>*</sup><br />
+			<input type="submit" name="save-settings" value="Save this batch" />
+		</form>
+		<sup>*: Requires additional reload after save</sup>
 		</details>
 	<?php
 	} else {

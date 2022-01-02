@@ -22,6 +22,7 @@
 	<?php
 	include('./public/header.php');
 	include('./styles/inject.php');
+	require './libraries/editlib.php';
 	if (!isset($_GET['name'])) die("Specify room first");
 	if (!getname()) die("Please log in to edit");
 	if (!file_exists(__DIR__ . '/data/messages/'.cleanFilename($_GET['name']).'/config.json')) die("Bad title");
@@ -31,17 +32,7 @@
   </head>
   <body>
   <?php 
-	class Revision {
-		function __construct($text, $author, $time, $summary) {
-			$this->text = $text;
-			$this->author = $author;
-			$this->time = $time;
-			$this->summary = $summary;
-			$Parsedown = new Parsedown;
-			$this->html = $Parsedown->text($text);
-		}
-	}
-	if (isset($_POST['body'])) {
+  	if (isset($_POST['body'])) {
 		if ($config->description != $_POST['body']) {
 			if (!isset($config->revisions)) {
 				$config->revisions = array();
@@ -56,12 +47,12 @@
 			$config->description = $_POST['body'];
 
 			fwrite(fopen(__DIR__ . '/data/messages/'.cleanFilename($_GET['name']).'/config.json', 'w+'), json_encode($config));
-			?>Your topic has been saved. <a href="viewtopic.php?room=<?php echo htmlspecialchars(urlencode($_GET['name'])); ?>">Return to topic</a> <?php
+			?>Your edit has been saved. <a href="viewtopic.php?room=<?php echo htmlspecialchars(urlencode($_GET['name'])); ?>">Return to topic</a> <?php
 		} else {
 			?>You forgot to make changes!<hr /><?php
 		}
 	}
-  ?>
+		?>
 	<form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="post">
 	<label>Edit topic:<br />
 	<textarea name="body" rows="15" style="width:100%;"><?php echo htmlspecialchars($config->description); ?></textarea></label>

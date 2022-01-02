@@ -77,7 +77,18 @@ if (!getname()) {
 			}
 		);
 </script>
-<tr><td>&nbsp;<label for="query" style="display:none;">Search query:</label></td><td rowspan="3" align="right"><form action="search.php" method="GET"> <input type="search" id="query" name="query" placeholder="search rooms" value="<?php if (isset($_GET['query'])) { echo htmlspecialchars($_GET['query']); } ?>" /> <input type="submit" value=">" /></form></td><td></td></tr>
+<tr><td>&nbsp;<label for="query" style="display:none;">Search query:</label></td><td rowspan="3" align="right"><form action="search.php" method="GET"> <span style="padding:7px;border:1px solid; color: black; background-color: white;">
+	<?php if (!isset($_GET['tags'])) { ?><span class="tag nohash"><a href="tagsearch.php" title="Add tags to search">[no tags]</a></span> <?php } 
+else {
+	$tags = array_unique(array_filter(explode(" ", $_GET['tags']), function($m) { return $m !== ""; }));
+	foreach ($tags as $tag) {
+		?><span class="tag"><?php echo htmlspecialchars($tag); ?></span> <?php
+	}
+	?><small><i><a href="tagsearch.php">(change)</a> <a title="Remove all tags and search" href="search.php?query=<?php echo htmlspecialchars($_GET['query']); ?>">(remove)</a></i></small>
+	
+	<input type="hidden" name="tags" value="<?php echo htmlspecialchars(implode(" ", $tags)); ?>" /><?php
+}
+	?>&nbsp;<input style="outline:none;padding:0;border:none;" type="search" id="query" name="query" placeholder="search rooms" value="<?php if (isset($_GET['query'])) { echo htmlspecialchars($_GET['query']); } ?>" /> </span><input type="submit" value=">" /></form></td><td></td></tr>
 </table>
 <div id="banner" style="width:100%;background-color:gold;color:black;text-align:center;"><?php 
 require(__DIR__ . '/../libraries/parsedown.php');
@@ -188,3 +199,9 @@ window.addEventListener('click', function(e) {
 makeDraggable("#drag", "div");
 </script>
 <div id="mainContent">
+<?php 
+$blocklist = explode("\n", file_get_contents(__DIR__ . "/../blocklist.txt"));
+if (in_array($_SERVER['REMOTE_ADDR'], $blocklist)) {
+	die("IP address blacklisted. If you think this is in error, please contact i.hate.spam.mail.here@gmail.com.");
+}
+?>

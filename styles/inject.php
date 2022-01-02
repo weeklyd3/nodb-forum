@@ -29,6 +29,7 @@ helped by this! -->
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 <?php
 ini_set('display_errors', 0);
+require_once __DIR__ . '/../libraries/lib.php';
 echo '<link rel="stylesheet" href="./styles/main/main.css" />';
 if (file_exists(__DIR__ . '/../config.json')) {
 	$config = json_decode(file_get_contents(__DIR__ . '/../config.json'));
@@ -36,6 +37,9 @@ if (file_exists(__DIR__ . '/../config.json')) {
 
 	fwrite(fopen(__DIR__ . '/../config.json', 'w+'), json_encode($config));
 }
+	if (file_exists(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . "/increasedfontsize.txt")) {
+		echo "<style>body { font-size: 125% !important; }</style>";
+	}
 ?>
 <link rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/vs.min.css" />
@@ -49,3 +53,6 @@ window.addEventListener('DOMContentLoaded', function() {
 	hljs.highlightAll();
 });
 </script>
+<?php 
+require_once __DIR__ . '/../libraries/lib.php';
+?>

@@ -66,6 +66,7 @@
   }
   if (count($_POST) !== 0) response();
   ?>
+	  <p>Submitting response to <strong><?php echo htmlspecialchars($json[$name][$id]['title']); ?></strong> (public) as <strong><?php echo htmlspecialchars(getname()); ?></strong> (username private)</p>
   <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="post">
 	<?php 
 	$name = $_GET['user'];

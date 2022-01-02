@@ -303,4 +303,8 @@ function startsWithNumber(string $str) {
 function donothing() {
 	return;
 }
+function random(array $options) {
+	shuffle($options);
+	return $options[array_rand($options)];
+}
 ?>
