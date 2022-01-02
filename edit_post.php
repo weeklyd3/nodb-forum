@@ -34,7 +34,7 @@ $Parsedown = new Parsedown;
 	$postcontent = $config->$post;
 	if ((verifyAdmin() == false) && (getname() != $postcontent->author)) die("access denied");
 		if (isset($_POST['contents'])) {
-			$original = new Revision($postcontent->md);
+			$original = new Revision($postcontent->md, $postcontent->author, $postcontent->time, "Original revision");
 			$postcontent->html = $Parsedown->text($_POST['contents']);
 			$postcontent->md = $_POST['contents'];
 			$rev = new Revision($_POST['contents'], getname(), time(), $_POST['summary']);

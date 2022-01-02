@@ -26,8 +26,9 @@ require 'libraries/diff.php';
 	if (!isset($_GET['topic'])) die("Specify room first");
 	if (!file_exists(__DIR__ . '/data/messages/'.cleanFilename($_GET['topic']).'/config.json')) die("Bad title");
 	$config = json_decode(file_get_contents(__DIR__ . '/data/messages/'.cleanFilename($_GET['topic']).'/config.json'));
-	?>
-  </head>
+	$postcontent = json_decode(file_get_contents(__DIR__ . '/data/messages/'.cleanFilename($_GET['topic']).'/msg.json'));
+if (isset($_GET['post']) && isset($postcontent->{$_GET['post']})) $config = $postcontent->{$_GET['post']};
+	?>  </head>
   <body>
   <h2>Revisions</h2>
   <a href="viewtopic.php?room=<?php echo htmlspecialchars(urlencode($_GET['topic'])); ?>">Return to topic</a>
