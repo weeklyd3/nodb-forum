@@ -40,6 +40,7 @@
 		$install->forumtitle = $title;
 		$install->tags = explode(" ", $_POST['tags']);
 		$install->creationTime = time();
+		$install->admins = array('admin');
 		$json = json_encode($install);
 		$handle = fopen("../config.json", 'w+');
 		$status = fwrite($handle, $json);
