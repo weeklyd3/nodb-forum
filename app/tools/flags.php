@@ -1,6 +1,7 @@
 <?php include_once('header.php'); ?>
 <h2>Flags</h2>
 <p>Below is a list of all topic flags. Better moderate them until they reach a million entries!</p>
+<a href="app/tools/reviewmessagereports.php">Review private message reports</a>
 <details open="open">
 <summary>Topics</summary>
 <ul>
