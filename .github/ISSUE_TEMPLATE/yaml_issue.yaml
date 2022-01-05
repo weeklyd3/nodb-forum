@@ -32,7 +32,9 @@ body:
       label: Version
       description: What version of our software are you running?
       options:
-        - 0.0.2 (Default)
+        - Code stored in repo
+        - 0.0.3
+        - 0.0.2 
         - 0.0.1
     validations:
       required: true
