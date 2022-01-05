@@ -29,6 +29,7 @@
   <body>
   <style>.error{border:1px solid #FF0000; color: #FF0000; background-color:#ffcccb ;}</style>
 	<?php 
+blockCheck();
 class Message {
 	public function __construct(string $subject, array $people, string $from, string $body) {
 		$this->subject = $subject;
@@ -117,6 +118,7 @@ class Message {
 						<li><label><input type="radio" name="warning" value="rude" /> Posting rude content</label></li>
 						<li><label><input type="radio" name="warning" value="junk" /> Posting junk content</label></li>
 						<li><label><input type="radio" name="warning" value="gibberish" /> Posting gibberish content</label></li>
+						<li><label><input type="radio" name="warning" value="vandal" /> Vandalizing posts</label></li>
 					</ul></fieldset><?php } if (isset($_POST['warning'])) { ?><label hidden="hidden">DO NOT TOUCH this field.<textarea name="oldmsg"><?php echo htmlspecialchars($_POST['body']); ?></textarea></label>
 					<?php } if (isset($_POST['warning'])) { ?><input type="submit" name="cancel" value="Close template" /> <?php } else { ?><input type="submit" name="use-me" value="Display template" /><?php } ?></td></tr><?php
 					if (isset($_POST['warning'])) {
@@ -135,7 +137,8 @@ class Message {
 						"spam" => "Hi,\n\nWe noticed that you were posting spam on our forum. It's okay to promote your product, as long as you:\n - don't talk about it too much\n - disclose how you are related\n   Note: Sometimes even a 'my' will be enough!\n\nSome of your posts may have been flagged by the community as spam and replied to with constructive criticism, please review them carefully. Thanks!\n\n-- moderation team",
 						"rude" => "Hi,\n\nWe noticed that you were posting rude content on our forum. Some users may have responded to your posts with constructive criticism, please review your rude posts carefully. \n\nIn the future, please remember to be nice to other users. Instead of getting into a fight over something, try stepping away for a second and thinking about it. Thanks!\n\n-- moderation team",
 						"junk" => "Hi,\n\nWe noticed you were posting some responses that did not add to the conversation. Some common examples of these are:\n - Bumping the question\n   i have the same problem!! can anyone halp? [sic.]\n - A new question\n   got it, thks! now I need to foo the bar. how? thks! [sic.]\n   A new question should be posted as a new topic.\n - A bumper's favorite:\n   BUMP! [sic.]\n   If a topic should be bumped to the front page, edit and improve it. This \n   will get more people interested.\n\nThese replies do not add anything to the topic, so they are discouraged. Please refrain from posting these kinds of replies in the future. Thanks!\n\n-- moderation team ",
-						"gibberish" => "Hi,\n\nWe noticed that you were posting gibberish on our forum. Gibberish simply to bump a topic is discouraged. You can try researching the topic and writing a partial solution. Using replies as formatting sandboxes is also discouraged. Rather, ask for a formatting sandbox topic to be created, and reply with formatting tests there. Thanks!\n\n-- moderation team"
+						"gibberish" => "Hi,\n\nWe noticed that you were posting gibberish on our forum. Gibberish simply to bump a topic is discouraged. You can try researching the topic and writing a partial solution. Using replies as formatting sandboxes is also discouraged. Rather, ask for a formatting sandbox topic to be created, and reply with formatting tests there. Thanks!\n\n-- moderation team",
+						"vandal" => "Hi,\n\nWe noticed that some of your edits to posts were not constructive. Constructive edits should at least strive to improve the post. The following kinds of edits are not constructive:\n - Blanking topics or posts with no apparent reason\n - Blanking or replacing topics with a message that the question has been resolved\n - Consistently \"warring\" with another user who has rolled back your edits by redoing them.\n\nThese edits do not help the forum, so please stop editing posts like this. Thanks!\n\n-- moderation team"
 					);
 					if (!isset($_POST['use-me'], $_POST['warning'])) {
 						if (isset($_POST['oldmsg'])) {
@@ -148,6 +151,7 @@ class Message {
 					} else {
 						if (verifyAdmin()) {
 							echo htmlspecialchars($useme[$_POST['warning']]);
+							echo "\n\nP.S. if you think this message was sent unfairly or you did not perform these actions, either your account was compromised or the sender made a mistake. If your account was compromised, please secure it by setting a unique password. If you think the sender made a mistake, please click the \"Is this message inappropriate?\" link. You will be sent to a page where you can add more details. Thank you.";
 						}
 					} ?></textarea></td>
 				</tr>

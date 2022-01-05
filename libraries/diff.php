@@ -24,7 +24,7 @@ function diff(string $old, string $new) {
 	  if (!$neutralize) {
 		  ?> class="delete-string"<?php
 	  }
-	  ?>><del><?php
+	  ?> style="white-space:break-spaces;"><del><?php
      // 0 = modified or not, -1 = added, 1 = deleted
      $comments = array("added", "kept", "deleted");
      $status = 0;
@@ -38,9 +38,9 @@ function diff(string $old, string $new) {
      }
      ?></del></td>
 				 <td class="diff-comment"><?php echo $comments[$status + 1]; ?> -></td>
-				 <td<?php
+				 <td style="white-space:break-spaces;"<?php
 	  if (!$neutralize) {
-		  ?> class="add-string"<?php
+		  ?>  class="add-string"<?php
 	  }
 	  ?>><ins><?php if ($status !== 1) {
          echo htmlspecialchars($new[$i]);

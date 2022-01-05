@@ -309,6 +309,7 @@ video {
 	padding: 7px;
 	text-transform: uppercase;
 	background-color: blue;
+	color: white;
 }
 .width-100 {
 	width: 100%;

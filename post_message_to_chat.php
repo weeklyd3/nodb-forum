@@ -57,6 +57,20 @@ if ($name) {
 		}
 	}
 	$json = json_decode(file_get_contents(__DIR__ . '/data/messages/'.cleanFilename($_POST['room']) . '/msg.json'));
+	$roomobj = json_decode(file_get_contents(__DIR__ . '/data/messages/'.cleanFilename($_POST['room']) . '/config.json'));
+	$author = $roomobj->author;
+	if ($author !== getname()) {
+		// Then, notify the author of a new question reply
+		$not = new stdClass;
+		$not->type = "Reply to your question";
+		$not->read = false;
+		$not->url = 'viewtopic.php?room=' . urlencode($_POST['room']);
+		$not->text = "New reply to a thread you created. Click to open it and read the new reply.";
+		$not->time = time();
+		$existingnotifications = json_decode(file_get_contents("data/accounts/" . cleanFilename($author) . "/inbox.json"));
+		array_push($existingnotifications->items, $not);
+		fwrite(fopen("data/accounts/" . cleanFilename($author) . "/inbox.json", "w+"), json_encode($existingnotifications));
+	}
 	$json->$name = new msg(getname(), $_POST['message'], time(), $_POST['attach']);
 	if ($_POST['reply'] != '')
 		$json->$name->reply = $_POST['reply'];

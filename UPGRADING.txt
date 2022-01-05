@@ -13,7 +13,7 @@ Preparing for the Upgrade
    utility of your choice.
 6. Delete tos_raw.php.
 
-Actualy Upgrading
+Actually Upgrading
 ============================
 7. Upload the files, replacing the exsting ones. 
 8. Take the site online.

@@ -27,6 +27,7 @@
   </head>
   <body>
   <?php 
+	blockCheck();
   if (!isset($_COOKIE['login'])) {
 	  echo 'You need to log in to create rooms.';
 	  include_once('./public/footer.php');
@@ -87,6 +88,7 @@
 	<form id="form" action="<?php echo $_SERVER['PHP_SELF']; echo '" '; if(isset($_POST['roomtitle'])) { echo 'style="display:none;"'; }?> method="post">
     	<strong>WARNING: Only create new rooms if you absolutely need to!</strong> If the topic already exists, do not re-post it.
 		<br />
+		
 		<label for="roomtitle">Room title:</label>
 		<input type="text" id="roomtitle" name="roomtitle" required="required" />
 		<br />
@@ -105,6 +107,7 @@
 
 		<button type="button" onclick="document.getElementById('tips').src='files/md.php#image';">Image</button>
 		<button type="button" onclick="window.open('files/', 'upload file', 'width=300,height=300');">Upload</button>
+			<b><a href="files" target="_blank">Button not working?</a></b>
 
 		</div>
 		<button type="button" onclick="document.getElementById('tips').style.display = 'block';this.style.display='none';" style="width:100%;">Show formatting tips</button>
@@ -119,6 +122,18 @@
 		<label>Enter your tags separated by spaces:
 		<input required="required" type="text" style="width: 100%;" name="tags" placeholder="Add your tags" />
 		</label>
+		<details>
+			<summary>What to do to get a response faster</summary>
+			<ul>
+				<li>Write a descriptive title. This is how NOT to write a title: "I NEED HELP!!! THIS IS URGENT!!!"</li>
+				<li>Search first, using first the site search engine and then the search box in your browser. Many common issues have already been asked somewhere else, maybe on another site.</li>
+				<li>This is not the place to post test topics and have them stick around. <a href="files/md_sandbox.php">You may test your formatting here, but it is never saved.</a></li>
+				<li>Document what you've already tried and searched and why it didn't work.</li>
+				<li>Make sure your topic is on-topic. If your topic is on-topic, more people will know how to solve it.</li>
+				<li>Tag the topic with the related tags. If related tags do not exist, then type them in anyways; they will get created when the topic is saved. People expert in the related tags will be more likely to see and reply to your topic. Avoid tags like "urgent" or "beginner" that do not describe the nature of the problem.</li>
+				<li>Lastly, if your topic does not get a response, maybe it's missing some required information. Ask a friend to read it and suggest improvements, and add new information using the "edit" link below the topic. If people do not have all the necessary information, they will not be able to answer.</li>
+			</ul>
+		</details>
 		<details>
 			<summary>Show all tags</summary>
 			<?php 

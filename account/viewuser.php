@@ -37,6 +37,10 @@
 	  $json = json_decode(file_get_contents('../data/accounts/'.cleanFilename($username).'/user.json'));
 	  ?>
 	  <h2>Profile: <?php echo htmlspecialchars($username); ?></h2>
+	  <?php 
+	  if (file_exists('../data/accounts/'.cleanFilename($username).'/ban.txt')) {
+		  ?><div style="background-color:red;">This user account has been blocked and is unable to respond to messages. Block reason: <i><?php echo htmlspecialchars(file_get_contents('../data/accounts/'.cleanFilename($username).'/ban.txt')); ?></i></div><?php
+	  } ?>
 	  <table class="table" width="100%"><tr>
 	  <td rowspan="2" valign="top"><h3>About Me</h3>
 	  <?php 

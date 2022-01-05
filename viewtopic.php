@@ -217,7 +217,9 @@ var enterPressed = function (event) {
 </script><div id="message" style="font-family:inherit;"><?php 
 include_once('data/getmsg.php');
 getMsg($_GET['room']);
-?></div>	<details style="position:sticky; bottom:0; background-color:lightblue; overflow-y:scroll;max-height:calc(100% - 7em); color: black;">
+?></div>	
+	  <?php blockCheck(); ?>
+	  <details style="position:sticky; bottom:0; background-color:lightblue; overflow-y:scroll;max-height:calc(100% - 7em); color: black;">
 	<summary style="list-style: none;padding-left:10;">-<span></span>-> Reply</summary>
 	<span id="status">loading status</span><br />
 	<form action="javascript:void(0);" id="compose" onsubmit="post();">
@@ -228,7 +230,17 @@ getMsg($_GET['room']);
 	<br />
 	<label for="messages">message (markdown allowed, no spam please), <button type="button" onclick="preview()">preview</button></label><textarea rows="7" <?php if ($_COOKIE['login']==''){echo 'disabled="disabled"'; }?> onkeydown="enterPressed(event)" name="message" id="messages" style="width:100%;" required="required" placeholder="Type here"></textarea><br>
 	<div id="previewHTML" style="display:none;">Click 'preview'!</div>
-	<label for="attach">Attachment filename (<button onclick="window.open('files/', 'upload', 'width=600,height=600');" type="button">upload</button>)</label>
+		<details><summary>How to reply to a question</summary>
+		<ol>
+			<li>All replies, even those by trusted users, go through a review system, which can be accessed by any user (including you!) <a href="review/">here</a>. In review, good posts are allowed to pass while low-quality posts are flagged for further review by administrators. Before someone reviews your post, the post will still be visible to everyone. (Reviewing your own post is not allowed.)</li>
+			<li>Make sure your post is a legitimate attempt at responding to the question. Replies stating that someone has the same problem and follow up questions are not permitted.</li>
+			<li><strong>No matter how late you are, feel free to submit a response anyway. Even if the original person got an answer, others might appreciate another solution.</strong></li>
+			<li>Make sure your post is readable. You can press the "preview" button to see how it will look.</li>
+			<li>After posting, please do not refresh the page. The post could take up to 10 seconds to appear.</li>
+			<li>New replies will appear live on the bottom.</li>
+		</ol></details>
+	<label for="attach">Attachment filename (<a href="files/directory.php" target="_blank">Use or upload files</a>)</label>
+
 	<input type="text" id="attach" name="attach" placeholder="sample.txt" /><br />
 	<label>Reply to: <input type="text" name="reply" placeholder="admin" /></label>
 	<input type="hidden" name="room" value="<?php echo htmlspecialchars($GLOBALS['room']); ?>" /><br />

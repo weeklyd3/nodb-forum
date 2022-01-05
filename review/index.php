@@ -105,8 +105,10 @@
 			$contents['topictitle'] = $topicinfo->title;
 			$contents['topic'] = $topicinfo->description_html;
 			$postinfo = json_decode(file_get_contents("../data/messages/" . cleanFilename($i->room) . '/msg.json'));
+			
 			$postid = $i->message;
 			$contents['post'] = $postinfo->$postid->html;
+				$GLOBALS['coi'] = $postinfo->$postid->author == getname();
 		}
 		?><h2>Review</h2>
 		<p><?php echo count($items); ?> item(s) left!</p>
@@ -150,11 +152,11 @@
 	?>
 	<input type="hidden" name="room" value="<?php echo htmlspecialchars($GLOBALS['roominfo']->room); ?>" />
 	<input type="hidden" name="message" value="<?php echo htmlspecialchars($GLOBALS['roominfo']->message); ?>" />
-	<label class="heading"><input type="radio" name="action" value="ok" value="ok" /> No action needed</label>
+	<label class="heading"><input type="radio" name="action" value="ok" value="ok" <?php if ($GLOBALS['coi']) { ?>disabled="disabled" <?php } ?>/> No action needed</label>
 	<div>This comment is relevant to the question and is high-quality. (Note: flagging it in a new tab does not make "no action needed" okay!)</div>
-	<label class="heading"><input type="radio" name="action" value="lqp"> Low Quality</label>
+	<label class="heading"><input type="radio" name="action" value="lqp" <?php if ($GLOBALS['coi']) { ?>disabled="disabled" <?php } ?>/> Low Quality</label>
 	<div>This post is low quality and should be flagged.</div>
-	<label class="heading"><input type="radio" name="action" value="skip"> Next Task</label>
+	<label class="heading"><input type="radio" name="action" value="skip" /> Next Task</label>
 	<div>Not sure? Select this and let someone else review it.</div>
 	</fieldset>
 	<input type="submit" />

@@ -307,4 +307,9 @@ function random(array $options) {
 	shuffle($options);
 	return $options[array_rand($options)];
 }
+function blockCheck() {
+	if (!file_exists(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . "/ban.txt")) return;
+	?><p>I'm sorry, but it appears that you have been blocked. <a href="banned.php">Click for more details.</a> Thus, content creation has been restricted. However, you are still allowed to edit your own profile.</p><?php 
+	exit(0);
+}
 ?>

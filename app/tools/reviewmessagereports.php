@@ -9,7 +9,7 @@ if (!file_exists('../../messages/reports.json')) {
 }
 $reports = json_decode(file_get_contents('../../messages/reports.json'));
 	$reports->reports = array_filter($reports->reports, function($r) {
-		return !isset($_POST[$r->id]);
+		return !isset($_POST[$r->id]) || (isset($_POST[$r->id]) && ($r->from === getname()));
 	});
 fwrite(fopen("../../messages/reports.json", "w+"), json_encode($reports));
 if (count($reports->reports) === 0) {
@@ -68,7 +68,7 @@ if (count($reports->reports) === 0) {
 			<td>
 				<label>
 					<span hidden="hidden">Mark: </span>
-					<input type="checkbox" name="<?php echo htmlspecialchars($report->id); ?>" value="complete" /></label>
+					<input <?php if ($report->from === getname()) { ?>disabled="disabled" title="Cannot review -- sent from your account" <?php } ?> type="checkbox" name="<?php echo htmlspecialchars($report->id); ?>" value="complete" /></label>
 			</td>
 		</tr><?php
 	}

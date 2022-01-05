@@ -38,7 +38,7 @@
 	?>
 	<p>&larr; Return to <a href="messages/">Messages Home</a> | <a href="messages/viewmsg.php?id=<?php echo htmlspecialchars($id); ?>">Offending message</a></p>
 	<h2><?php echo htmlspecialchars($s->subject); ?> - Report message</h2>
-	<p>Is this message spam, offensive, or a violation of the <a href="tos.php">Terms of Service</a>? Please fill in details below, and a volunteer will take a look at it.</p>
+	<p>Is this message spam, offensive, or a violation of the <a href="tos.php">Terms of Service</a>? Please fill in details below, and a volunteer (who will not be the sender) will take a look at it.</p>
 	  <p><strong>Note: Reporting a message will permanently reveal ALL of the headers -- the sender, receiver, and sending time. However, the author will not see that the message has been reported.</strong></p>
 	  <p>Please be descriptive in your reports.
 	  This is how NOT to write a report: <blockquote>This message is bad.</blockquote> This is an example of a good report: <blockquote>This message only serves to promote the link enclosed - it is written like an advertisement and has no intention to actually communicate, only advertise.</blockquote>
@@ -72,7 +72,7 @@ if (isset($_POST['reason'])) {
 	?>
 <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
 	<p>I think this message is inappropriate because...<br />
-	<label><span hidden="hidden">Enter reason here</span><textarea required="required" name="reason" rows="5" cols="50" placeholder="Insert your reason here"></textarea></label>
+	<label><span hidden="hidden">Enter reason here</span><textarea required="required" name="reason" rows="5" cols="50" placeholder="Insert your reason here. Common reasons: Inaccurate warning, spam, offensive, gibberish"></textarea></label>
 	</p>
 	<button type="submit">Report this message</button>
 </form>

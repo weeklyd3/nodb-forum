@@ -29,6 +29,7 @@
   </head>
   <body>
 	<h2>Post a Reply</h2>
+	  <b><a href="files">Click to upload a file</a></b>
 	<div><?php
 	if (!isset($_POST['submit'], $_POST['message'])) { ?>
 	Write your reply below: <?php } 
