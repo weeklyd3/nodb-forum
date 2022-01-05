@@ -1,5 +1,5 @@
 # Starting Your Contribution
-[< Back](welcome.md)
+[< Back](welcome.md) [Next >](start2.md)
 
 You can do anything you want in a commit, fix a bug,
 update documentation, anything that's related.
@@ -20,3 +20,15 @@ or
 
 or 
 > Fixed confusion in \<section> of README
+#### Bad
+> I don't know what this is 
+
+or 
+> Fix (issue number), (issue number), \<5 more issue numbers>
+
+or 
+
+> Edit the README somehow, but I don't know.
+
+### Done?
+Click "Next" above to continue.
