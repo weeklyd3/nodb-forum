@@ -25,7 +25,7 @@
 	?>
   </head>
   <body><h2>Users</h2>This list shows all the members of this board.<?php
-  $GLOBALS['size'] = 2;
+  $GLOBALS['size'] = 10;
 $handle = array_diff(scandir(__DIR__ . '/data/accounts/'), array('index.php', '.', '..', 'default.png'));
 $page = isset($_GET['page'])
 	? (
@@ -47,18 +47,38 @@ function paginate($handle, $page, $total) {
 	<?php
 }
 paginate($handle, $page, $total);
+$admins = json_decode(file_get_contents("config.json"));
+$admins = $admins->admins;
 ?><div id="gallery"><?php
 $GLOBALS['counter'] = 0;
+$GLOBALS['failEntries'] = 0;
 if ($handle = opendir(__DIR__ . '/data/accounts')) {
 	while (false !== ($entry = readdir($handle))) {
-		if (!is_dir(__DIR__ . '/data/accounts/' . $entry)) continue;
-		if (in_array($entry, array('default.png', 'index.php', ".", '..'))) continue;
-		$GLOBALS['counter'] = $GLOBALS['counter'] + 1;
-		if ($GLOBALS['counter'] < $page * $GLOBALS['size']) continue;
-		if ($GLOBALS['counter'] == ($page + 1) * $GLOBALS['size']) break;
-		?><div id="flex"><img src="data/accounts/<?php echo htmlspecialchars($entry); ?>/avatar.png" /> <?php echo file_exists(__DIR__ . '/data/accounts/' . $entry . '/user.txt') ? htmlspecialchars(file_get_contents(__DIR__ . '/data/accounts/' . $entry . '/user.txt')) : 'false'; ?></div><?php
+		if (in_array($entry, array(".", "..", "default.png", "index.php"))) continue;
+		if ($GLOBALS['failEntries'] < ($page - 1) * ($GLOBALS['size'])) {
+			$GLOBALS['failEntries']++;
+			continue;
+		}
+		if ($GLOBALS['counter'] === $GLOBALS['size']) {
+			break;
+		}
+		?>
+			<div class="flex">
+				<img src="data/accounts/<?php echo htmlspecialchars($entry); ?>/avatar.png" alt="Avatar image" />
+				<a href="account/viewuser.php?user=<?php echo htmlspecialchars(urlencode(file_get_contents('data/accounts/' . $entry . '/user.txt'))); ?>"><?php echo htmlspecialchars(file_get_contents('data/accounts/' . $entry . '/user.txt')); ?></a><br />
+				Role: <?php echo in_array( file_get_contents('data/accounts/' . $entry . '/user.txt'), $admins) ? '<span title="Reviews reports, adjusts sitewide settings, and moderates content in addition to posting content.">Administrator</span>' : '<span title="Reads, reports, and adds content.">User</span>'; ?><br />
+				Banned: <?php echo file_exists('data/accounts/' . $entry . '/ban.txt') ? "<b>Yes</b>" : "No"; ?><br />
+				Joined: <?php echo friendlyDate(filemtime('data/accounts/' . $entry . '/user.txt')); ?><br />
+				<?php 
+					if (getname()) {
+						?><a href="messages/new.php?target=<?php echo htmlspecialchars(urlencode(file_get_contents('data/accounts/' . $entry . '/user.txt'))); ?>">Contact</a><?php
+					}
+				?>
+			</div>
+		<?php
+		$GLOBALS['counter']++;
 	}
 }
 ?>
 </div>
-<style>#flex { background-color: #94bdff; margin: 5px; } #gallery { display: flex; flex-wrap: wrap; }</style>
+<style>.flex { background-color: #94bdff; margin: 5px; } #gallery { display: flex; flex-wrap: wrap; }</style>

@@ -105,7 +105,7 @@ class Message {
 			<tbody>
 				<tr>
 					<td><label for="to">Recipients (newline between each username):</label></td>
-					<td><textarea oninput="if (this.value!=''){this.rows = this.value.split('\n').length;}else{this.rows='3';}" rows="3" cols="30" id="to" name="to" placeholder="admin&#10;user1&#10;anotheruser"><?php if (isset($_POST['subject'])) echo htmlspecialchars($_POST['to']); ?></textarea></td>
+					<td><textarea oninput="if (this.value!=''){this.rows = this.value.split('\n').length;}else{this.rows='3';}" rows="3" cols="30" id="to" name="to" placeholder="admin&#10;user1&#10;anotheruser"><?php if (isset($_GET['target'])) { echo htmlspecialchars($_GET['target']); } if (isset($_POST['to'])) echo htmlspecialchars($_POST['to']); ?></textarea></td>
 				</tr>
 				<tr>
 					<td><label for="subject">Message subject:</label></td>
