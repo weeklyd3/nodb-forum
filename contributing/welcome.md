@@ -1,5 +1,5 @@
 # Contributing Guidelines
-[Next >](start.md)
+[Next >](codechoice.md)
 
 This document outlines the beginning steps for
 contributing to this repository.
