@@ -39,6 +39,7 @@
 	?><h2><?php echo htmlspecialchars($j['title']); ?></h2><?php require 'header.php'; 
 	$Parsedown = new Parsedown;
 	echo $Parsedown->text($j['description']);
+	require '../libraries/bargraph.php';
 	?>
 	<ul>
 		<li><?php echo count($j['questions']); ?> question(s)</li>
@@ -63,36 +64,10 @@
 			$Parsedown = new Parsedown;
 			echo $Parsedown->text($j['questions'][$question]['description']);
 			echo count($answers); ?> answer(s)
-			<br />Breakdown:<ul>
+			<br />Breakdown:
 			<?php 
-				foreach ($answers as $answer) {
-					if (!isset($responses[$answer])) {
-						$responses[$answer] = array();
-					}
-					if (!isset($responses[$answer]['number'])) $responses[$answer]['number'] = 0;
-					$responses[$answer]['number']++;
-					$responses[$answer]['text'] = $answer;
-				}
-				foreach ($responses as $answer => $stats) {
-					?><li><strong><?php echo htmlspecialchars($answer); ?></strong>: <?php echo $stats['number']; ?> response(s), <?php echo round($stats['number'] * 100/ count($answers), 2); ?>%</li><?php
-				}
-			?></ul>
-			<table style="width:100%;" class="exempt-from-format">
-			<?php 
-				$graph = array();
-				$max = array();
-				foreach ($responses as $answer) {
-					array_push($max, $answer['number']);
-				}
-				$m = max($max);
-				foreach ($responses as $answer) {
-					?><tr>
-						<td style="width:120px;"><?php echo htmlspecialchars($answer['text']); ?></td>
-						<td><div style="vertical-align:middle;width:<?php echo 100 * $answer['number'] / $m; ?>%;background-color:blue;color:white;padding:20 0 20;"><?php echo round(100 * $answer['number'] / count($answers), 2); ?>%</div></td>
-					</tr><?php
-				}
-			?>
-			</table></li><?php
+				barGraph("Responses", array_count_values($answers));
+			?></li><?php
 		}
 		?></ol><?php
 	}

@@ -1,4 +1,9 @@
 <?php
+if (isset($_POST['logout'])) {
+	setcookie('login', false, time() + 72000, '/');
+	setcookie('login', false, time() + 72000);
+	unset($_COOKIE['login']);
+}
 /*
     Forum Software
     Copyright (C) 2021 contributors
@@ -28,12 +33,17 @@
   <body>
 	<?php
 	ob_start();
+if (isset($_POST['logout'])) {
 	echo '<em>Please wait...</em>';
-	setcookie('login', false, time() + 72000, '/');
-	setcookie('login', false, time() + 72000);
-	unset($_COOKIE['login']);
 	echo '<p>Logged out!</p>';
 	echo '<script>location.href="/";</script>';
+} else {
+	?><form action="account/logout.php" method="post">
+		To help prevent <abbr title="Cross-site request forgery">CSRF</abbr>, please click the button below to send a POST request that will log you out.
+		<br />
+		<input type="submit" name="logout" value="Confirm log out" />
+	</form><?php
+}
 	?>
 	</body>
 	</html>

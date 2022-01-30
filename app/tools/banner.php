@@ -8,6 +8,7 @@ $config = json_decode(file_get_contents('../../config.json'));
 		if ($_POST['banner'] =='') 
 			unset($config->banner);
 		$status = fwrite(fopen('../../config.json', 'w+'), json_encode($config));
+		logmsg("setting", getname() . " changed sitewide banner", getname());
 		if ($status) {
 			echo 'Success!<br />'; 
 		} else {

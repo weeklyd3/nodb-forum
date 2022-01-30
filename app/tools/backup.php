@@ -6,16 +6,16 @@ include('header.php');
 <?php 
 	if (isset($_POST['submit'])) {
 		$a = copyDir(__DIR__ . '/../../', __DIR__ . '/../../backup/' . time(), array("backup"));
+		logmsg("setting", "A backup was created", getname());
 		?><label><br />Copy done. Log:<br /><textarea rows="25" style="width:100%;"><?php echo htmlspecialchars($a); ?></textarea><br /></label><?php
 	}
 ?>
+		<p>Click the button below to create a backup:</p>
 <form action="app/tools/backup.php" method="post">
 <input type="submit" value="Go now" name="submit" />
 </form><?php 
-if (!is_dir('../../backup')) exit('No backups. Make one?')
+if (!is_dir('../../backup')) exit('No backups. Make one?');
 ?>
-	<h3>Restore</h3>
-<p>Restore a saved backup</p>
 <style>
 .optionlink {
 	display: none;
@@ -30,7 +30,7 @@ if (!is_dir('../../backup')) exit('No backups. Make one?')
 	font-weight: bold;
 }
 .optionlink:checked + label::before {
-	content: "✓";
+	content: "✓\00a0";
 }
 .optionlink:not(:checked) + label::before {
 	content: "\000BB\00a0";
@@ -46,6 +46,7 @@ if (isset($_POST['restorethis'], $_POST['restore'], $_POST['action'])) {
 			recListDIR(__DIR__ . '/../../backup/' . cleanFilename($_POST['restorethis']));
 		}
 	} else {
+		logmsg("setting", getname() . " restored the site from a saved backup at " . date("Y-m-d H:i:s", $_POST['restorethis']), getname());
 		restore("../../backup/" . $_POST['restorethis'], "../../");
 	}
 }
@@ -63,7 +64,7 @@ if (isset($_POST['restorethis'], $_POST['restore'], $_POST['action'])) {
 		}
 	?>
 	</fieldset>
-	<fieldset>Backup or restore?<legend>Action</legend>
+	<fieldset>Preview or restore?<legend>Action</legend>
 	<input type="radio" class="optionLink" value="preview" name="action" id="one" />
 	<label for="one" class="optionlabel">Preview</label>
 	<input type="radio" class="optionLink" value="restore" name="action" id="two" checked="checked" />

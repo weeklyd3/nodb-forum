@@ -72,6 +72,7 @@
 		}
 	}
 	?></p>
+	  <p>Want to see what's going on right now? <a href="logs.php">View logged actions.</a></p>
   </div>
   <div>
   <h3><a href="faq.php">Read the FAQ document</a></h3>

@@ -16,7 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-?><?php
+require 'updateOnlineTime.php';
 if (!class_exists('emptyClass')) {
 	class emptyClass {
 		function _copyright() {
@@ -72,9 +72,14 @@ function contains($str, $arr) {
     }
     return false;
 }
-function custom_substr_count($str, $arr) {
+/* For posterity:
+	$str is the string to search within.
+	$arr is the list of search terms.
+	
+	This function is case-insensitive. */
+function custom_substr_count(string $str, array $arr) {
 	$i = 0;
-    foreach($arr as $a) {
+    foreach ($arr as $a) {
         $i += substr_count(strtoupper($str), strtoupper($a));
     }
     return $i;
@@ -199,12 +204,33 @@ function friendlyDate(int $timestamp) {
 
 	return implode(" ", $friend);
 }
-function dateDiff(int $before, int $after = time) {
+function dateDiff(int $before, int $after) {
 	$bef = new DateTime('now');
 	$now = new DateTime('now');
 	$bef->setTimestamp($before);
 	$now->setTimestamp($after);
 	$dff = $now->diff($bef, true);
+	if ($dff->y >= 10) {
+		return "About " . $dff->y . " years ago";
+	}
+	if ($dff->y >= 1) {
+		return "About " . $dff->y . "years and " . $dff->m . " months ago";
+	}
+	if ($dff->m >= 1) {
+		return "About " . $dff->m . " months and " . $dff->d . " days ago";
+	}
+	if ($dff->d >= 1) {
+		return "Yesterday";
+	}
+	if ($dff->h >= 1) {
+		return $dff->h . " hours and " . $dff->i . " minutes ago";
+	}
+	if ($dff->i >= 1) {
+		return $dff->i . " minutes and " . $dff->s . " seconds ago";
+	}
+	if ($dff->s >= 0) {
+		return $dff->s . " seconds ago";
+	}
 }
 function colorNum(int $num): string {
 	$number = $num;
@@ -311,5 +337,21 @@ function blockCheck() {
 	if (!file_exists(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . "/ban.txt")) return;
 	?><p>I'm sorry, but it appears that you have been blocked. <a href="banned.php">Click for more details.</a> Thus, content creation has been restricted. However, you are still allowed to edit your own profile.</p><?php 
 	exit(0);
+}
+/* The function below is used a lot, and changes may
+	be widely noticed. Please exercise extreme care
+	in modifying it. Thanks! */
+function logmsg(string $subject, string $details, ?string $user) {
+	$entry = new stdClass;
+	$entry->subject = $subject;
+	$entry->details = $details;
+	$entry->user = $user;
+	$entry->time = time();
+	if (!file_exists(__DIR__ . '/../log.json')) {
+		fwrite(fopen(__DIR__ . '/../log.json', 'w+'), '[]');
+	}
+	$currentlog = json_decode(file_get_contents(__DIR__ . '/../log.json'));
+	array_push($currentlog, $entry);
+	fwrite(fopen(__DIR__ . '/../log.json', 'w+'), json_encode($currentlog));
 }
 ?>

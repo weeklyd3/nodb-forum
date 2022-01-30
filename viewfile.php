@@ -80,5 +80,6 @@
 	  <source src="files/uploads/<?php echo htmlspecialchars($n); ?>" />
 	  Oh no! Browser not supported. Try downloading and opening with a video player.</video><?php
   }
+  ?><style>.file-contents { overflow: scroll; max-height: 90vh; }</style><?php
   if (isset($GLOBALS['t'])) { ?></div></div><?php }
   else { ?>File type not supported. Click the link above to download the file.<?php }

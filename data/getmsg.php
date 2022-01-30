@@ -17,18 +17,21 @@ function getMsg($room) {
 	?></p>
 	<p><a href="share.php?room=<?php echo htmlspecialchars(urlencode($room)); ?>">share</a> <a href="print_topic.php?title=<?php echo htmlspecialchars(urlencode($room)); ?>">print</a> <?php if (getname()) { ?> <a href="flag_topic.php?room=<?php echo htmlspecialchars(urlencode($room)); ?>">flag</a> <?php } ?> <?php if (verifyAdmin() || getname() == $config->author) { ?><a href="edit_topic.php?name=<?php echo htmlspecialchars(urlencode($config->title)); ?>">edit</a><?php } ?> <a href="revisions.php?topic=<?php echo htmlspecialchars(urlencode($config->title)); ?>">revisions</a></p></div>
 	<h3><?php echo count($msgs); ?> comment(s)</h3>
-	<table class="table" width="100%"><?php 
+	<table class="table exempt-from-format" style="width:100%;max-width:100%;"><?php 
 	if (!isset($room)) die("Specify a room!");
 	if (!file_exists(__DIR__ . '/../data/messages/'.cleanFilename($room) . '/msg.json')) die("Bad room");
 	foreach ($msgs as $key => $value) {
-		?><tr><td id="topic-message-<?php echo htmlspecialchars($key); ?>" style="vertical-align:top;" rowspan="3"><?php
+		?><tr><td id="topic-message-<?php echo htmlspecialchars($key); ?>" style="<?php if (isset($config->accepted)) { if ($config->accepted === $key) { ?>background-color:lime;color:black;<?php } } ?>vertical-align:top;" rowspan="3"><?php
 		if (isset($value->reply)) {
 			?><span style="color:black;background-color:#ffcccb;">@<?php echo htmlspecialchars($value->reply); ?></span><?php
 		}
 		echo $value->html; ?> <hr /><?php if (getname()) { ?><a href="flag_post.php?room=<?php echo htmlspecialchars(urlencode($room)); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">flag</a> 
 		<?php 
 		if (verifyAdmin() || $value->author === getname()) { ?><a href="edit_post.php?topic=<?php echo htmlspecialchars(urlencode($room)); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">edit</a>
-		<?php } }  ?>
+		<?php } 
+														 if ($config->author === getname()) {
+		?> <a href="markasanswer.php?topic=<?php echo htmlspecialchars($config->title); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">Mark as answer</a><?php												 }
+														 }  ?>
 			<a href="revisions.php?topic=<?php echo htmlspecialchars(urlencode($room)); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">revisions</a>
 		</td><td style="width:0px;" id="topic-user-<?php echo htmlspecialchars($key); ?>"><?php 
 			if (file_exists(__DIR__ . '/accounts/'.cleanFilename($value->author) . '/psw.txt')) {

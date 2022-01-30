@@ -12,6 +12,7 @@
 		echo '<ul>';
 		foreach ($_POST as $key => $value) {
 			if ($key != 'reason') {
+				logmsg("users", getname() . " unbanned user " . $value);
 				$status = unlink('../../data/accounts/'.cleanFilename($value).'/ban.txt');
 				if ($status) {
 					echo '<li>User '.htmlspecialchars($value).' unbanned.</li>';

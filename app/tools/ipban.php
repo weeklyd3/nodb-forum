@@ -2,6 +2,7 @@
 require 'header.php';
 if (isset($_POST['list'])) {
 	$list = str_replace("\r", "", $_POST['list']);
+	logmsg("ban", "User ". getname() . ' blocked IPs ' . json_encode($list), getname());
 	fwrite(fopen("../../blocklist.txt", "w+"), $list);
 }
 $contents = file_get_contents("../../blocklist.txt");

@@ -50,6 +50,7 @@
 	<div style="margin:2px;"><a href="app/tools/files.php">Files</a></div>
 	<div style="margin:2px;"><a href="app/tools/edit_tos.php">Edit TOS</a></div>
 	<div style="margin:2px;"><a href="app/tools/banner.php">Banners</a></div>
+		<div style="margin:2px;"><a href="app/tools/backup.php">Backup</a></div>
 	<div style="margin:2px;"><a href="app/tools/ipban.php">IP bans</a></div>
 	<div style="margin:2px;"><a href="app/tools/flags.php">Flags</a></div>
 	<?php 

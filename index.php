@@ -35,7 +35,7 @@
 	if ($login != "") {
 		echo "Welcome, ".htmlspecialchars(getname()).'!</h2> We&apos;re glad to have you. Choose a room to join. (<a href="create.php" class="fakebutton">new topic</a>)';
 	} else {
-		echo "You are not logged in.</h2> You will not be able to post any messages.";
+		echo "You are not logged in.</h2> You will not be able to post any messages, upload files, or communicate with others, although you will be able to view public content.";
 	}
 	include_once('./libraries/listroom.php');
 	include_once('./public/footer.php');

@@ -173,14 +173,15 @@ if (true) {
 				?><span class="tag"><a title="Click to show topics tagged <?php echo htmlspecialchars($value); ?>." href="tagged.php?tag=<?php echo htmlspecialchars(urlencode($value)); ?>"><?php echo htmlspecialchars($value); ?></a></span> <?php
 			}
 			echo '</td>';
-			?><td style="width:0;" style="border-radius:10px;"><?php echo isset($config->views) ? colorNum($config->views) : 0; ?></td>
-			<td style="width:0;" style="border-radius:10px;"><?php echo friendlyDate($config->creationTime); ?></td>
-			<td style="width:0;" style="border-radius:10px;"><?php 
+			?><td style="width:0;border-radius:10px;"><?php echo isset($config->views) ? colorNum($config->views) : 0; ?></td>
+			<td style="width:0;border-radius:10px;"><?php echo friendlyDate($config->creationTime); ?></td>
+			<td style="width:0;border-radius:10px;"><?php 
 			clearstatcache();
 			echo friendlyDate(filemtime(__DIR__ . '/../data/messages/' . $entry . '/msg.json')); ?></td>
-			<td style="width:0;" style="border-radius:10px;"><?php 
+			<td style="width:0;border-radius:10px;<?php $accepted = false; if (isset($config->accepted)) { ?>background-color:lime;color:black !important;<?php $accepted = true; } ?>"><?php 
 				if (isset($config->replies)) {
-					echo colorNum($config->replies);
+					if (!$accepted) { echo colorNum($config->replies); }
+				else { echo $config->replies; }
 				} else {
 					$msgs = (array) json_decode(file_get_contents(__DIR__ . '/../data/messages/' . $entry . '/msg.json'));
 					echo colorNum(count($msgs));

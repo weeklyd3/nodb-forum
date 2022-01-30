@@ -10,11 +10,12 @@ $config = json_decode(file_get_contents('../../config.json'));
 		if (isset($_POST['confirm'])) {
 			if ($_POST['action'] == 'add') {
 				if (!in_array($_POST['name'], $config->admins)) {
+					logmsg("users", getname() . " assigned admin status to " . $_POST['name'], getname());
 					$message = new stdClass;
 					$message->time = time();
 					$message->type = "User status changed";
-					$message->text = "You have become an admin. Woohoo! Click to check out the mod dashboard you just gained access to.";
-					$message->url = $_SERVER['PHP_SELF'];
+					$message->text = "You have become an admin. Woohoo! Click to check out the administrator dashboard.";
+					$message->url = "app/tools/adminwelcome.php";
 					$message->read = false;
 					$j = json_decode(file_get_contents("../../data/accounts/" . cleanFilename($_POST['name']) . '/inbox.json'));
 					array_push($j->items, $message);
@@ -23,6 +24,7 @@ $config = json_decode(file_get_contents('../../config.json'));
 				}
 			}
 			if ($_POST['action'] == 'rm') {
+				logmsg("users", getname() . " removed admin status from " . $_POST['name'], getname());
 				$config->admins = array_values(array_diff($config->admins, array($_POST['name'])));
 			}
 			?><div>Wrote changes to disk</div><?php

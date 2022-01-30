@@ -153,3 +153,20 @@ Click the 'Log Out' link at the top:
 	</tbody>
 </table>
 <?php if (isset($config->creationTime)) { ?><small>*rounded up</small><br /><small>**rounded to two decimal places</small><?php } ?>
+<details>
+	<summary>Graphs of site data</summary>
+	<p>Size of accounts, topics, and files</p>
+	<?php 
+		require '../../libraries/bargraph.php';
+		barGraph("Size comparison", array("Accounts" => getDirSize("../../data/accounts/"), "Messages" => getDirSize("../../data/messages/"), "Files" => getDirSize("../../files/uploads/")));
+	?>
+<p>Blocked vs Unblocked Users vs Total Users</p>
+	<?php 
+		$totalUsers = count(scandir(__DIR__ . '/../../data/accounts', SCANDIR_SORT_NONE)) - 4;
+		$blockedUsers = count(array_filter(scandir("../../data/accounts", SCANDIR_SORT_NONE), function($e) {
+			if (!is_dir("../../data/accounts/" . $e)) return false;
+			return file_exists("../../data/accounts/" . $e . "/ban.txt");
+		}));
+		barGraph("Blocked, Unblocked, and Total Users", array("Blocked users" => $blockedUsers, "Unblocked users" => $totalUsers - $blockedUsers, "Total users" => $totalUsers));
+	?>
+</details>

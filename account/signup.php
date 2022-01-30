@@ -29,7 +29,7 @@ error_reporting(E_ALL);
 	?>
   </head>
   <body>
-  <form action="account/signup.php" method="post" enctype="multipart/form-data">
+  <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="post" enctype="multipart/form-data">
 	<?php
 	$page = $_POST['page'];
 	if ($page == "1") {
@@ -39,7 +39,7 @@ error_reporting(E_ALL);
 		echo '<big><strong>Be careful! You cannot change any of these fields after you sign up!</strong></big><br>';
 		echo '<script>function random(min, max) {return Math.random() * (max - min) + min;}</script>';
 		echo '<label for="usr"><strong>Enter your username (3-25 characters).</strong><br><small>It is recommended to not use your real name for privacy online. Anyone can screenshot or see your username, as it is available publicly.</small><br></label>';
-		echo '<input minlength="3" maxlength="25" required="required" type="text" size="25" id="usr" name="usr" />';
+		echo '<input minlength="3" value="' . (isset($_GET['name']) ? htmlspecialchars($_GET['name']) : "") . '" maxlength="25" required="required" type="text" size="25" id="usr" name="usr" />';
 		echo '&nbsp;';
 		echo '<button type="button" onclick="document.getElementById(\'usr\').value=\'user\'+Math.round(random(1000000000,9999999999));">Generate random</button>';
 		echo '<br><label for="psw">Enter a password:</label><br>';

@@ -14,6 +14,7 @@
 		echo '<ul>';
 		foreach ($_POST as $key => $value) {
 			if ($key != 'reason') {
+				logmsg("users", getname() . " banned user " . $value . " with reason \"" . $_POST['reason'] . "\"", getname());
 				$handle = fopen('../../data/accounts/'.cleanFilename($value).'/ban.txt', 'w+');
 				$status = fwrite($handle, htmlspecialchars($_POST['reason']));
 				if ($status) {

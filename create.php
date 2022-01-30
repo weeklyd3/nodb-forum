@@ -68,6 +68,7 @@
 
 			echo '<h2>';
 			echo htmlspecialchars($room->title) . ' is being created...</h2>';
+			logmsg("Topic created", "A topic was created", getname());
 			echo '<pre>'.htmlspecialchars(json_encode($room)).'</pre>';
 			if (!file_exists('data/messages/'.cleanFilename($room->title).'/config.json')) {
 				$dir = mkdir('data/messages/'.cleanFilename($room->title));

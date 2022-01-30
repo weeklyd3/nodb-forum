@@ -32,7 +32,9 @@ $page = isset($_GET['page'])
 		is_numeric($_GET['page']) ? (int) $_GET['page'] : 1
 	)
 	: 1;
-	?><br /><?php
+	?><br />
+	  <form action="users.php" method="GET">Need help finding your username? <label>Search: <input type="text" name="search" /></label> <input type="submit" /></form>
+	  <br /><?php
 	$total = ceil((count($handle)) / $GLOBALS['size']);
 echo "Page " . $page . ' of ' . $total;
 function paginate($handle, $page, $total) {
@@ -46,6 +48,7 @@ function paginate($handle, $page, $total) {
 	?><a href="?page=<?php echo $total; ?>">last</a></div>
 	<?php
 }
+$search = isset($_GET['search']) ? $_GET['search'] : "";
 paginate($handle, $page, $total);
 $admins = json_decode(file_get_contents("config.json"));
 $admins = $admins->admins;
@@ -55,6 +58,8 @@ $GLOBALS['failEntries'] = 0;
 if ($handle = opendir(__DIR__ . '/data/accounts')) {
 	while (false !== ($entry = readdir($handle))) {
 		if (in_array($entry, array(".", "..", "default.png", "index.php"))) continue;
+		$name = file_get_contents(__DIR__ . '/data/accounts/' . cleanFilename($entry) . '/user.txt');
+		if ($search !== "") { if (stripos($name, $search) === false) continue; }
 		if ($GLOBALS['failEntries'] < ($page - 1) * ($GLOBALS['size'])) {
 			$GLOBALS['failEntries']++;
 			continue;
