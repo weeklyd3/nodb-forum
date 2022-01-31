@@ -27,5 +27,5 @@ log.json
 data/community/events
 files/uploads
 messages/reports.json
-
+review/items.json
 *.py
