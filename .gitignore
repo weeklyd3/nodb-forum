@@ -21,4 +21,9 @@ data/accounts/admin/psw.txt
 data/accounts/user2762153624/avatar.png
 data/messages/Sandbox/webchat.txt
 data/messages/web-chat/webchat.txt
+data/messages/
+data/accounts/
+log.json
+data/community/events
+files/uploads
 *.py
