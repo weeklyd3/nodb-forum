@@ -354,4 +354,17 @@ function logmsg(string $subject, string $details, ?string $user) {
 	array_push($currentlog, $entry);
 	fwrite(fopen(__DIR__ . '/../log.json', 'w+'), json_encode($currentlog));
 }
+function deletionReasons() {
+	$reasons = array(
+		"other" => "Another reason, rationale is in details field.",
+		"requested" => "Author requested deletion in good faith.",
+		"gibberish" => "Patent nonsense or test topic",
+		"spam" => "Exists to promote something, and does not disclose affiliation.",
+		"offensive" => "Offensive content",
+		"copyright" => "Copyright violation/issue"
+	);
+	foreach ($reasons as $abbr => $reason) {
+		?><option value="<?php echo htmlspecialchars($abbr); ?> - <?php echo htmlspecialchars($reason); ?>"><?php echo htmlspecialchars($reason); ?> (<?php echo htmlspecialchars($abbr); ?>)</option><?php
+	}
+}
 ?>

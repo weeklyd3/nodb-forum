@@ -6,15 +6,16 @@ Remove them if they are being abusive or are all consisted of low quality posts.
 <ul>
 <?php 
 class Deleted {
-	public function __construct(string $reason) {
+	public function __construct(string $reason, ?string $details) {
 		$this->reason = $reason;
+		$this->extendedReason = $details;
 		$this->time = time();
 		$this->user = getname();
 	}
 }
 foreach( $_POST as $name => $stuff ) {
 	if (is_dir('../../data/messages/'.cleanFilename($stuff))) {
-		$d       = new Deleted($_POST['reason']);
+		$d       = new Deleted($_POST['reason'], $_POST['details']);
 		$address = __DIR__ . '/../../data/messages/' .
 		                     cleanFilename($stuff) . 
 							 "/del.json";
@@ -26,7 +27,13 @@ foreach( $_POST as $name => $stuff ) {
 ?>
 </ul>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-<label>Reason for deletion: <input type="text" name="reason" required="required" /></label><br />
+<label>Deletion reason:
+<select name="reason">
+<?php 
+deletionReasons();
+?>
+</select>
+<label>More details: <input type="text" name="details" /></label><br />
 <input type="submit" value="Remove!" />
 <?php
 if ($handle = opendir('../../data/messages/')) {

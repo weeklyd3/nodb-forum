@@ -1,7 +1,7 @@
 <?php
 /*
     Forum Software
-    Copyright (C) 2021 contributors
+    Copyright (C) 2022 contributors
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -85,6 +85,16 @@ window.addEventListener('offline', function(e) {
 			<dd><?php echo htmlspecialchars($del->user); ?></dd><?php } ?>
 			<dt>Reason:</dt>
 			<dd><?php $Parsedown = new Parsedown; echo $Parsedown->line($del->reason); ?></dd>
+			<?php
+			if (isset($del->extendedReason)) {
+				if ($del->extendedReason != "") {
+					?>
+					<dt>More details:</dt>
+					<dd>
+						<?php echo htmlspecialchars($del->extendedReason); ?>
+					</dd><?php
+				}
+			} ?>
 		</dl>
 		</div><?php
 		if (!verifyAdmin() && $obj->author !== getname()) {
