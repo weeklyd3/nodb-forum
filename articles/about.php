@@ -28,7 +28,7 @@
 	<body>
 	<h2>Articles are like permanent information containers.</h2>
 	because they exist indefinitely and cannot be deleted by anyone.
-	<p>The data is stored as JSON, making it easy to read or write from. Mknifying the JSON also saves disk space so there is more room for new articles.</p>
+	<p>The data is stored as JSON, making it easy to read or write from. Minifying the JSON also saves disk space so there is more room for new articles.</p>
 	<details>
 	<summary>Raw data</summary>
 	<pre style="word-break:break-word;"><code class="lang-json"><?php 
