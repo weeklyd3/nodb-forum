@@ -309,7 +309,7 @@ function recListDIR(string $dir) {
 		?></details><?php
 	}
 }
-function restore(string $bkdir, string $target): ?string {
+function restore(string $bkdir, string $target): ?bool {
 	if (!is_dir($bkdir)) return null;
 	if (!is_dir($target)) mkdir($target, 0777, true);
 	foreach (scandir($bkdir) as $f) {
