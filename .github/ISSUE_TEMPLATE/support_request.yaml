@@ -1,0 +1,27 @@
+name: Support Question
+description: Question about using or installing the software
+title: "[Question]: <title>"
+labels: question
+assignees:
+ -
+body:
+  - type: markdown
+    id: question
+    attributes:
+      label: What is your question?
+      description: Please ask your question here.
+      placeholder: Please write your question. Please include relevant information.
+    validations:
+      required: true
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: What version of our software are you running?
+      options:
+        - Code stored in repo
+        - 0.0.3
+        - 0.0.2 
+        - 0.0.1
+    validations:
+      required: true
