@@ -8,7 +8,14 @@ body:
   - type: markdown
     attributes:
       value: |
-        Please write your question here.
+        Please write a descriptive title. Everything you submit is available publicly, so do not post any personal information. The title will help others find your question. Thanks! 
+  - type: textarea
+    id: question-body
+    attributes:
+      label: Your question
+      description: Please write your question. Please do not include sensitive info.
+      placeholder: Enter your question here
+      value: "How do I..."
     validations:
       required: true
   - type: dropdown
