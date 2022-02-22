@@ -44,6 +44,24 @@ $readonly = getname() !== $_GET['username'];
 if (isset($_POST['contents'])) {
 	if (!$readonly) {
 		?><p>Saving your page...</p><?php
+		$objProps = "";
+		$currentobj = $obj;
+		foreach ($path as $index => $element) {
+			if (!isset($path[$index + 1])) {
+				$objProps .= '->{"files"}->{' . json_encode($element) . '}';
+				$currentobj = $currentobj->files->$element;
+			} else {
+				$objProps .= '->{"folders"}->{' . json_encode($element) . '}';
+				$currentobj = $currentobj->folders->$element;
+			}
+		}
+		$GLOBALS['currentobj'] = $currentobj;
+		$currentobj->contents = $_POST['contents'];
+		$rev = new pageRevision($_POST['contents'], $_POST['summary']);
+		array_unshift($currentobj->revisions, $rev);
+		eval('$obj' . $objProps . ' = $currentobj;');
+		fwrite(fopen(__DIR__ . '/../../data/accounts/' . cleanFilename($_GET['username']) . '/subpages.json', 'w+'), base64_encode(serialize($obj)));
+		?>Subpage saved. <a href="account/pages?path=<?php echo htmlspecialchars(urlencode(implode('/', $path))); ?>&user=<?php echo htmlspecialchars(urlencode(implode('/', $path))); ?>">Return to your subpage?</a><?php
 	}
 }
 ?>
@@ -58,3 +76,4 @@ if ($readonly) {
 userSubpageEditor($info->contents, $readonly);
 ?>
 </form>
+<p>Return to <a href="account/pages?path=<?php echo htmlspecialchars(urlencode(implode('/', $path))); ?>&user=<?php echo htmlspecialchars(urlencode(implode('/', $path))); ?>">subpage</a>.</p>

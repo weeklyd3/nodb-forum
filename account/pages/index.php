@@ -1,7 +1,7 @@
 <?php
 /*
     Forum Software
-    Copyright (C) 2021 contributors
+    Copyright (C) 2022 contributors
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -42,7 +42,7 @@ if ($name === getname()) {
 	  <?php 
 	function formatPath(string $path, string $name) {
 		$path = array_values(array_filter(explode("/", $path), function($v) { return $v !== ''; }));
-		?><a href="account/pages/index.php?username=<?php echo htmlspecialchars($name); ?>">&lt;root></a> ><?php
+		?><a href="account/pages/index.php?username=<?php echo htmlspecialchars($name); ?>"><?php echo htmlspecialchars($name) ?>'s Subpages</a> ><?php
 		foreach ($path as $index => $item) {
 			if (!isset($path[$index + 1])) {
 				echo " " . htmlspecialchars($item);
@@ -57,7 +57,7 @@ if ($name === getname()) {
 		}
 	}
 ?>
-	  <p>You are here: <?php echo isset($_GET['path']) ? formatPath($_GET['path'], $name) : '&lt;root>'; ?></p></div>
+	  <p>You are here: <?php echo isset($_GET['path']) ? formatPath($_GET['path'], $name) : htmlspecialchars($name) . '\'s Subpages</a>'; ?></p></div>
 	<?php 
 	$errorMSG = $name . " has no user subpages.";
 	$subpageJSON = __DIR__ . '/../../data/accounts/' . cleanFilename($name) . "/subpages.json";
@@ -76,7 +76,7 @@ function validatePath(array $path, $obj, string $baddirmsg) {
 		if (!isset($obj->folders->$item)) {
 			if (!isset($path[$index + 1]) && isset($obj->files->$item)) {
 				?><h3><?php echo htmlspecialchars($item); ?></h3>
-	  			(<b>view</b> | <a href="account/pages/editpage.php?path=<?php echo htmlspecialchars(urlencode(implode("/", $path))); ?>&username=<?php echo htmlspecialchars(urlencode($name)); ?>"><?php echo $name === getname() ? "edit" : "view source"; ?></a>)
+	  			(<b>view</b> | <a href="account/pages/editpage.php?path=<?php echo htmlspecialchars(urlencode(implode("/", $path))); ?>&username=<?php echo htmlspecialchars(urlencode($name)); ?>"><?php echo $name === getname() ? "edit" : "view source"; ?></a> | <a href="account/pages/pagehistory.php?path=<?php echo htmlspecialchars(urlencode(implode("/", $path))); ?>&username=<?php echo htmlspecialchars(urlencode($name)); ?>">view history</a>)
 	  			<?php 
 				$Parsedown = new Parsedown;
 				echo $Parsedown->text($obj->files->$item->contents);
