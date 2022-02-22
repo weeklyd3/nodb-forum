@@ -14,6 +14,7 @@ class Deleted {
 	}
 }
 foreach( $_POST as $name => $stuff ) {
+	if ($name === "reason" || $name === "extendedreason") continue;
 	if (is_dir('../../data/messages/'.cleanFilename($stuff))) {
 		$d       = new Deleted($_POST['reason'], $_POST['details']);
 		$address = __DIR__ . '/../../data/messages/' .
@@ -39,7 +40,7 @@ deletionReasons();
 if ($handle = opendir('../../data/messages/')) {
     while (false !== ($entry = readdir($handle))) {
 		if (is_dir('../../data/messages/'.$entry) && $entry!='.' && $entry!='..') {
-			echo '<div><input type="checkbox" name="'.htmlspecialchars($entry).'" value="'.htmlspecialchars($entry).'" id="'.htmlspecialchars($entry).'" /><label for="'.htmlspecialchars($entry).'">';
+			echo '<div><input type="checkbox" name="delete-room-'.htmlspecialchars($entry).'" value="'.htmlspecialchars($entry).'" id="'.htmlspecialchars($entry).'" /><label for="'.htmlspecialchars($entry).'">';
 			$config = file_get_contents('../../data/messages/'.$entry.'/config.json');
 			$config = json_decode($config);
 			echo htmlspecialchars($config->title);
