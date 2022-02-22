@@ -1,7 +1,7 @@
 <?php
 /*
     Forum Software
-    Copyright (C) 2021 contributors
+    Copyright (C) 2022 contributors
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -28,8 +28,8 @@ register_shutdown_function(function() {
 		<table height="100%"><tr><td><p id="loading" style="color:black;">loading...</p><iframe src="about:blank" onload="document.getElementById('loading').style.display = 'none';" id="notification-iframe" frameBorder="0" style="height:600px;max-height:75vh;"></iframe></td></tr><tr><td><button onclick="this.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = 'none';document.getElementById('loading').style.display = 'block';document.getElementById('notification-iframe').src = '';">Close</button></td></tr></table>
 	</div>
   </div>
-<table id="header" style="width:100%; background-color:#7AD7FF;color:black;z-index:10;">
-<tr><td><h1 style="display:inline;"><span id="menubutton" style="cursor:pointer;" tabindex="0"><img src="img/menu.png" alt="≡" /></span> <a style="text-decoration:none !important;" href="./"><img alt="Forum Logo" src="./img/logo.png" /><span id="TitleText">
+<table id="header" style="width:100%; max-width:100%;background-color:#7AD7FF;color:black;z-index:10;">
+<tr><td><h1 style="display:inline;"><span id="menubutton" style="cursor:pointer;" tabindex="0"><img src="img/menu.png" alt="" /></span> <a style="text-decoration:none !important;" href="./"><img alt="Forum Logo" src="./img/logo.png" /><span id="TitleText">
 <?php
 include_once(__DIR__ . '/../libraries/lib.php');
 if (!file_exists(__DIR__ ."/../config.json")) {
@@ -77,7 +77,7 @@ if (!getname()) {
 			}
 		);
 </script>
-<tr><td>&nbsp;<label for="query" style="display:none;">Search query:</label></td><td rowspan="3" align="right"><form action="search.php" method="GET"> <span style="padding:7px;border:1px solid; color: black; background-color: white;">
+<tr><td rowspan="4" align="right"><form action="search.php" method="GET"><label for="query" style="display:none;">Search query:</label> <span style="padding:7px;border:1px solid; color: black; background-color: white;">
 	<?php if (!isset($_GET['tags'])) { ?><span class="tag nohash"><a href="tagsearch.php" title="Add tags to search">[no tags]</a></span> <?php } 
 else {
 	$tags = array_unique(array_filter(explode(" ", $_GET['tags']), function($m) { return $m !== ""; }));
