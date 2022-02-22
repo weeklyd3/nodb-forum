@@ -1,63 +1,118 @@
 <?php 
-function getMsg($room) {
-	include_once(__DIR__ . '/../libraries/lib.php');
-
-	$config = json_decode(file_get_contents(__DIR__ . '/../data/messages/'.cleanFilename($room) . '/config.json'));
+require_once __DIR__ . '/../libraries/lib.php';
+function getMsg(string $room) {
 	?>
-	<div id="topic-firstpost"><?php 
-
-		echo $config->description_html;
-		$msgs = (array) json_decode(file_get_contents(__DIR__ . '/../data/messages/'.cleanFilename($room) . '/msg.json'));
-	?>
-	<p>
-	<?php 
-		foreach (explode(" ", $config->tags) as $key => $value) {
-			?><span class="tag"><a href="tagged.php?tag=<?php echo htmlspecialchars(urlencode($value)); ?>"><?php echo htmlspecialchars($value); ?></a></span> <?php
-		}
-	?></p>
-	<p><a href="share.php?room=<?php echo htmlspecialchars(urlencode($room)); ?>">share</a> <a href="print_topic.php?title=<?php echo htmlspecialchars(urlencode($room)); ?>">print</a> <?php if (getname()) { ?> <a href="flag_topic.php?room=<?php echo htmlspecialchars(urlencode($room)); ?>">flag</a> <?php } ?> <?php if (verifyAdmin() || getname() == $config->author) { ?><a href="edit_topic.php?name=<?php echo htmlspecialchars(urlencode($config->title)); ?>">edit</a><?php } ?> <a href="revisions.php?topic=<?php echo htmlspecialchars(urlencode($config->title)); ?>">revisions</a></p></div>
-	<h3><?php echo count($msgs); ?> comment(s)</h3>
-	<table class="table exempt-from-format" style="width:100%;max-width:100%;"><?php 
-	if (!isset($room)) die("Specify a room!");
-	if (!file_exists(__DIR__ . '/../data/messages/'.cleanFilename($room) . '/msg.json')) die("Bad room");
-	foreach ($msgs as $key => $value) {
-		?><tr><td id="topic-message-<?php echo htmlspecialchars($key); ?>" style="<?php if (isset($config->accepted)) { if ($config->accepted === $key) { ?>background-color:lime;color:black;<?php } } ?>vertical-align:top;" rowspan="3"><?php
-		if (isset($value->reply)) {
-			?><span style="color:black;background-color:#ffcccb;">@<?php echo htmlspecialchars($value->reply); ?></span><?php
-		}
-		echo $value->html; ?> <hr /><?php if (getname()) { ?><a href="flag_post.php?room=<?php echo htmlspecialchars(urlencode($room)); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">flag</a> 
-		<?php 
-		if (verifyAdmin() || $value->author === getname()) { ?><a href="edit_post.php?topic=<?php echo htmlspecialchars(urlencode($room)); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">edit</a>
-		<?php } 
-														 if ($config->author === getname()) {
-		?> <a href="markasanswer.php?topic=<?php echo htmlspecialchars($config->title); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">Mark as answer</a><?php												 }
-														 }  ?>
-			<a href="revisions.php?topic=<?php echo htmlspecialchars(urlencode($room)); ?>&post=<?php echo htmlspecialchars(urlencode($key)); ?>">revisions</a>
-		</td><td style="width:0px;" id="topic-user-<?php echo htmlspecialchars($key); ?>"><?php 
-			if (file_exists(__DIR__ . '/accounts/'.cleanFilename($value->author) . '/psw.txt')) {
-				?><a href="account/viewuser.php?user=<?php echo htmlspecialchars(urlencode($value->author)); ?>"><img src="./data/accounts/<?php echo htmlspecialchars(cleanFilename($value->author)); ?>/avatar.png" alt="Avatar image for <?php echo htmlspecialchars($value->author); ?>" width="100"/> <br /><?php echo htmlspecialchars($value->author); ?></a><?php
-			} else {
-				?><span style="color:#cccccc;">&lt;user is deleted></span><?php
-			}
-		?></td></tr><tr><td id="topic-message-date-<?php echo htmlspecialchars($key); ?>"><?php echo friendlyDate($value->time); ?></td></tr><tr><td id="topic-attachment-<?php echo htmlspecialchars($key); ?>">Attachment:<br /><span style="text-overflow: ellipsis;"><?php 
-			if (!$value->attach) {
-				?>none<?php
-			} else {
-				if (!file_exists(__DIR__ . '/../files/uploads/'.cleanFilename($value->attach))) {
-					echo "(not found): ";
-					echo htmlspecialchars(substr($value->attach, 0, 30));
-					$var = (strlen($value->attach) > 30) ? "..." : "";
-					echo $var;
-				} else {
-					?><a download="" href="files/download.php?filename=<?php echo htmlspecialchars(urlencode($value->attach)); ?>"><?php echo htmlspecialchars(substr($value->attach, 0, 30)); 
-					if (strlen($value->attach) > 30) {
-						?>...<?php
-					}
-					?></a> (<a href="viewfile.php?filename=<?php echo htmlspecialchars($value->attach); ?>">View</a>)<?php
-				}
-			}
-		?></span></td></tr><?php
+	
+	<style>
+	dt, dd {display: inline; margin: 0;}</style><?php
+	$folder = __DIR__ . '/messages/' . cleanFilename($room);
+	if (!is_dir($folder) || !file_exists("$folder/config.json")) {
+		?>Room is corrupted or non-existent.<?php
+		return;
 	}
-	?></table><?php 
+	$configPath = "$folder/config.json";
+	$msgPath = "$folder/msg.json";
+	$delPath = "$folder/del.json";
+
+	$config = json_decode(file_get_contents($configPath));
+	$msg = json_decode(file_get_contents($msgPath));
+	
+	$deleted = false;
+	if (file_exists($delPath)) {
+		$deleted = true;
+	}
+	?>
+	<div id="topic-firstpost">
+	<?php 
+	if ($deleted && $config->author !== getname()) {
+		?><em>This topic has been deleted. Please see the deletion notice.</em><?php
+	} else {
+	echo $config->description_html;
+	 } ?>
+	</div>
+	<div>
+	Tagged:
+	<?php
+	foreach (explode(" ", $config->tags) as $tag) {
+		?><span class="tag"><a href="tagged.php?tag=<?php echo htmlspecialchars(urlencode($tag)); ?>"><?php echo htmlspecialchars($tag); ?></a></span> <?php
+	}
+	$esname = htmlspecialchars(urlencode($config->title));
+	?></div>
+	<div>
+	Topic options:
+	<ul class="flex options">
+	<li><a href="print_topic.php?title=<?php echo $esname; ?>">
+	<img src="img/icons/PrintIcon.png" alt="" />
+	Printable version</a></li>
+	<?php 
+	if (verifyAdmin() || $config->author === getname()) { ?><li><a href="edit_topic.php?name=<?php echo $esname; ?>">
+	<img src="img/icons/PencilIcon.png" alt="" />
+	Edit</li><?php } ?>
+	<li><a href="revisions.php?topic=<?php echo $esname; ?>">
+	<img src="img/icons/RevisionsIcon.png" alt="" />
+	View <?php echo isset($config->revisions) ? count($config->revisions) : 1; ?> revision(s)</a></li>
+	<?php 
+	if (getname()) {
+		?><li><a href="flag_topic.php?room=<?php echo $esname; ?>">
+		<img src="img/icons/FlagIcon.png" alt="" />
+		Flag topic</a></li><?php 
+	} 
+if (verifyAdmin() || ($config->author === getname() && count((array) $msg) === 0))	{
+	?><li><a href="deletionmgrtopic.php?topic=<?php echo $esname; ?>"><img src="img/icons/XIcon.png" alt="" /> Delete/Undelete</a></li><?php
 }
-if (isset($_POST['room'])) getMsg($_POST['room']);
+?>
+	</ul>
+	</div>
+	<hr />
+	<h3>
+	<?php
+	$msg = (array) $msg;
+	echo count($msg); ?>
+	comment(s)</h3>
+	<ul class="semantic">
+	<?php
+	foreach ($msg as $id => $message) {
+		$espost = htmlspecialchars(urlencode($id));
+		$skip = isset($message->del) && (!verifyAdmin() && $message->author !== getname()) || ($deleted && !verifyAdmin());
+		if (isset($message->del) || $deleted) {
+			?><div class="border error" style="color:black;background-color:#ffdddd;">This post has been deleted by <?php userlink($message->del->user ?? ($del->user  ?? null)); ?> for the reason: <?php echo htmlspecialchars($message->del->reason ?? "automatic deletion"); ?>. More information:<pre><?php echo htmlspecialchars(isset($message->del->extendedReason) ? $message->del->extendedReason : "None available"); ?></pre></div><?php
+		}
+		if ($skip) continue;
+	?>
+	<li id="topic-message-<?php echo $espost; ?>">
+	<div class="border">
+	<div class="border<?php if (isset($config->accepted)) { if ($config->accepted === $id) { ?> accepted<?php } } ?>">
+	<?php echo $message->html; ?>
+	</div>
+	<div class="smaller">
+	<dl>
+	<dt>Author:</dt>
+	<dd><?php userlink($message->author, true); ?></dd>
+
+	<dt>Time:</dt><dd>
+	<?php echo friendlyDate($message->time); ?>
+	</dd>
+	</dl>
+	</div>
+	<div>Post options:
+		<ul class="flex options">
+			<?php
+		if ($message->author === getname()) { ?>
+			<li>
+				<a href="markasanswer.php?topic=<?php echo $esname; ?>&post=<?php echo $espost; ?>">
+				<img src="img/icons/CheckIcon.png" alt="" />
+				Mark as answer</a>
+			</li> <?php } ?>
+			<?php if (getname()) { ?><li>
+				<a href="flag_post.php?room=<?php echo $esname; ?>&post=<?php echo $espost; ?>">
+				<img src="img/icons/FlagIcon.png" alt="" /> Flag</a>
+			</li><?php } ?>
+			<li><a href="revisions.php?topic=<?php echo $esname; ?>&post=<?php echo $espost; ?>"><img src="img/icons/RevisionsIcon.png" /> View <?php echo isset($message->revisions) ? count($message->revisions) : 1; ?> revision(s)</a></li>
+		</ul></div>
+	</li><?php
+	}
+	?></ul><?php
+}
+if (isset($_POST['room'])) {
+	getMsg($_POST['room']);
+}
