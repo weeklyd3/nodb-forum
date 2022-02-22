@@ -8,9 +8,7 @@ body:
   - type: markdown
     id: question
     attributes:
-      label: What is your question?
-      description: Please ask your question here.
-      placeholder: Please write your question. Please include relevant information.
+      value: 
     validations:
       required: true
   - type: dropdown
