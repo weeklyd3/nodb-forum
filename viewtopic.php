@@ -18,7 +18,10 @@
 */
 ?><html lang="en">
   <head>
-  <?php 	include_once('./public/header.php'); ?>
+  <?php 	include_once('./public/header.php'); 
+ $GLOBALS['nopost'] = true; 
+  ?>
+  <!-- <?php include_once('data/getmsg.php'); ?> -->
     <title><?php
 	 if (isset($_GET['room'])) { 
 		 // verify that room exists
@@ -69,6 +72,11 @@ window.addEventListener('offline', function(e) {
 }, false);</script>
   </head>
   <body>
+	  <div id="connect">
+		  <span id="connect-status">Connecting to chat...</span>
+		  <span id="disconnect-instructions">You can stop the connection at any time by clicking Reply > Stop Refresh.</span>
+		  <a id="close-connect" href="javascript:;">&times;</a>
+	  </div>
   <h2><?php echo htmlspecialchars($_GET['room']); ?></h2>
   <?php 
 	$obj = json_decode(file_get_contents(__DIR__.'/data/messages/'.cleanFilename($GLOBALS['room']).'/config.json'));
@@ -77,7 +85,9 @@ window.addEventListener('offline', function(e) {
 	  $del = json_decode(file_get_contents(__DIR__.'/data/messages/'.cleanFilename($GLOBALS['room']).'/del.json'));
 		    ?><div style="color:black;background-color:#ffdddd;"><p>This room has been deleted<?php if (!isset($del->user)) {
 				?> automatically because it has accumulated enough flags.<?php
-			} ?>.</p><p>Rooms may be removed for reasons of moderation: spam, abuse, etc.</p><p>If you see the topic, either you are an administrator or you are viewing your own deleted topic.</p><p>More deletion information:</p>
+			} ?>.</p><p>Rooms may be removed for reasons of moderation: spam, abuse, etc.</p><p>If you see the topic, either you are an administrator or you are viewing your own deleted topic.</p>
+			<p>Additionally, if you have posted in this topic, you can view this topic's posts that you wrote.</p>
+			<p>More deletion information:</p>
 		<dl>
 			<dt>Deleted:</dt>
 			<dd><?php echo friendlyDate($del->time); ?></dd>
@@ -98,8 +108,8 @@ window.addEventListener('offline', function(e) {
 		</dl>
 		</div><?php
 		if (!verifyAdmin() && $obj->author !== getname()) {
+			$GLOBALS['noshow'] = true;
 			?><h3>Try:</h3><ul><li>Searching for similar topics</li><li>Asking someone for a screenshot</li><li>Asking an administrator to undelete it</li><?php if (isset($del->user)) { ?><li>If you think this page was deleted in error, private message <?php echo htmlspecialchars($del->user); ?> on the forum.</li><?php } ?></ul><?php
-			exit(0);
 		}
   }
 	$obj->views = intval($obj->views) + 1;
@@ -107,22 +117,44 @@ window.addEventListener('offline', function(e) {
 	fwrite($file, json_encode($obj)) or die('fail');
 	fclose($file);
 	?>
-  <style>#flex-gallery{display:flex;}#flex-gallery>p{margin:3px;}#offlinemsg{display:none;background-color:pink;}</style>
+  <style>#close-connect {padding-left: 5px;}#connect{max-width: 50%;z-index:300;position:fixed; bottom: 20px; left: 20px; background-color: black; color:white;padding: 10px;display:none;}#flex-gallery{display:flex;}#flex-gallery>p{margin:3px;}#offlinemsg{display:none;background-color:pink;}</style>
   <div id="flex-gallery">
   <p><strong>Views</strong> <?php echo $obj->views; ?></p>
   <p><strong>Created</strong> <?php echo date('Y-m-d H:i:s', $obj->creationTime);?></p>
   <p><strong>Author</strong> <a href="account/viewuser.php?user=<?php echo htmlspecialchars(urlencode($obj->author)); ?>"><?php echo htmlspecialchars($obj->author); ?></a></p>
   </div>
   <hr />
-<script>window.scrollTo(0,document.body.scrollHeight);
+<script>
+	document.getElementById('close-connect').addEventListener('click', function() {
+		document.getElementById('connect').style.display = 'none';
+	});
+	document.getElementById('connect').style.display = 'block';
+	var connectTest = new XMLHttpRequest();
+	connectTest.open('POST', 'data/getmsg.php', true);
+	connectTest.onerror = function() {
+		document.getElementById('connect-status').innerHTML = '<strong>Sorry, there was a problem with your request.</strong> You have not been connected. Reload to try again, or read the topic without refresh functionality.';
+	};
+	connectTest.onload = function() {
+		if (connectTest.status === 200) {
+			document.getElementById('status').innerHTML = 'Connected!';
+			document.getElementById('connect').style.display = 'none';
+		} else {
+			document.getElementById('connect-status').innerHTML = '<strong>Sorry, there was a problem with your request.</strong> You have not been connected. Reload to try again, or read the topic without refresh functionality.';
+			document.getElementById('disconnect-instructions').style.display = 'none';
+		}
+	}
+	var data = new FormData();
+	data.append("room", RoomName);
+	connectTest.send(data);
+	window.scrollTo(0,document.body.scrollHeight);
 function update() {
-    const exist = globalThis.currentValue;
+    var exist = globalThis.currentValue;
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "data/getmsg.php");
 	var data = new FormData();
 	data.append("room", RoomName);
 	xhr.send(data);
-    xhr.onload = function () {
+    xhr.onload = function() {
         if (xhr.status != 200) {
             document.getElementById("status").innerHTML = `Error ${xhr.status}:${xhr.statusText}`;
         } else {
@@ -131,7 +163,7 @@ function update() {
             } else {
                 globalThis.bottom = false;
             }
-            document.getElementById("status").innerHTML = `<strong>Finished refresh</strong> Done,got ${xhr.response.length} bytes`;
+            document.getElementById("status").innerHTML = `<strong>Finished refresh</strong> Done, got ${xhr.response.length} bytes`;
             var text = xhr.response;
             if (text !== exist) {
                 document.getElementById("message").innerHTML = text;
@@ -224,10 +256,10 @@ var enterPressed = function (event) {
     }
 };
 
-</script><div id="message" style="font-family:inherit;"><?php 
-include_once('data/getmsg.php');
+</script>
+<div id="message" style="font-family:inherit;"><?php 
 getMsg($_GET['room']);
-?></div>	
+?></div>
 	  <?php blockCheck(); ?>
 	  <details style="position:sticky; bottom:0; background-color:lightblue; overflow-y:scroll;max-height:calc(100% - 7em); color: black;">
 	<summary style="list-style: none;padding-left:10;">-<span></span>-> Reply</summary>
@@ -238,7 +270,9 @@ getMsg($_GET['room']);
 	<span><input type="radio" name="mode" id="nonquick" />
 	<label for="nonquick">Detailed chat (click send = send)</label></span>
 	<br />
-	<label for="messages">message (markdown allowed, no spam please), <button type="button" onclick="preview()">preview</button></label><textarea rows="7" <?php if ($_COOKIE['login']==''){echo 'disabled="disabled"'; }?> onkeydown="enterPressed(event)" name="message" id="messages" style="width:100%;" required="required" placeholder="Type here"></textarea><br>
+	<input type="button" id="insertmedia" value="Insert media" />
+	<br />
+	<label for="messages">message (markdown allowed, no spam please), <button type="button" onclick="preview()">preview</button></label><textarea rows="7" <?php if ($_COOKIE['login']==''){echo 'disabled="disabled"'; }?> onkeydown="enterPressed(event)" name="message" id="messages" style="width:100%;" required="required" placeholder="Type here"></textarea><br />
 	<div id="previewHTML" style="display:none;">Click 'preview'!</div>
 		<details><summary>How to reply to a question</summary>
 		<ol>
@@ -266,16 +300,66 @@ getMsg($_GET['room']);
 	}
 	?>
 	</div></form>
+		  <script src="styles/other/picker.js"></script>
+		  <link rel="stylesheet" href="styles/other/picker.css" />
+		  <script>
+			  	initFilePicker(document.getElementById('attach'));
+</script>
 	<noscript>JavaScript is disabled. Please use the <a href="reply.php?room=<?php echo htmlspecialchars(urlencode($_GET['room'])); ?>">reply form</a> instead.</noscript>
 	</details>
+	<div class="blanket" id="insertmediaoverlay" style="display: none;width:100vw;height:100vw;">
+	<div class="overlay" style="display:block;">
+		<h2>Insert Media</h2>
+		<p>Type the file name of an image or video to insert it into your post.</p>
+		<p>After inserting the media, please preview your post to make sure that the filename is correct.</p>
+		<form action="javascript:;" method="post" id="mediainsert">
+			<fieldset>
+				<legend>Select type of media</legend>
+				<label><input type="radio" name="mediatype" value="image" /> Image</label><br />
+				<label><input type="radio" name="mediatype" value="video" /> Video</label>
+			</fieldset>
+			<fieldset>
+				<legend>Method of locating media</legend>
+				<label><input type="radio" name="medialocation" value="url" /> By URL</label><br />
+				<label><input type="radio" name="medialocation" value="upload" /> By looking in uploaded files</label>
+			</fieldset>
+			<label>URL/filename: <input type="text" name="location" /></label><br />
+			<label>Add a short description (alt text) of the media: <input type="text" name="alttext" /><br /></label>
+			<input type="submit" value="Insert Media" />
+		</form>
+	</div>
+</div>
 	<script>
-update();
 document.querySelector("#load-js").style.display = 'block';
+document.getElementById('insertmedia').addEventListener('click', function() {
+	document.getElementById('insertmediaoverlay').style.display = 'block';
+});
+const mediaForm = document.querySelector('#mediainsert');
+mediaForm.addEventListener('submit', function() {
+	var mediatype     = mediaForm.elements['mediatype'].value,
+		medialocation = mediaForm.elements['medialocation'].value,
+		location      = mediaForm.elements['location'].value,
+		alt           = mediaForm.elements['alttext'].value;
+
+	var markdown = "";
+	var src = (medialocation === 'upload') ? "files/download.php?filename=" + encodeURIComponent(location) : location;
+	var fileviewlocation = (medialocation === 'upload') ? "viewfile.php?filename=" + encodeURIComponent(location) : location;
+
+	if (mediatype === 'image') {
+		markdown = "\n<!-- Start of image -->\n[![" + alt + "](" + src + ")](" + fileviewlocation + ")\n<!-- End of image -->\n";
+	} else {
+		markdown = "\n<!-- Start of video -->\n[Video: " + alt + "](" + fileviewlocation + ") \n<!-- End of video -->\n"
+	}
+
+	insertAtCursor(document.querySelector('textarea[required]'), markdown);
+	document.getElementById('insertmediaoverlay').style.display = 'none';
+});
 </script>
 <div class="blanket" id="overlay" style="display: none;width:100vw;height:100vw;">
 	<div class="overlay" style="display:block;">
 		<h2>A problem occurred while sending your request</h2>
-		Please try again later.
+		<p>Please try again later.</p>
+		<p>If you keep seeing this, please raise an issue on the repository linked in the footer.</p>
 		<br />
 		<pre>Error code: <br /><code id="error"></code></pre>
 		<br />
