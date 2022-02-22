@@ -1,0 +1,7 @@
+.files > input[type="radio"] {
+	display: none;
+}
+.files > input[type="radio"]:checked + div {
+	background-color: blue;
+	color: white;
+}
