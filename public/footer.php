@@ -23,10 +23,10 @@ QUICK LINKS: <br />
 <hr><footer>
 <center>
 <small>looks like you're at the end!</small>
-	<p>Software licensed under <a href="https://www.gnu.org/licenses/agpl-3.0.txt">GNU AGPL 3</a> (View <a href="https://github.com/weeklyd3/nodb-forum#licensing">copyright</a> | <a href="https://github.com/weeklyd3/nodb-forum">source code</a>), user content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.</p>
+	<p>Software licensed under <a href="https://www.gnu.org/licenses/agpl-3.0.txt">GNU AGPL 3</a> (View <a href="https://github.com/weeklyd3/nodb-forum#licensing">copyright</a> | <a href="https://github.com/weeklyd3/nodb-forum">source code</a>), user content licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a> unless otherwise stated.</p>
 <p>Version: 1.0.21
 <br>Hi! :) Have a good time here chatting! Also read these links:</p>
 <a href="DCP.php">Data Collection Policy</a> - <a href="tos.php">Terms of Use</a> - 
 <a href="info.php">PHP Information</a><hr />
-<?php echo "This page was last modified on ".date( "F d Y H:i:s.", getlastmod() ); ?> <strong>All times are UTC.</strong>
+<?php echo "This page was last modified on ".date("F d Y H:i:s.", getlastmod() ); ?> <strong>All times are UTC.</strong>
 </center></footer>
