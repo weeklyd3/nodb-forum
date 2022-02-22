@@ -6,9 +6,9 @@ assignees:
  -
 body:
   - type: markdown
-    id: question
     attributes:
-      value: Please write your question here?
+      value: |
+        Please write your question here.
     validations:
       required: true
   - type: dropdown
