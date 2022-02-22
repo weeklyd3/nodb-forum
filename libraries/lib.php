@@ -1,7 +1,7 @@
 <?php
 /*
     Forum Software
-    Copyright (C) 2021 contributors
+    Copyright (C) 2022 contributors
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -366,5 +366,40 @@ function deletionReasons() {
 	foreach ($reasons as $abbr => $reason) {
 		?><option value="<?php echo htmlspecialchars($abbr); ?> - <?php echo htmlspecialchars($reason); ?>"><?php echo htmlspecialchars($reason); ?> (<?php echo htmlspecialchars($abbr); ?>)</option><?php
 	}
+}
+function userlink(?string $username, bool $avatar = false) {
+	if (!isset($username)) {
+		?>the system<?php
+		return; 
+	}
+	if (!is_dir(__DIR__ . '/../data/accounts/' . cleanFilename($username))) {
+		?><span class="user-deleted">&lt;nonexistent 
+		user></span><?php
+		return;
+	}
+	$name = file_get_contents(__DIR__ . '/../data/accounts/' . cleanFilename($username) . '/user.txt');
+	?><a href="account/viewuser.php?user=<?php echo htmlspecialchars(urlencode($username)); ?>"><?php
+	if ($avatar) {
+		?><img src="data/accounts/<?php echo htmlspecialchars(urlencode($username)); ?>/avatar.png" alt="User avatar" /><?php
+	}
+	 echo htmlspecialchars($username); ?></a><?php
+}
+function colorChange(int $change): string {
+	if ($change === 0) {
+		return '<span style="color: #eeeeee;">' . $change . '</span>';
+	}
+	if ($change > 0) {
+		$string = '<span style="color: darkgreen;';
+	} else {
+		$string = '<span style="color: red;';
+	}
+	if (abs($change) > 500) {
+		$string .= 'font-weight: 700;';
+	}
+	if ($change > 0) {
+		$change = "+" . $change;
+	}
+	$string .= '">' . $change . '</span>';
+	return $string;
 }
 ?>
