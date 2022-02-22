@@ -11,7 +11,7 @@
 # For the full license information, view the LICENSE file that was distributed
 # with this source code.
 #
-#
+# Changes were made to the source code.
 
 class Parsedown
 {
@@ -74,7 +74,10 @@ class Parsedown
 		"ul",
 		"ol",
 		"li",
-		"img"
+		"img",
+        "video",
+        "source",
+        "span"
 	);
 
     #
