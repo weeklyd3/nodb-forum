@@ -2,7 +2,13 @@
 **Note**: It is recommended to install on a 64 bit system. If you install on a 32-bit system, the [2038 problem](https://en.wikipedia.org/wiki/2038_Problem) will strike in, and all your dates tracked after 03:14:07 1-19-2038 will reset to 1901! So, if you want to last until 2486, use a 64-bit system!
 
 **WARNING: DO NOT INSTALL WITH THE REPO CODE. DOWNLOAD A STABLE RELEASE INSTEAD. DEV VERSION IS VERY UNSTABLE.**
+## Asking for Help
 
+You can find documentation at the [wiki](https://github.com/weeklyd3/nodb-forum/wiki).
+
+If you can't find answers to your questions at the wiki, please ask them by clicking below: 
+[![Ask a Question!](https://gist.githubusercontent.com/weeklyd3/ac9072f166f619e67e733380af93308d/raw/10f9ba7dd8b006dd43daba782858f463d19879d7/Ask%2520a%2520question%2520button.svg)](https://github.com/weeklyd3/nodb-forum/issues/new?assignees=&labels=question&template=support_request.yaml&title=%5BQuestion%5D%3A+%3Ctitle%3E)  
+<sub><sup>([direct link](https://github.com/weeklyd3/nodb-forum/issues/new?assignees=&labels=question&template=support_request.yaml&title=%5BQuestion%5D%3A+%3Ctitle%3E))</sup></sub>
 ## Updates
 **7/8/2021**: Relicensed as AGPL.
 
