@@ -61,7 +61,7 @@ if (isset($_POST['contents'])) {
 		array_unshift($currentobj->revisions, $rev);
 		eval('$obj' . $objProps . ' = $currentobj;');
 		fwrite(fopen(__DIR__ . '/../../data/accounts/' . cleanFilename($_GET['username']) . '/subpages.json', 'w+'), base64_encode(serialize($obj)));
-		?>Subpage saved. <a href="account/pages?path=<?php echo htmlspecialchars(urlencode(implode('/', $path))); ?>&user=<?php echo htmlspecialchars(urlencode(implode('/', $path))); ?>">Return to your subpage?</a><?php
+		?>Subpage saved. <a href="account/pages?path=<?php echo htmlspecialchars(urlencode(implode('/', $path))); ?>&username=<?php echo htmlspecialchars(urlencode(implode('/', $path))); ?>">Return to your subpage?</a><?php
 	}
 }
 ?>
@@ -75,5 +75,4 @@ if ($readonly) {
 	<?php 
 userSubpageEditor($info->contents, $readonly);
 ?>
-</form>
-<p>Return to <a href="account/pages?path=<?php echo htmlspecialchars(urlencode(implode('/', $path))); ?>&user=<?php echo htmlspecialchars(urlencode(implode('/', $path))); ?>">subpage</a>.</p>
+<p>Return to <a href="account/pages?path=<?php echo htmlspecialchars(urlencode(implode('/', $path))); ?>&username=<?php echo htmlspecialchars(urlencode($_GET['username'])); ?>">subpage</a>.</p>

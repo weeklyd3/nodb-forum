@@ -27,7 +27,7 @@
 	?>
   </head>
   <body>
-	<h2>User Subpages</h2>
+	<h2>User Subpages (<a href="account/pages/createpage.php">Create page</a>)</h2>
 	  <?php 
 	$name = isset($_GET['username']) ? (file_exists('../../data/accounts/' . cleanFilename($_GET['username']) . '/psw.txt') ? $_GET['username'] : getname()) : getname();
 ?>
@@ -76,7 +76,7 @@ function validatePath(array $path, $obj, string $baddirmsg) {
 		if (!isset($obj->folders->$item)) {
 			if (!isset($path[$index + 1]) && isset($obj->files->$item)) {
 				?><h3><?php echo htmlspecialchars($item); ?></h3>
-	  			(<b>view</b> | <a href="account/pages/editpage.php?path=<?php echo htmlspecialchars(urlencode(implode("/", $path))); ?>&username=<?php echo htmlspecialchars(urlencode($name)); ?>"><?php echo $name === getname() ? "edit" : "view source"; ?></a> | <a href="account/pages/pagehistory.php?path=<?php echo htmlspecialchars(urlencode(implode("/", $path))); ?>&username=<?php echo htmlspecialchars(urlencode($name)); ?>">view history</a>)
+	  			(<b>view</b> | <a href="account/pages/editpage.php?path=<?php echo htmlspecialchars(urlencode(implode("/", $path))); ?>&username=<?php echo htmlspecialchars(urlencode($name)); ?>"><?php echo $name === getname() ? "edit" : "view source"; ?></a> | <a href="account/pages/pagehistory.php?path=<?php echo htmlspecialchars(urlencode(implode("/", $path))); ?>&username=<?php echo htmlspecialchars(urlencode($name)); ?>">view history</a> | <a href="account/pages/createpage.php">new page</a>)
 	  			<?php 
 				$Parsedown = new Parsedown;
 				echo $Parsedown->text($obj->files->$item->contents);
@@ -104,32 +104,56 @@ foreach ($path as $index => $pathitem) {
 }
 ?>
 <h3>Pages and folders in this directory</h3>
-<table class="table" style="width:100%;">
-	<tr>
-		<th width="0">Type</th>
-		<th>Name</th>
-	</tr>
+<h4>Folders in this directory</h4>
 	<?php 
+$esname = htmlspecialchars(urlencode($name));
+$espath = htmlspecialchars(urlencode(implode('/', $path)));
 if (isset($obj->folders)) {
+	?><div class="flex"><?php
 	foreach ($obj->folders as $title => $folder) {
-		?>
-		<tr title="Directory">
-			<td><img src="img/icons/FolderIcon.png" alt="folder icon" /> Directory</td>
-			<td><a href="account/pages?username=<?php echo htmlspecialchars(urlencode($name)); ?>&path=<?php echo htmlspecialchars(urlencode(implode("/", $path))) . "/" . htmlspecialchars(urlencode($title)); ?>"><?php echo htmlspecialchars($title); ?></a></td>
-		</tr><?php
-	} }
-if (isset($obj->files)) {
-	foreach ($obj->files as $title => $details) {
-		?>
-		<tr title="Page">
-			<td>
-				<img src="img/icons/PageIcon.png" alt="page icon" /> Page
-			</td>
-			<td>
-				<a href="account/pages?username=<?php echo htmlspecialchars(urlencode($name)); ?>&path=<?php echo htmlspecialchars(urlencode(implode("/", $path))); ?>/<?php echo htmlspecialchars($title); ?>"><?php echo htmlspecialchars($title); ?>
-				</a></td>
-		</tr><?php
+		$estitle = htmlspecialchars(urlencode($title));
+		?><div>
+			<img src="img/icons/FolderIcon.png" alt="" />
+			<a href="account/pages?username=<?php echo $esname; ?>&path=<?php echo $espath; ?>/<?php echo $estitle; ?>"><?php echo htmlspecialchars($title); ?></a>
+		</div><?php
 	}
+	?></div><?php
+} else {
+	?><p>This folder has no subfolders.</p><?php
+}
+?>
+<h4>Pages in this directory</h4><?php
+if (isset($obj->files)) {
+	?><div class="flex"><?php
+	foreach ($obj->files as $title => $details) {
+		$estitle = htmlspecialchars(urlencode($title));
+		?><div>
+			<img src="img/icons/PageIcon.png" alt="" />
+			<a href="account/pages?username=<?php echo $esname; ?>&path=<?php echo $espath; ?>/<?php echo $estitle; ?>"><?php echo htmlspecialchars($title); ?></a>
+		</div><?php
+	}
+	?></div><?php
+} else {
+	?><p>This folder has no pages.</p><?php
 }
 	?>
-</table>
+<style>
+	.flex {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.flex div {
+		overflow: hidden;
+		white-space: nowrap;
+		padding: 7px;
+		width: 250px;
+		max-width: 100%;
+		text-overflow: ellipsis;
+		border: 1px solid;
+		color: black;
+		background-color: white;
+		border-radius: 3px;
+		margin: 3px;
+		max-height: calc(1em + 14px);
+	}
+</style>

@@ -334,9 +334,21 @@ function random(array $options) {
 	return $options[array_rand($options)];
 }
 function blockCheck() {
-	if (!file_exists(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . "/ban.txt")) return;
-	?><p>I'm sorry, but it appears that you have been blocked. <a href="banned.php">Click for more details.</a> Thus, content creation has been restricted. However, you are still allowed to edit your own profile.</p><?php 
-	exit(0);
+	if (file_exists(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . '/ban.txt')) {
+		?><p>I'm sorry, but it appears that you have been blocked. <a href="banned.php">Click for more details.</a> Thus, content creation has been restricted. However, you are still allowed to edit your own profile.</p><?php
+		exit(0);
+	}
+	$IPBans = json_decode(file_get_contents(__DIR__ . '/../ipblock.json'));
+	$IP = $_SERVER['REMOTE_ADDR'];
+	if (isset($IPBans->$IP)) {
+		if ($IPBans->$IP->blockExistingAccounts) {
+			?><div style="text-align: center;"><h3>You are currently unable to post content due to a ban on your IP address.</h3>
+				<p>You may still read content.</p>
+				<p>This IP address has been banned for the following reason:</p>
+				<p><?php echo htmlspecialchars($IPBans->$IP->reason); ?></p></div><?php
+			exit(0);
+		}
+	}
 }
 /* The function below is used a lot, and changes may
 	be widely noticed. Please exercise extreme care

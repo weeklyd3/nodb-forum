@@ -18,6 +18,7 @@
 */
 date_default_timezone_set('UTC');
 set_error_handler(function($errno, $errstr, $errfile, $errline) {
+	if (isset($GLOBALS['noerror'])) return;
 	logmsg("error", "Error number " . $errno . " with string " . json_encode($errstr) . " in file " . $errfile . " on line " . $errline, getname());
 	?><div><strong>[Debug info] Error:</strong><table class="table"><tr><th>Name</th><th>Value</th><tr><td>Error number</td><td><?php echo $errno; ?></td></tr><tr><td>Error string</td><td><?php echo htmlspecialchars($errstr); ?></td></tr><tr><td>File</td><td><?php echo $errfile; ?></td></tr><tr><td>Line</td><td><?php echo $errline; ?></td></table><a href="https://github.com/weeklyd3/nodb-forum/issues/new/choose">Report this error</a></div><?php
 	return true;
@@ -58,3 +59,4 @@ window.addEventListener('DOMContentLoaded', function() {
 <?php 
 require_once __DIR__ . '/../libraries/lib.php';
 ?>
+<script src="libraries/load.js"></script>

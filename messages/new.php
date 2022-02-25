@@ -71,6 +71,7 @@ class Message {
 					?><div class="error">All of the recipient names were invalid.</div><?php 
 					return;
 				}
+				if (!isset($_POST['send'])) return;
 				$title = getname() . time();
 				foreach ($rec as $a) {
 					$inbox = json_decode(file_get_contents(__DIR__ . '/../data/accounts/' . cleanFilename($a) . '/inbox.json'));
@@ -157,5 +158,5 @@ class Message {
 				</tr>
 			</tbody>
 		</table>
-		<input type="submit" value="Confirm and Send" />
+		<input type="submit" name="send" value="Confirm and Send" />
 	</form>

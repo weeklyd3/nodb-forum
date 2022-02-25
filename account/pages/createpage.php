@@ -76,14 +76,13 @@ function savePage() {
 savePage();
 ?>
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-		<label>Enter the path and filename, without the leading slash. If the page already exists, an error will occur. (Leave empty for home page)
-		<input type="text" name="title" value="<?php if (isset($_POST['title'])) {
+		<label>Enter the path and filename, without the leading slash. If the page already exists, an error will occur.
+		<input required="required" type="text" name="title" value="<?php if (isset($_POST['title'])) {
 	echo htmlspecialchars($_POST['title']);
 } ?>" />
 		</label>
 		<details><summary>Examples of directories</summary>
 			<ul>
-				<li><code>/</code>: home page</li>
 				<li><code>/foo</code> or <code>foo</code>: page named <code>foo</code> in root directory</li>
 				<li><code>foo/bar</code>: Page <code>bar</code> in directory <code>foo</code>, which also functions as the index page of <code>foo/bar/</code></li>
 			</ul></details>
@@ -91,4 +90,3 @@ savePage();
 $contents = isset($_POST['contents']) ? $_POST['contents'] : "";
 userSubpageEditor($contents, false, true);
 ?>
-	</form>

@@ -18,7 +18,16 @@
 */
 ?><html lang="en">
   <head>
-    <title>Viewing Message</title>
+    <title><?php
+require '../libraries/lib.php';
+if (file_exists(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . '/msg.json')) {
+	$msgs = json_decode(file_get_contents(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . '/msg.json'));
+	$id = isset($_GET['id']) ? $_GET['id'] : null;
+	if (isset($msgs->$id)) {
+		echo htmlspecialchars($msgs->$id->subject);
+	} else { ?>Private Messages<?php }
+} else { 
+?>Private Messages<?php } ?></title>
 	<base href="../" />
 	<?php
 	include_once('../public/header.php');
@@ -38,8 +47,13 @@
 	?>
 	<p><a href="messages/">Back to Messages Home</a></p>
 	<h2><?php echo htmlspecialchars($s->subject); ?></h2>
+	  <p>Message options:</p>
+	  <ul class="options">
+		  <li><a href="messages/delete.php?id=<?php echo htmlspecialchars(urlencode($_GET['id'])); ?>"><img src="img/icons/XIcon.png" alt="" /> Delete</a></li>
+		  <li><a href="messages/forward.php?id=<?php echo htmlspecialchars(urlencode($_GET['id'])); ?>"><img src="img/icons/ForwardIcon.png" alt="" /> Forward</a></li>
+	  </ul>
 	  <p>View as Markdown: <a href="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>&markdown=on">once</a> <a href="account/#mdmail">always</a></p>
-	  <p><a href="messages/report.php?id=<?php echo htmlspecialchars($_GET['id']); ?>">Is this message inappropriate?</a></p>
+	  <p><a href="messages/report.php?id=<?php echo htmlspecialchars(urlencode($_GET['id'])); ?>">Is this message inappropriate?</a></p>
 	<ul>
 		<li>Sent: <?php echo friendlyDate($s->time); ?></li>
 		<li>From: <?php echo htmlspecialchars($s->from); ?></li>

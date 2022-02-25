@@ -78,8 +78,12 @@ $GLOBALS['filterMethod'] = isset($_GET['filter']) ? $_GET['filter'] : "everythin
 							?> style="font-weight:bold;"<?php
 						}
 					?>>
-						<td><?php userlink($m->from); ?></td>
-						<td><a href="messages/viewmsg.php?id=<?php echo htmlspecialchars(urlencode($n)); ?>"><div class="bold big"><?php echo htmlspecialchars($m->subject); ?></div>
+						<td><?php 
+					if (!in_array(getname(), $m->read)) {
+						?><img src="img/icons/RedDotIcon.png" />  <?php
+					}
+					userlink($m->from); ?></td>
+						<td><a href="messages/viewmsg.php?id=<?php echo htmlspecialchars(urlencode($n)); ?>"><div class="bold"><?php echo htmlspecialchars($m->subject); ?></div>
 						<?php 
 							echo htmlspecialchars(substr(str_replace(array("\r", "\n"), ' ', $m->body), 0, 30));
 					if (strlen(str_replace(array("\r", "\n"), ' ', $m->body)) > 30) {

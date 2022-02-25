@@ -84,7 +84,28 @@ if (verifyAdmin() || ($config->author === getname() && count((array) $msg) === 0
 	<div class="border<?php if (isset($config->accepted)) { if ($config->accepted === $id) { ?> accepted<?php } } ?>">
 	<?php echo $message->html; ?>
 	</div>
-	<div class="smaller">
+	<div class="smaller"><?php 
+		if (isset($message->reply)) {
+			?>Replying to <span style="background-color: pink; color: black;"><?php userlink($message->reply); ?></span><?php
+		}
+		if (isset($message->reply, $message->attach)) {
+			?>, <?php
+		}
+		if (isset($message->attach)) {
+			if ($message->attach !== "") {
+			?>attached file:<br />
+			<img src="img/icons/PageIcon.png" alt="" /> <?php
+			if 
+			(!file_exists(__DIR__ . '/../files/uploads/' . cleanFilename($message->attach))) {
+				echo htmlspecialchars($message->attach);
+
+				?>(error: file not found)<?php
+			} else {
+				?><a href="viewfile.php?filename=<?php echo htmlspecialchars(urlencode($message->attach)); ?>"><?php echo htmlspecialchars($message->attach); ?></a> (<a href="files/download.php?filename=<?php echo htmlspecialchars(urlencode($message->attach)); ?>" download=""><img src="img/icons/DownloadIcon.png" alt="Download" /></a>)<?php
+			}
+			}
+		}
+	?>
 	<dl>
 	<dt>Author:</dt>
 	<dd><?php userlink($message->author, true); ?></dd>

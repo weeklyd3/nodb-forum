@@ -199,9 +199,3 @@ window.addEventListener('click', function(e) {
 makeDraggable("#drag", "div");
 </script>
 <div id="mainContent">
-<?php 
-$blocklist = explode("\n", file_get_contents(__DIR__ . "/../blocklist.txt"));
-if (in_array($_SERVER['REMOTE_ADDR'], $blocklist)) {
-	die("IP address blacklisted. If you think this is in error, please contact i.hate.spam.mail.here@gmail.com.");
-}
-?>

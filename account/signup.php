@@ -29,6 +29,18 @@ error_reporting(E_ALL);
 	?>
   </head>
   <body>
+	  <?php 
+$IP = $_SERVER['REMOTE_ADDR'];
+$IPBans = json_decode(file_get_contents('../ipblock.json'));
+if (isset($IPBans->$IP)) {
+	?><p>Sorry, you cannot create an account right now because your IP address has been blocked for the following reason:</p>
+	  <p><?php echo htmlspecialchars($IPBans->$IP->reason); ?></p><?php
+	if (!$IPBans->$IP->blockExistingAccounts) {
+		?><p>To create an account, please try again when you have a different IP address.</p><?php
+	}
+	exit(0);
+}
+?>
   <form action="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" method="post" enctype="multipart/form-data">
 	<?php
 	$page = $_POST['page'];

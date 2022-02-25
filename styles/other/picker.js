@@ -16,32 +16,49 @@ function finishXHR(text, id, element) {
 			button.id = 'file-picker-' + id + "-" + files[i].name;
 			ul.appendChild(button);
 			option.setAttribute('for', 'file-picker-' + id + "-" + files[i].name);
-			option.textContent = files[i].name;
+			var fileName = document.createElement('div');
+			fileName.textContent = files[i].name;
+			option.appendChild(fileName);
 			var mod = document.createElement('div');
 			mod.classList.add('smaller');
 			mod.textContent = "(Modified " + files[i].mod + ")";
+			var mime = document.createElement('div');
+			mime.textContent = "MIME type " + files[i].mime;
+			mime.classList.add('smaller');
 			option.appendChild(mod);
+			option.appendChild(mime);
 			optiondiv.appendChild(option);
 			ul.appendChild(optiondiv);
 		}
 		return ul.innerHTML;
 	}
 }
-function loadFiles(files, id, element) {
+function loadFiles(files, id, element, mimetype = null) {
 	files.innerHTML = "Please wait..."
 	var oReq = new XMLHttpRequest();
 	oReq.addEventListener("load", function() {
 		files.innerHTML = finishXHR(this.responseText, id, element);
 	});
-	oReq.open("GET", "/api/files");
+	url = '/api/files';
+	if (mimetype !== null) {
+		url += "?mime=" + encodeURIComponent(mimetype);
+	}
+	oReq.open("GET", url);
 	oReq.send();
 }
-function initFilePicker(element) {
+function initFilePicker(element, mimetype = null) {
+	element.readOnly = true;
+	element.size = 30;
+	element.placeholder = 'Select a file (no file selected)';
+	element.classList.add('filepicker');
 	var id = element.id + "-picker";
 	var popup = document.createElement('div');
 	popup.classList.add('overlay');
 	popup.setAttribute('id', id);
 	popup.innerHTML = '<h3>Select a file</h3>';
+	if (mimetype !== null) {
+		popup.innerHTML += "<p>The file's mime type should start with <code>" + mimetype + "</code>.</p>";
+	}
 	var buttons = document.createElement('div');
 	var files = document.createElement('form');
 	files.classList.add('files');
@@ -52,7 +69,7 @@ function initFilePicker(element) {
 	popup.appendChild(files);
 	var refreshButton = document.createElement('button');
 	refreshButton.addEventListener('click', function() {
-		loadFiles(files, id, element);
+		loadFiles(files, id, element, mimetype);
 	});
 	refreshButton.textContent = 'Refresh';
 	buttons.appendChild(refreshButton);
@@ -78,12 +95,13 @@ function initFilePicker(element) {
 		var file = submitted.elements['file-picker-' + id]['value'];
 		element.value = file;
 		popup.style.display = 'none';
+		element.classList.add('fileselected');
 	});
 	popup.appendChild(buttons);
 	document.body.appendChild(popup);
 	element.addEventListener('focus', function() {
 		popup.style.display = 'block';
-		loadFiles(files, id, element);
+		loadFiles(files, id, element, mimetype);
 	});
 	var closeButton = document.createElement('button');
 	closeButton.type = 'button';
@@ -93,7 +111,8 @@ function initFilePicker(element) {
 	closeButtonWSpace.appendChild(closeButton);
 	closeButton.addEventListener('click', function() {
 		element.value = '';
-		element.focus();
+		element.readOnly = true;
+		element.classList.remove('fileselected');
 	});
 	var openButton = document.createElement('button');
 	openButton.type = 'button';

@@ -81,7 +81,39 @@
 	  </td></tr><tr>
 	  <td>Last active: <?php echo file_exists('../data/accounts/'.cleanFilename($username).'/lastactive.txt') ? dateDiff((int) file_get_contents('../data/accounts/'.cleanFilename($username).'/lastactive.txt'), time()) : "Date unknown"; ?></td>
 	  </tr></table>
-	  <script>hljs.highlightAll();</script>
+	  <h3>User Contributions</h3>
+	  <p>Below you can find content that this user has created.</p>
+	  <?php 
+	  $polls = json_decode(file_get_contents('../polls/polls.json'));
+	  $polls = (array) (isset($polls->$username) ? $polls->$username : array());
+	  	  $esuser = htmlspecialchars(urlencode($username));
+
+	  ?>
+	  <div>
+		  <h3>User subpages</h3>
+		  <a href="account/pages/index.php?username=<?php echo $esuser; ?>">View subpages</a>
+	  </div>
+	  <div>
+		  <h3><?php echo count($polls); ?> poll(s)</h3>
+		  <ul>
+			  <?php if (count($polls) === 0) {
+		  	?><li>(this user has no polls)</li><?php
+			  } 
+	  $Parsedown = new Parsedown;
+		  foreach ($polls as $id => $poll) {
+			  $espoll = htmlspecialchars(urlencode($id));
+			  ?><li>
+				  <a href="polls/poll.php?user=<?php echo $esuser; ?>&id=<?php echo $espoll; ?>"><h4><?php echo htmlspecialchars($poll->title); ?></h4></a>
+				  <p><?php echo substr(strip_tags($Parsedown->text($poll->description)), 0, 30); 
+			  if (strlen(strip_tags($Parsedown->text($poll->description))) > 30) {
+				  ?>...<?php
+			  }
+			  ?></p>
+			  </li><?php
+		  }
+		  ?>
+		  </ul>
+	  </div>
 	  <?php
   } else {
 	  echo 'Bad user name';

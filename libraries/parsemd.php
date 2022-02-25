@@ -1,7 +1,8 @@
 <?php
-include('parsedown.php');
+require('parsedown.php');
+require 'lib.php';
 $Parsedown = new Parsedown();
-if ($_POST['description']) {
+if (isset($_POST['description'])) {
 	echo $Parsedown->text($_POST['description']);
 } else {
 	if ($_GET['text']) {

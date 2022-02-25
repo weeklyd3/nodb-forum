@@ -5,3 +5,14 @@
 	background-color: blue;
 	color: white;
 }
+.filepicker {
+	cursor: default;
+	background-image: url("../../img/icons/FileSelectionIcon.png");
+	background-size: 17px;
+	background-repeat: no-repeat;
+	padding-left: 31px !important;
+	background-position: 7px 7px; 
+}
+.fileselected {
+	background-image: url("../../img/icons/FileSelectedIcon.png");
+}
