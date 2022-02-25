@@ -131,11 +131,14 @@ blockquote {
 	padding-left: 10px;
 }
 kbd {
+	display: inline-block;
 	font-family: inherit;
 	border:1px solid;
 	box-shadow: 2px 2px 0px 0px gray;
 	border-radius: 2px;
-	padding:1px;
+	padding: 1px;
+	margin-right: 2px;
+	margin-bottom: 2px;
 }
 .message {
 	font-size:17;
@@ -312,7 +315,7 @@ video {
 .box {
 	border: 1px solid;
 	padding: 3px;
-	height: 300px;
+	max-height: 300px;
 	overflow-y: scroll;
 }
 .fakebutton {
@@ -378,11 +381,62 @@ ul.flex > li {
 .accepted {
 	background-color: darkgreen;
 }
+.options {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+}
 .options li a {
 	border: 1px solid;
 	padding: 1px;
 	text-decoration: none;
+	margin: 2px;
 }
 .options li a:not(:hover) img {
 	filter: grayscale(100%);
+}
+.dropdown {
+	position: relative;
+	display: none;
+}
+.dropdown > .dropdown-content {
+	display: none;
+	position: absolute;
+}
+.dropdown:hover > .dropdown-content {
+	display: block;
+	color: black;
+	background-color: white;
+}
+.dropdown:hover > .dropdown-content > .item {
+	appearance: none;
+	-webkit-appearance: none;
+	border: 1px solid;
+	padding: 7px;
+	display: block;
+	cursor: pointer;
+}
+.dropdown:hover > .dropdown-content > .item:hover {
+	background-color: #eeeeee;
+}
+.brightred {
+	background-color: red !important;
+	color: white;
+}
+.mdtable td, .mdtable th {
+	padding: 3px;
+}
+.fixed-layout {
+	table-layout: fixed;
+	display: table;
+	width: 100%;
+}
+.fixed-layout td, .fixed-layout th {
+	word-wrap: break-word;
+	padding: 3px;
+}
+td[colspan] {
+	text-align: center;
 }
