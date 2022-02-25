@@ -20,7 +20,33 @@ class Parsedown
     const version = '1.7.4';
 
     # ~
-
+	protected function filter($text, bool $inline = false) {
+		if ($text === '') return $text;
+		$GLOBALS['noerror'] = true;
+		$doc = new DOMDocument;
+		$doc->loadHTML($text, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
+		unset($GLOBALS['noerror']);
+		// Add rel="ugc noopener" to all links
+		$alllinks = $doc->getElementsByTagName('a');
+		foreach ($alllinks as $link) {
+			$link->setAttribute('rel', 'ugc noopener');
+		}
+		$alltables = $doc->getElementsByTagName('table');
+		foreach ($alltables as $table) {
+			$table->setAttribute('class', 'table mdtable');
+		}
+		// Remove all attributes starting with
+		// on (e.g. onclick, onerror, etc.)
+		$allelements = $doc->getElementsByTagName('*');
+		foreach ($allelements as $element) {
+			foreach ($element->attributes as $a) {
+				if (startsWith($a->nodeName, 'on')) {
+					$element->removeAttribute($a->nodeName);
+				}
+			}
+		}
+		return $doc->saveHTML();
+	}
     function text($text)
     {
         # make sure no definitions are set
@@ -41,7 +67,7 @@ class Parsedown
         # trim line breaks
         $markup = trim($markup, "\n");
 
-        return strip_tags($markup, "<" . implode("><", $this->tags) . ">");
+        return $this->filter(strip_tags($markup, "<" . implode("><", $this->tags) . ">"));
     }
 
 	# Whitelisted tags 
@@ -75,7 +101,6 @@ class Parsedown
 		"ol",
 		"li",
 		"img",
-        "video",
         "source",
         "span"
 	);
@@ -1169,9 +1194,11 @@ class Parsedown
         }
 
         $markup .= $this->unmarkedText($text);
-
-        return $markup;
+        return strip_tags($this->filter($markup), '<b><i><a><strong><em><code><img>');
     }
+	protected function stripTags(string $markup) {
+		return strip_tags($markup, "<" . implode("><", $this->tags) . ">");
+	}
 
     #
     # ~
@@ -1305,9 +1332,9 @@ class Parsedown
             'nonNestables' => array('Url', 'Link'),
             'text' => null,
             'attributes' => array(
-				'target' => '_blank',
                 'href' => null,
                 'title' => null,
+				'rel' => 'ugc noopener'
             ),
         );
 
