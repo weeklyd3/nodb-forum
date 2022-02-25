@@ -23,7 +23,7 @@ function diff(string $old, string $new, string $oldcaption = "Old revision", str
 		<th style="width: 50%;"><?php echo htmlspecialchars($oldcaption); ?></th>
 		<th style="width: 50%;"><?php echo htmlspecialchars($newcaption); ?></th>
 		</tr>
-		<?php 
+		<?php
 		$rowsSkipped = 0;
 
 		foreach ($unifiedVersion as $line) {
@@ -43,7 +43,7 @@ function diff(string $old, string $new, string $oldcaption = "Old revision", str
 			$rowsSkipped = 0;
 			$inlineDiff = inlineDiff($oldLine, $newLine);
 			?><tr><td><?php echo $inlineDiff['old']; ?></td><td><?php echo $inlineDiff['new']; ?></td></tr><?php
-		} 
+		}
 	if ($rowsSkipped > 0) {
 		?><tr><td colspan="2">(<?php echo $rowsSkipped; ?> identical row(s) skipped)</td></tr><?php
 	} ?>
