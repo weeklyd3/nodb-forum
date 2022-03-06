@@ -1,0 +1,35 @@
+# Use this .gitignore file to track
+# files that are in the repository but
+# should not be published.
+#
+# config.json is one of them, since installation
+# generates it automatically:
+
+config.json
+
+# I sometimes change .replit, so let's ignore
+# it for the Repl.it users.
+
+.replit
+
+# Data that I have to delete before pushing:
+
+data/messages/Meta-Discussion/webchat.txt
+data/accounts/admin/avatar.png
+data/accounts/admin/user.txt
+data/accounts/admin/psw.txt
+data/accounts/user2762153624/avatar.png
+data/messages/Sandbox/webchat.txt
+data/messages/web-chat/webchat.txt
+data/messages/
+data/accounts/
+log.json
+data/community/events
+files/uploads
+messages/reports.json
+*.py
+review/items.json
+file_reports.json
+file_details.json
+review/items.json
+visitlog.json

@@ -1,0 +1,19 @@
+**Not an actual source file. Upgrading guidelines.**
+
+Preparing for the Upgrade
+============================
+1. Go to "Banners" and inform users about the 
+   downtime. The site will not be able to run 
+   while the files are uploading. (Or at least,
+   it's risky.)
+2. Take your site offline.
+3. Download your desired release from GitHub.
+4. Your files should be offline.
+5. Unzip the file using an archive extraction 
+   utility of your choice.
+6. Delete tos_raw.php.
+
+Actually Upgrading
+============================
+7. Upload the files, replacing the exsting ones. 
+8. Take the site online.

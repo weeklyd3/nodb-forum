@@ -1,0 +1,21 @@
+# Configuration for welcome - https://github.com/behaviorbot/welcome
+
+# Configuration for new-issue-welcome - https://github.com/behaviorbot/new-issue-welcome
+
+# Comment to be posted to on first time issues
+newIssueWelcomeComment: >
+  Thanks for opening an issue! Someone will look at it soon. Meanwhile, you can go [here](https://github.com/weeklyd3/nodb-forum/contribute) to find good first issues. Again, thanks!
+
+# Configuration for new-pr-welcome - https://github.com/behaviorbot/new-pr-welcome
+
+# Comment to be posted to on PRs from first time contributors in your repository
+newPRWelcomeComment: >
+  Thanks for opening this pull request! Someone will review it and may merge it soon.
+
+# Configuration for first-pr-merge - https://github.com/behaviorbot/first-pr-merge
+
+# Comment to be posted to on pull requests merged by a first time user
+firstPRMergeComment: >
+  Thank you for merging a pull request! We appreciate your contributions to the project. The changes should appear in the next release!
+
+# It is recommend to include as many gifs and emojis as possible
