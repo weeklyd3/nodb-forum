@@ -1,11 +1,7 @@
 <?php
 /*
     Forum Software
-<<<<<<< HEAD
-    Copyright (C) 2022 contributors
-=======
     Copyright (C) 2021 contributors
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -36,39 +32,22 @@
 	if (!getname()) die("log in to flag");
 	if (!file_exists(__DIR__ . '/data/messages/'.cleanFilename($_GET['room']).'/config.json')) die("Bad title");
 	$config = json_decode(file_get_contents(__DIR__ . '/data/messages/' . cleanFilename($_GET['room']) . '/config.json'));
-<<<<<<< HEAD
-	$msgs = json_decode(file_get_contents(__DIR__ . '/postflags.json'));
-if ($msgs === null) {
-	$msgs = json_decode('{}');
-}
-=======
 	$msgs = json_decode(file_get_contents(__DIR__ . '/data/messages/' . cleanFilename($_GET['room']) . '/msg.json'));
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
 	if (!isset($msgs->$post)) die("Bad post name");
 	$name = getname();
 	class Flagged extends emptyClass {
 		public $reason = '';
 	}
 	if (isset($_POST['flag'])) {
-<<<<<<< HEAD
-		$topic = $_GET['room'];
-=======
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
 		$flag = new Flagged;
 		$flag->reason = $_POST['flag'];
 		if (isset($_POST['input']) && $_POST['flag'] == 'Other') $flag->modText = $_POST['input'];
 		if ($_POST['flag'] == 'Junk') $flag->junkreason = $_POST['junk'];
-<<<<<<< HEAD
-		$msgs->$topic->$post->$name = $flag;
-		$name = getname();
-		fwrite(fopen(__DIR__ . '/postflags.json', 'w+'), json_encode($msgs));
-=======
 
 		$msgs = json_decode(file_get_contents(__DIR__ . '/data/messages/' . cleanFilename($_GET['room']) . '/msg.json'));
 		$name = getname();
 		$msgs->$post->flags->$name = $flag;
 		fwrite(fopen(__DIR__ . '/data/messages/'.cleanFilename($_GET['room']).'/msg.json', 'w+'), json_encode($msgs));
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
 	}
 	?>
 	<h2>Why is this post inappropriate?</h2>

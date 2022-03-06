@@ -179,11 +179,7 @@ function update() {
     };
     xhr.onprogress = function (event) {
         if (event.lengthComputable) {
-<<<<<<< HEAD
-            document.getElementById("status").innerHTML = `Received ${event.loaded} of ${event.total} bytes`;
-=======
             document.getElementById("status").innerHTML = `Received ${event.loaded} of ${event.total}bytes`;
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
         } else {
             document.getElementById("status").innerHTML = `Received ${event.loaded} bytes`;
         }
@@ -280,10 +276,7 @@ getMsg($_GET['room']);
 	<div id="previewHTML" style="display:none;">Click 'preview'!</div>
 		<details><summary>How to reply to a question</summary>
 		<ol>
-<<<<<<< HEAD
-=======
 			<li>All replies, even those by trusted users, go through a review system, which can be accessed by any user (including you!) <a href="review/">here</a>. In review, good posts are allowed to pass while low-quality posts are flagged for further review by administrators. Before someone reviews your post, the post will still be visible to everyone. (Reviewing your own post is not allowed.)</li>
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
 			<li>Make sure your post is a legitimate attempt at responding to the question. Replies stating that someone has the same problem and follow up questions are not permitted.</li>
 			<li><strong>No matter how late you are, feel free to submit a response anyway. Even if the original person got an answer, others might appreciate another solution.</strong></li>
 			<li>Make sure your post is readable. You can press the "preview" button to see how it will look.</li>

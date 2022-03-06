@@ -439,13 +439,4 @@ ul.flex > li {
 }
 td[colspan] {
 	text-align: center;
-<<<<<<< HEAD
 }
- @media only screen and (max-width: 464px) {
-	#personal-links {
-		display: none;
-	}
- }
-=======
-}
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53

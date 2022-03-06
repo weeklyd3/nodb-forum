@@ -40,12 +40,7 @@
   ?></code></p>
   <p>Results in topics and posts are shown below. If you want to search the whole site, please <a href="https://google.com/search?q=site:<?php echo htmlspecialchars(urlencode($_SERVER['HTTP_HOST'] . " " . $_GET['query'])); ?>">do a Google Search instead.</a></p>
   <?php 
-<<<<<<< HEAD
   $GLOBALS['results'] = array();
-$startTime = microtime(true);
-=======
-  $GLOBALS['results'] = array();
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
   // use usort for the search results
   function addResultToSearch(string $room, ?string $post) {
 	  $searchtags = $GLOBALS['searchtags'];
@@ -63,40 +58,20 @@ $startTime = microtime(true);
 		  $json = json_decode(file_get_contents(__DIR__ . '/data/messages/' . cleanFilename($room) . '/config.json'));
 		  $msg = $json;
 		  $posttext = strip_tags($msg->description_html);
-<<<<<<< HEAD
-		  $matches = custom_substr_count($posttext, $terms) + custom_substr_count($msg->title, $terms);
-	  }
-	  if ($matches > 0) {
-		  $author = $msg->author;
-		  $deleted = isset($post) ? isset($msg->del) : file_exists(__DIR__ . '/data/messages/' . cleanFilename($room) . '/del.json');
-		  array_push($GLOBALS['results'], new searchResult($room, $post, $matches, $posttext, $author, $postconfig->tags, $deleted));
-=======
 		  $matches = custom_substr_count($posttext, $terms);
 	  }
 	  if ($matches > 0) {
 		  array_push($GLOBALS['results'], new searchResult($room, $post, $matches, $posttext));
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
 	  }
 	  return;
   }
   $rooms = array_diff(scandir(__DIR__ . '/data/messages', SCANDIR_SORT_NONE), array('.', '..', 'index.php'));
   class searchResult {
-<<<<<<< HEAD
-	  public function __construct(string $room, ?string $post, int $matches, string $text, string $author, string $tags, bool $deleted = false) {
-		  $this->room = $room;
-		  $this->post = $post;
-		  $this->matches = $matches;
-		  $this->text = $text;
-		  $this->author = $author;
-		  $this->deleted = $deleted;
-		  $this->tags = $tags;
-=======
 	  public function __construct(string $room, ?string $post, int $matches, string $text) {
 		  $this->room = $room;
 		  $this->post = $post;
 		  $this->matches = $matches;
 		  $this->text = $text;
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
 	  }
   }
   foreach ($rooms as $room) {
@@ -109,14 +84,7 @@ $startTime = microtime(true);
 		  addResultToSearch($name, $id);
 	  }
   }
-<<<<<<< HEAD
   ?><ul style="list-style: none; padding: 0; margin: 0;"><?php 
-	$GLOBALS['results'] = array_filter($GLOBALS['results'], function($result) {
-		return !($result->deleted && $result->author !== getname() && !verifyAdmin());
-	});
-=======
-  ?><ul style="list-style: none; padding: 0; margin: 0;"><?php 
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
   usort($GLOBALS['results'], function($a, $b) {
 	  return ($a->matches) - ($b->matches);
   });
@@ -126,14 +94,7 @@ $startTime = microtime(true);
 	  array_push($regexterms, preg_quote(htmlspecialchars($term), "/"));
   }
   $regex .= implode("|", $regexterms);
-<<<<<<< HEAD
   $regex .= ")/i";
-$endTime = microtime(true);
-?><p><?php echo count($GLOBALS['results']); ?> result(s) found in <?php echo round(($endTime - $startTime) * 1000, 3); ?> milliseconds.</p>
-	  <?php
-=======
-  $regex .= ")/i";
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
   foreach (array_reverse($GLOBALS['results']) as $result) {
 	  ?><li style="padding-top: 2px; padding-bottom: 2px;">
 	  <h3>
@@ -143,53 +104,17 @@ $endTime = microtime(true);
 	  }
 	  ?>">
 	  <?php
-<<<<<<< HEAD
-	  echo htmlspecialchars($result->room);
-	  $flags = array();
-	  if (isset($result->post)) {
-		  array_push($flags, 'reply');
-	  } else {
-		  array_push($flags, 'topic');
-	  }
-		if ($result->deleted) {
-			array_push($flags, 'deleted');
-		}
-	  ?></a> <?php 
-			if (count($flags) > 0) {
-				echo "(" . implode($flags, ", ") . ")";
-			}
-			?></h3>
-=======
 	  echo htmlspecialchars($result->room);
 	  if (isset($result->post)) {
 		  ?> (#topic-message-<?php echo htmlspecialchars($result->post); ?>)<?php
 	  }
 	  ?></a></h3>
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
 	  <p><?php echo $result->matches; ?> match(es)</p>
 	  <p><?php 
 	  $previewStr = substr($result->text, custom_stripos($result->text, $GLOBALS['terms']), 300);
 	  $previewStrHighlighted = preg_replace($regex, '<strong class="highlight">$0</strong>', $previewStr);
 	  echo $previewStrHighlighted;
-<<<<<<< HEAD
 	  ?></p>
-		  <details class="smaller">
-			  <summary>Why did this result appear?</summary>
-			  <?php 
-	  $whyThisResult = array();
-	  if (count($tags) > 0) {
-		  array_push($whyThisResult, "Th" . (isset($result->post) ? "e parent" : "is") . " topic was tagged " . htmlspecialchars(implode(" ", $tags)) . ' and you searched for tags ' . htmlspecialchars($result->tags));
-	  }
-	array_push($whyThisResult, "This result had " . $result->matches . " matches with your search terms");
-	  array_push($whyThisResult, "You are authorized to view this topic");
-	  ?>
-	  <ul><li>
-		  <?php echo implode("</li><li>", $whyThisResult); ?>
-	  </li></ul>
-		  </details>
-=======
-	  ?></p>
->>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
 	  </li><?php
   }
     ?></ul><small><em>Can't find what you're looking for? <strong><?php 
