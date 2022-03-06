@@ -1,0 +1,451 @@
+/*
+    Forum Software
+    Copyright (C) 2021 contributors
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+/* Configure your forum styles! */
+body,
+button,
+input {
+    /* Specify fonts for your forums
+	here. */
+    font-family: -apple-system, Tahoma, Verdana, sans-serif;
+    /* Default font size. Editor can 
+	override this. */
+    font-size: 17px;
+}
+h1 {
+	font-size: 34px;
+}
+/* sync with system selection color */
+::selection {
+    background-color: Highlight;
+}
+body {
+	width: calc(100% - 12px);
+}
+body, html {
+	margin:0;
+	padding:3px;
+ color:white;
+background: rgb(148,187,233);
+background: -moz-linear-gradient(0deg, rgba(148,187,233,1) 0%, rgba(255,97,167,1) 96%);
+background: -webkit-linear-gradient(0deg, rgba(148,187,233,1) 0%, rgb(255, 97, 167) 96%);
+background: linear-gradient(0deg, rgba(148,187,233,1) 0%, rgba(255,97,167,1) 96%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#94bbe9",endColorstr="#ff61a7",GradientType=1);
+}
+/* Configure hyperlinks. */
+a {
+    text-decoration: underline;
+    color: inherit;
+}
+a[target="_blank"]::after {
+    content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);
+    margin: 0 3px 0 5px;
+}
+a:visited {
+    color:inherit;
+}
+a:hover {
+    text-decoration: none;
+}
+select {
+	font-family:inherit;
+	font-size:inherit;
+}
+button,
+input:not([type="file"]),
+.fakeinput,
+select,
+textarea {
+    background-color: white;
+    border: 1px solid black;
+    transition: background-color 0.3s;
+    padding: 7px;
+	font-size:inherit;
+}
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover {
+    background-color: Highlight;
+}
+pre {
+	white-space:pre-wrap;
+	word-break: break-all;
+}
+input[type="checkbox"] {
+  position: relative;
+  width: 1.2em;
+  height: 1.2em;
+  box-sizing: border-box;
+  border: 1px solid gray;
+  vertical-align: -2px;
+  -webkit-appearence:none;
+  appearance: none;
+  background-color:white;
+  color: black;
+}
+input[type="checkbox"]::before {
+  content: "✔";
+  position: absolute;
+  font-size: 1.2em;
+  background-color:Highlight;
+  right: -1px;
+  top: -0.3em;
+  visibility: hidden;
+}
+
+input[type="checkbox"]:checked::before {
+  visibility: visible;
+}
+input[type="checkbox"]:disabled {
+  border-color: black;
+  background: #ddd;
+  color: gray;
+}
+:focus {
+	outline: 2px solid;
+}
+.gallery {
+	margin:2px;
+	border-radius: 10px;
+	background-color: white;
+	color: black;
+}
+blockquote {
+	border-left: 4px solid;
+	padding-left: 10px;
+}
+kbd {
+	display: inline-block;
+	font-family: inherit;
+	border:1px solid;
+	box-shadow: 2px 2px 0px 0px gray;
+	border-radius: 2px;
+	padding: 1px;
+	margin-right: 2px;
+	margin-bottom: 2px;
+}
+.message {
+	font-size:17;
+	font-family: -apple-system, Tahoma, Verdana, sans-serif !important;
+	background-color:inherit !important;
+	color:inherit !important;
+}
+@media screen and (max-width: 600px) {
+    #titleText {
+		display: none;
+	}
+}
+table.table, table.table>tbody>tr, table.table>tbody>tr>td, table.table>tbody>tr>th {
+	border:1px solid;
+	border-collapse: collapse;
+}
+table, table>tr, table>td {
+	padding:7px;
+}
+.blanket {
+	z-index: 20;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: rgba(122, 122, 122, 0.4);
+	width: 0;
+	height: 0;
+}
+
+.overlay {
+	display: none;
+	color: black;
+	background-color: white;
+	opacity: 1;
+	padding: 5px;	
+	border: 3px solid;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	max-width: 75%;
+	max-height: 75%;
+	overflow-y: scroll;
+}
+.tag {
+	background-color: rgb(159, 197, 255);
+	border-radius: 3px;
+	text-decoration: none !important;
+	cursor: default;
+	color: black;
+}
+.tag:hover {
+	background-color: #6c9ce6;
+}
+.tag>a {
+	text-decoration: none;
+}
+.tag:not(.nohash)::before {
+	content: "#";
+}
+details {
+	margin-left: 10px;
+}
+summary {
+	margin-left: -10px;
+}
+#keyboard-focus {
+	position: absolute;
+	top: -1200px;
+}
+#link:focus {
+	position: absolute;
+	top: 1200px !important;
+}
+#link:not(:focus) {
+	position: absolute;
+	left: -1000px !important;
+}
+input:not([type="radio"]) {
+	border-radius: 0px !important;
+	-webkit-appearance: none;
+}
+input:disabled, textarea:disabled {
+	background-color: lightgray;
+}
+input, textarea, select {
+	max-width: 100%;
+}
+.vote.up:hover, .vote.down:hover {
+	filter: brightness(85%);
+	cursor: pointer;
+}
+button.vote {
+	background-color: transparent;
+	padding: 0;
+	border: none;
+	margin: none;
+	color: white;
+}
+.inline {
+	display: inline;
+	margin: 0;
+}
+table:not(#header):not(#topics):not(.exempt-from-format) {
+	display: block;
+	max-width: -moz-fit-content;
+	max-width: fit-content;
+	padding: 0;
+	margin: 0 auto;
+	overflow-x: auto;
+	white-space: nowrap;
+	text-align: left;
+}
+.calendar-row {
+	min-height: 100px;
+	width: 100px;
+}
+.calendar-row>td {
+	min-height: 100px;
+	height: 100px;
+}
+.calendar > tbody > tr > th {
+	width: 100px;
+}
+.horizontal-scroll {
+	overflow-x: scroll;
+}
+.bg-skyblue {
+	background-color: skyblue;
+}
+.black {
+	color: black;
+}
+.nobullet {
+	list-style: none;
+	padding: 0;
+	display: inline-block;
+}
+.nobullet.calendar-list > li {
+	border: 1px solid blue;
+	background-color: darkcyan;
+}
+.toolbar-wrapper {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	background-color: lightgray;
+}
+audio {
+	width: 100%;
+}
+.float-right {
+	float: right;
+}
+video {
+	height: 70%;
+	margin: 0;
+	padding: 0;
+}
+.name {
+	width: 100%;
+	font-size: 24px;
+	background-color: lightblue;
+	color: black;
+}
+.file-contents {
+	overflow: scroll;
+	width: 100%;
+	max-height: 75%;
+}
+.smaller {
+	font-size: 90%;
+}
+.box {
+	border: 1px solid;
+	padding: 3px;
+	max-height: 300px;
+	overflow-y: scroll;
+}
+.fakebutton {
+	padding: 7px;
+	text-transform: uppercase;
+	background-color: blue;
+	color: white;
+}
+.width-100 {
+	width: 100%;
+}
+.colorpreview::after {
+	content: "\00a0\00a0";
+	display: inline-block;
+	width: 30px;
+}
+.diff-comment {
+	color: #eeeeee;
+	font-style: italic;
+}
+.delete-string {
+	background-color: red;
+	color:white;
+}
+.add-string {
+	background-color: lime;
+	color: black;
+}
+.media {
+	background-color: white;
+	color: black;
+	display: block;
+	border: 1px solid;
+}
+.media::before {
+	content: "Media:";
+	font-weight: 700;
+	font-size: 1.5em;
+}
+.player {
+	max-width: 75%;
+}
+.block {
+	display: block;
+}
+ul.flex {
+	display: flex;
+	margin: 0;
+	padding: 3px;
+	list-style: none;
+}
+ul.flex > li {
+	margin: 0;
+	padding: 2px;
+}
+.semantic {
+	list-style: none;
+	margin: 0;
+}
+.border {
+	border: 1px solid;
+}
+.accepted {
+	background-color: darkgreen;
+}
+.options {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+}
+.options li a {
+	border: 1px solid;
+	padding: 1px;
+	text-decoration: none;
+	margin: 2px;
+}
+.options li a:not(:hover) img {
+	filter: grayscale(100%);
+}
+.dropdown {
+	position: relative;
+	display: none;
+}
+.dropdown > .dropdown-content {
+	display: none;
+	position: absolute;
+}
+.dropdown:hover > .dropdown-content {
+	display: block;
+	color: black;
+	background-color: white;
+}
+.dropdown:hover > .dropdown-content > .item {
+	appearance: none;
+	-webkit-appearance: none;
+	border: 1px solid;
+	padding: 7px;
+	display: block;
+	cursor: pointer;
+}
+.dropdown:hover > .dropdown-content > .item:hover {
+	background-color: #eeeeee;
+}
+.brightred {
+	background-color: red !important;
+	color: white;
+}
+.mdtable td, .mdtable th {
+	padding: 3px;
+}
+.fixed-layout {
+	table-layout: fixed;
+	display: table;
+	width: 100%;
+}
+.fixed-layout td, .fixed-layout th {
+	word-wrap: break-word;
+	padding: 3px;
+}
+td[colspan] {
+	text-align: center;
+<<<<<<< HEAD
+}
+ @media only screen and (max-width: 464px) {
+	#personal-links {
+		display: none;
+	}
+ }
+=======
+}
+>>>>>>> 0dd6ba65130b774d8e078ba9c410e6bb02f22f53
