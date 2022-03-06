@@ -1,5 +1,0 @@
-<div>weeklyd3 on 2022:02:24 22:46:00:<div><p>Test reply
-</p>
-</div>with attachment &quot;sample.txt&quot;</div><div>weeklyd3 on 2022:02:24 23:32:00:<div><p>no ping
-</p>
-</div>with attachment &quot;&quot;</div>
