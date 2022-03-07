@@ -47,7 +47,7 @@ function getMsg(string $room) {
 	<?php 
 	if (verifyAdmin() || $config->author === getname()) { ?><li><a href="edit_topic.php?name=<?php echo $esname; ?>">
 	<img src="img/icons/PencilIcon.png" alt="" />
-	Edit</li><?php } ?>
+	Edit</a></li><?php } ?>
 	<li><a href="revisions.php?topic=<?php echo $esname; ?>">
 	<img src="img/icons/RevisionsIcon.png" alt="" />
 	View <?php echo isset($config->revisions) ? count($config->revisions) : 1; ?> revision(s)</a></li>
@@ -58,7 +58,7 @@ function getMsg(string $room) {
 		Flag topic</a></li><?php 
 	} 
 if (verifyAdmin() || ($config->author === getname() && count((array) $msg) === 0))	{
-	?><li><a href="deletionmgrtopic.php?topic=<?php echo $esname; ?>"><img src="img/icons/XIcon.png" alt="" /> Delete/Undelete</a></li><?php
+	?><li><a href="deletionmgrtopic.php?topic=<?php echo $esname; ?>"><img src="img/icons/XIcon.png" alt="" /> Manage Deletion</a></li><?php
 }
 ?>
 	</ul>
@@ -75,7 +75,7 @@ if (verifyAdmin() || ($config->author === getname() && count((array) $msg) === 0
 		$espost = htmlspecialchars(urlencode($id));
 		$skip = isset($message->del) && (!verifyAdmin() && $message->author !== getname()) || ($deleted && !verifyAdmin());
 		if (isset($message->del) || $deleted) {
-			?><div class="border error" style="color:black;background-color:#ffdddd;">This post has been deleted by <?php userlink($message->del->user ?? ($del->user  ?? null)); ?> for the reason: <?php echo htmlspecialchars($message->del->reason ?? "automatic deletion"); ?>. More information:<pre><?php echo htmlspecialchars(isset($message->del->extendedReason) ? $message->del->extendedReason : "None available"); ?></pre></div><?php
+			?><div class="border error" style="color:black;background-color:#ffdddd;">This post has been deleted by <?php userlink($message->del->user ?? ($del->user  ?? null)); ?> for the reason: <?php echo htmlspecialchars($message->del->reason ?? "automatic deletion"); ?><br /> More information:<pre><?php echo htmlspecialchars(isset($message->del->extendedReason) ? $message->del->extendedReason !== "" ? $message->del->extendedReason : "None available" : "None available"); ?></pre></div><?php
 		}
 		if ($skip) continue;
 	?>
@@ -118,6 +118,21 @@ if (verifyAdmin() || ($config->author === getname() && count((array) $msg) === 0
 	<div>Post options:
 		<ul class="flex options">
 			<?php
+			if (verifyAdmin() || $message->author === getname()) {
+				?><li>
+				<a href="deletionmgrpost.php?topic=<?php echo $esname; ?>&post=<?php echo $espost; ?>">
+				<img src="img/icons/XIcon.png" alt="" />
+				Manage Deletion
+				</a>
+				</li>
+				<li>
+				<a>
+				<img src="img/icons/PencilIcon.png" alt="" />
+				Edit
+				</a>
+				</li>
+				<?php
+			}
 		if ($message->author === getname()) { ?>
 			<li>
 				<a href="markasanswer.php?topic=<?php echo $esname; ?>&post=<?php echo $espost; ?>">

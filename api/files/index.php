@@ -2,7 +2,7 @@
 header("Content-Type: application/json");
 require '../../libraries/lib.php';
 $search = isset($_GET['search']) ? $_GET['search'] : null;
-$dir = scandir(__DIR__ . '/../../files/uploads', SCANDIR_SORT_NONE);
+$dir = scandir(__DIR__ . '/../../files/uploads/', SCANDIR_SORT_NONE);
 $dir = array_diff($dir, array('..', '.'));
 $results = array();
 foreach ($dir as $file) {

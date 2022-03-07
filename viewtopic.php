@@ -272,7 +272,9 @@ getMsg($_GET['room']);
 	<br />
 	<input type="button" id="insertmedia" value="Insert media" />
 	<br />
-	<label for="messages">message (markdown allowed, no spam please), <button type="button" onclick="preview()">preview</button></label><textarea rows="7" <?php if ($_COOKIE['login']==''){echo 'disabled="disabled"'; }?> onkeydown="enterPressed(event)" name="message" id="messages" style="width:100%;" required="required" placeholder="Type here"></textarea><br />
+	<label for="messages">message (markdown allowed, no spam please), <button type="button" onclick="preview()">preview</button></label>
+	<br />
+	<textarea rows="7" <?php if (!getname()){echo 'disabled="disabled"'; }?> onkeydown="enterPressed(event)" name="message" id="messages" style="width:100%;" required="required" placeholder="Type here"></textarea><br />
 	<div id="previewHTML" style="display:none;">Click 'preview'!</div>
 		<details><summary>How to reply to a question</summary>
 		<ol>
@@ -290,8 +292,7 @@ getMsg($_GET['room']);
 	<input type="hidden" name="room" value="<?php echo htmlspecialchars($GLOBALS['room']); ?>" /><br />
 	<input type="hidden" name="js" value="a" />
 	<?php
-	$name = $_COOKIE['login'];
-	if ($name != "") {
+	if (getname()) {
 		echo '<input type="hidden" name="login" value="'.htmlspecialchars(getname()).'" />';
 		echo '<input type="submit" value="send" />';
 		echo '&nbsp;&nbsp;<input type="button" value="stop refresh" onclick="clearInterval(refresh);document.getElementById(\'status\').innerHTML=\'Disconnected. Reload to start connection again.\';" />';

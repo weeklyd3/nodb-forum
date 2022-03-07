@@ -25,7 +25,7 @@ data/messages/
 data/accounts/
 log.json
 data/community/events
-files/uploads
+#files/uploads
 messages/reports.json
 *.py
 review/items.json
