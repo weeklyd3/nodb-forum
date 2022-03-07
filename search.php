@@ -40,6 +40,7 @@
   ?></code></p>
   <p>Results in topics and posts are shown below. If you want to search the whole site, please <a href="https://google.com/search?q=site:<?php echo htmlspecialchars(urlencode($_SERVER['HTTP_HOST'] . " " . $_GET['query'])); ?>">do a Google Search instead.</a></p>
   <?php 
+  $starttime = microtime(true);
   $GLOBALS['results'] = array();
   // use usort for the search results
   function addResultToSearch(string $room, ?string $post) {
@@ -54,24 +55,35 @@
 		  $msg = $json->$post;
 		  $posttext = strip_tags($msg->html);
 		  $matches = custom_substr_count($posttext, $terms);
+		  if (isset($msg->del)) {
+			  $viewable = verifyAdmin() || $msg->author === getname();
+		  } else {
+			  $viewable = true;
+		  }
 	  } else {
 		  $json = json_decode(file_get_contents(__DIR__ . '/data/messages/' . cleanFilename($room) . '/config.json'));
 		  $msg = $json;
 		  $posttext = strip_tags($msg->description_html);
-		  $matches = custom_substr_count($posttext, $terms);
+		  $matches = custom_substr_count($posttext, $terms) + custom_substr_count($postconfig->title, $terms);
+		  if (file_exists(__DIR__ . '/data/messages/' . cleanFilename($room) . '/del.json')) {
+			  $viewable = verifyAdmin() || $msg->author === getname();
+		  } else {
+			  $viewable = true;
+		  }
 	  }
 	  if ($matches > 0) {
-		  array_push($GLOBALS['results'], new searchResult($room, $post, $matches, $posttext));
+		  array_push($GLOBALS['results'], new searchResult($room, $post, $matches, $posttext, $viewable));
 	  }
 	  return;
   }
   $rooms = array_diff(scandir(__DIR__ . '/data/messages', SCANDIR_SORT_NONE), array('.', '..', 'index.php'));
   class searchResult {
-	  public function __construct(string $room, ?string $post, int $matches, string $text) {
+	  public function __construct(string $room, ?string $post, int $matches, string $text, bool $viewable) {
 		  $this->room = $room;
 		  $this->post = $post;
 		  $this->matches = $matches;
 		  $this->text = $text;
+		  $this->viewable = $viewable;
 	  }
   }
   foreach ($rooms as $room) {
@@ -85,6 +97,9 @@
 	  }
   }
   ?><ul style="list-style: none; padding: 0; margin: 0;"><?php 
+  $GLOBALS['results'] = array_filter($GLOBALS['results'], function($r) {
+	  return $r->viewable;
+  });
   usort($GLOBALS['results'], function($a, $b) {
 	  return ($a->matches) - ($b->matches);
   });
@@ -95,6 +110,10 @@
   }
   $regex .= implode("|", $regexterms);
   $regex .= ")/i";
+  $endtime = microtime(true);
+  ?>
+  <p><b><?php echo count($GLOBALS['results']); ?></b> result(s) found in <b><?php echo round(($endtime - $starttime) * 1000, 3); ?></b> milliseconds.</p>
+  <?php
   foreach (array_reverse($GLOBALS['results']) as $result) {
 	  ?><li style="padding-top: 2px; padding-bottom: 2px;">
 	  <h3>
