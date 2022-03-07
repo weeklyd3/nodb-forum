@@ -40,9 +40,8 @@
 			echo 'Random order';
 		}
 	}
-	function paginateButton() {
-		$items = count(scandir(__DIR__.'/../data/messages/', SCANDIR_SORT_ASCENDING)) - 3;
-
+	function paginateButton($items) {
+		$items = count($items);
 		$page = isset($_GET['page']) ? $_GET['page'] : 1;
 		$size = 10;
 		if (ceil($items/$size) == 1) return;
@@ -117,7 +116,6 @@ Shuffle
 <input type="submit" value="Go!" /></form>
 <strong>Showing <em><?php echo $size; ?></em> entries on page <?php echo isset($_GET['page']) ? $_GET['page'] : 1; ?></strong><br />
 <?php
-paginateButton();
 if (!$sort || $sort == 'active')
 	$handle = scan_dir(__DIR__.'/../data/messages/', "msg.json");
 if ($sort == 'abc_asc')
@@ -134,9 +132,20 @@ if (($sort == 'os' || $sort == 'random'))
 	$handle = scandir(__DIR__.'/../data/messages/', SCANDIR_SORT_NONE);
 if ($sort == 'random')
 	shuffle($handle);
-
-$handle = array_diff($handle, array('.', '..', 'index.php'));
+$handle = array_diff($handle, array('.', '..', 'readme.txt'));
+$handle = array_filter($handle, function($n) {
+	if (!is_dir(__DIR__ . '/../data/messages/' . $n)) return;
+	if (!file_exists(__DIR__ . '/../data/messages/' . $n . '/del.json')) return true;
+	$config = json_decode(file_get_contents(__DIR__ . '/../data/messages/' . $n . '/config.json'));
+	return ($config->author === getname()) || verifyAdmin();
+});
 $handle = array_values($handle);
+paginateButton($handle);
+
+if (count($handle) === 0) {
+	?><h2>No discussions yet.</h2><p>No one has started a topic yet.</p> <a href="create.php">Start a new discussion?</a><?php
+	return;
+}
 if (true) {
 	echo "<table style=\"width:100%;\" id=\"topics\">";
 	?><tr><th class="topic-header">Name</th><th class="topic-header">Views</th><th class="topic-header">Created</th><th class="topic-header">Active</th><th class="topic-header">Replies</th></tr><?php
@@ -149,13 +158,6 @@ if (true) {
 			$del = file_exists('data/messages/'.$entry.'/del.json');
 			$config = file_get_contents('data/messages/'.$entry.'/config.json');
 			$config = json_decode($config);
-			if ($del) {
-				if ($config->author !== getname()) {
-					if (!verifyAdmin()) {
-						continue;
-					}
-				}
-			}
 			echo '<tr style="width:100%;';
 			if ($del) {
 				?>background-color:#ffdddd;<?php
@@ -198,7 +200,7 @@ if (true) {
 <style>tr.gallery>td { border-radius: 10px !important; } </style>
 There are <?php echo ceil($count/$size); ?> page(s) total.<br />
 <?php 
-paginateButton();
+paginateButton($handle);
 ?>
 <style>.topic-header {
 	border-radius: 10px;
