@@ -102,13 +102,13 @@ globalThis.noOpenButton = true;	initFilePicker(document.getElementById('filename
   if (startsWith($type, "image/")) {
 	  ?>image.</p>
 	  <?php $GLOBALS['t'] = toolbar($n); ?>
-	  <img src="files/uploads/<?php echo htmlspecialchars($n); ?>" alt="User-uploaded image" /><?php
+	  <img src="files/download.php?filename=<?php echo htmlspecialchars(urlencode($n)); ?>" alt="User-uploaded image" class="viewer" /><?php
   }
   if (startsWith($type, "audio/")) {
 	  ?>audio.</p>
 	  <figcaption>You can play the file:</figcaption>
 	  <?php $GLOBALS['t'] = toolbar($n); ?>
-	  <audio controls="controls" src="files/uploads/<?php echo htmlspecialchars($n); ?>">
+	  <audio controls="controls" src="files/download.php?filename=<?php echo htmlspecialchars(urlencode($n)); ?>">
 	  Oh no! Browser
 	  not supported. Try downloading and opening with a 
 	  music player program.</audio><?php
@@ -135,7 +135,7 @@ globalThis.noOpenButton = true;	initFilePicker(document.getElementById('filename
 	  <?php 
 	  $GLOBALS['t'] = toolbar($n, true); ?>
 	  <video controls="controls">
-	  <source src="files/uploads/<?php echo htmlspecialchars($n); ?>" />
+	  <source src="files/download.php?filename=<?php echo htmlspecialchars(urlencode($n)); ?>" />
 	  Oh no! Browser not supported. Try downloading and opening with a video player.</video><?php
   }
   ?><style>.file-contents { overflow: scroll; max-height: 90vh; }</style><?php

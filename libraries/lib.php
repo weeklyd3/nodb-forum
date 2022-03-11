@@ -211,25 +211,25 @@ function dateDiff(int $before, int $after) {
 	$now->setTimestamp($after);
 	$dff = $now->diff($bef, true);
 	if ($dff->y >= 10) {
-		return "About " . $dff->y . " years ago";
+		return "About " . $dff->y . " year(s) ago";
 	}
 	if ($dff->y >= 1) {
-		return "About " . $dff->y . "years and " . $dff->m . " months ago";
+		return "About " . $dff->y . "year(s) and " . $dff->m . " month(s) ago";
 	}
 	if ($dff->m >= 1) {
-		return "About " . $dff->m . " months and " . $dff->d . " days ago";
+		return "About " . $dff->m . " month(s) and " . $dff->d . " day(s) ago";
 	}
 	if ($dff->d >= 1) {
 		return "Yesterday";
 	}
 	if ($dff->h >= 1) {
-		return $dff->h . " hours and " . $dff->i . " minutes ago";
+		return $dff->h . " hour(s) and " . $dff->i . " minute(s) ago";
 	}
 	if ($dff->i >= 1) {
-		return $dff->i . " minutes and " . $dff->s . " seconds ago";
+		return $dff->i . " minute(s) and " . $dff->s . " second(s) ago";
 	}
 	if ($dff->s >= 0) {
-		return $dff->s . " seconds ago";
+		return $dff->s . " second(s) ago";
 	}
 }
 function colorNum(int $num): string {

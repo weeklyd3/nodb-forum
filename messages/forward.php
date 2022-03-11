@@ -49,13 +49,13 @@ if (!isset($file->$message)) {
 	<label hidden="hidden">Do not touch! <input name="subject" value="Fwd: <?php echo htmlspecialchars($msg->subject); ?>" /></label>
 	<label hidden="hidden">Do not touch!<textarea name="body"><?php
 echo '--- Forwarded Message ---';
-echo "\nFrom: " . htmlspecialchars($msg->from);
-echo "\nTo: " . htmlspecialchars(implode(', ', $msg->people));
-echo "\nDate: " . htmlspecialchars(date('l, F m, Y \a\t g:i:s A', $msg->time));
-echo "\nSubject: " . htmlspecialchars($msg->subject);
+echo "  \nFrom: " . htmlspecialchars($msg->from);
+echo "  \nTo: " . htmlspecialchars(implode(', ', $msg->people));
+echo "  \nDate: " . htmlspecialchars(date('l, F m, Y \a\t g:i:s A', $msg->time));
+echo "  \nSubject: " . htmlspecialchars($msg->subject);
 echo "\n\n";
 echo htmlspecialchars($msg->body);
-echo "\n--- End Forwarded Message ---";
+echo "  \n--- End Forwarded Message ---";
 ?></textarea></label>
 	<input type="submit" value="Review message" />
 	<input type="submit" name="send" value="Send message now" />

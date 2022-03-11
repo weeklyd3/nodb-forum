@@ -12,7 +12,14 @@
 # with this source code.
 #
 # Changes were made to the source code.
+require_once __DIR__ . '/htmlpurifier/library/HTMLPurifier.auto.php';
 
+
+$HTMLPurifierConfig = HTMLPurifier_Config::createDefault();
+$HTMLPurifierConfig->set('HTML.Doctype', 'XHTML 1.1');
+$HTMLPurifierConfig->set("Attr.AllowedRel", array('ugc noopener noreferrer' => true));
+$purifier = new HTMLPurifier($HTMLPurifierConfig);
+$GLOBALS['purifier'] = $purifier;
 class Parsedown
 {
     # ~
@@ -20,33 +27,6 @@ class Parsedown
     const version = '1.7.4';
 
     # ~
-	protected function filter($text, bool $inline = false) {
-		if ($text === '') return $text;
-		$GLOBALS['noerror'] = true;
-		$doc = new DOMDocument;
-		$doc->loadHTML($text, LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED);
-		unset($GLOBALS['noerror']);
-		// Add rel="ugc noopener" to all links
-		$alllinks = $doc->getElementsByTagName('a');
-		foreach ($alllinks as $link) {
-			$link->setAttribute('rel', 'ugc noopener');
-		}
-		$alltables = $doc->getElementsByTagName('table');
-		foreach ($alltables as $table) {
-			$table->setAttribute('class', 'table mdtable');
-		}
-		// Remove all attributes starting with
-		// on (e.g. onclick, onerror, etc.)
-		$allelements = $doc->getElementsByTagName('*');
-		foreach ($allelements as $element) {
-			foreach ($element->attributes as $a) {
-				if (startsWith($a->nodeName, 'on')) {
-					$element->removeAttribute($a->nodeName);
-				}
-			}
-		}
-		return $doc->saveHTML();
-	}
     function text($text)
     {
         # make sure no definitions are set
@@ -67,43 +47,8 @@ class Parsedown
         # trim line breaks
         $markup = trim($markup, "\n");
 
-        return $this->filter(strip_tags($markup, "<" . implode("><", $this->tags) . ">"));
+        return ($GLOBALS['purifier'])->purify($markup);
     }
-
-	# Whitelisted tags 
-	protected $tags = array(
-		"h1",
-		"h2",
-		"h3",
-		"h4",
-		"h5",
-		"h6",
-		"pre",
-		"code",
-		"kbd",
-		"p",
-		"table",
-		"tr",
-		"td",
-		"th",
-		"kbd",
-		"blockquote",
-		"details",
-		"summary",
-		"br",
-		"hr",
-		"strong",
-		"em",
-		"b",
-		"i",
-		"a",
-		"ul",
-		"ol",
-		"li",
-		"img",
-        "source",
-        "span"
-	);
 
     #
     # Setters
@@ -1194,11 +1139,8 @@ class Parsedown
         }
 
         $markup .= $this->unmarkedText($text);
-        return strip_tags($this->filter($markup), '<b><i><a><strong><em><code><img>');
+        return $markup;
     }
-	protected function stripTags(string $markup) {
-		return strip_tags($markup, "<" . implode("><", $this->tags) . ">");
-	}
 
     #
     # ~

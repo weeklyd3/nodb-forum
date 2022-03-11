@@ -94,8 +94,9 @@ class subPage {
 	public $title;
 	public $contents;
 	public $revisions;
-	public function __construct(string $title, string $contents, $editsummary = null) {
+	public function __construct(string $contentType, string $title, string $contents, $editsummary = null) {
 		if (!isset($editsummary)) $editsummary = "Created page with contents starting with \"" . substr($contents, 0, 15) . "\"";
+		$this->contentType = $contentType;
 		$this->title = $title;
 		$this->contents = $contents;
 		$this->revisions = array(new pageRevision($contents, $editsummary));
@@ -130,4 +131,21 @@ function checkIfPageExists(array $path, $obj) {
 		}
 	}
 	return $currentobj;
+}
+function displayPage(string $contents, string $type) {
+	$Parsedown = new Parsedown;
+	switch ($type) {
+		case 'txt':
+		?><pre><code><?php echo htmlspecialchars($contents); ?></code></pre><?php
+		break;
+		case 'js':
+		?><pre><code class="language-js"><?php echo htmlspecialchars($contents); ?></code></pre><?php
+		break;
+		case 'css':
+		?><pre><code class="language-css"><?php echo htmlspecialchars($contents); ?></code></pre><?php
+		break;
+		default:
+		echo $Parsedown->text($contents);
+		break;
+	}
 }

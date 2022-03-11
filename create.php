@@ -1,7 +1,7 @@
 <?php
 /*
     Forum Software
-    Copyright (C) 2021 contributors
+    Copyright (C) 2022 contributors
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -93,27 +93,37 @@
 		<label for="roomtitle">Room title:</label>
 		<input type="text" id="roomtitle" name="roomtitle" required="required" />
 		<br />
-		<div id="toolbar"><button type="button" onclick="document.getElementById('tips').src='files/md.php#bold';"><strong>B</strong></button>
-		<button type="button" onclick="document.getElementById('tips').src='files/md.php#italic';"><em>I</em></button>
+		<div class="box no-height-limit">
+			<?php
+			function editorOptions() {
+				?>
+		<ul class="options toolbar">
+			<li><a href="create.php#bold"><img src="img/icons/editor/BoldIcon.png" alt="Bold" /></a></li>
+			<li><a href="create.php#italic"><img src="img/icons/editor/ItalicIcon.png" alt="Italic" /></a></li>
+			<li><a href="create.php#bolditalic"><img src="img/icons/editor/BoldItalicIcon.png" alt="Bold and Italic" /></a></li>
+			&nbsp;
+			<li><a href="create.php#script"><img src="img/icons/editor/SubSuperScriptIcon.png" alt="Super/Subscript" /></a></li>
+			<li><a href="create.php#hr"><img src="img/icons/editor/HRIcon.png" alt="Horizontal rule" /></a></li>
+			&nbsp;
+			<li><a href="create.php#hyperlink"><img src="img/icons/editor/LinkIcon.png" alt="Hyperlink" /></a></li>
+			<li><a href="create.php#image"><img src="img/icons/editor/ImageIcon.png" alt="Image" /></a></li>
+			&nbsp;
+			<li><a href="create.php#other"><img src="img/icons/editor/MoreIcon.png" alt="Other formatting" /></a></li>
+		</ul><?php } 
+editorOptions(); ?>
 
-		<button type="button" onclick="document.getElementById('tips').src='files/md.php#sub';"><span><sub>2</sub></span></button>
-		<button type="button" onclick="document.getElementById('tips').src='files/md.php#sup';"><sup>2</sup></button>
-		
-		<button type="button" onclick="document.getElementById('tips').src='files/md.php#hr';">&mdash;</button>
-
-		<button type="button" onclick="document.getElementById('tips').src='files/md.php#block';"><span style="font-size:0.3rem;font-family:monospace;">ABC<br />DEF</span></button>
-		<button type="button" onclick="document.getElementById('tips').src='files/md.php#inlinecode';"><span style="font-family:monospace;">ABC</span></button>
-
-		<button type="button" onclick="document.getElementById('tips').src='files/md.php#link';">Link</button>
-
-		<button type="button" onclick="document.getElementById('tips').src='files/md.php#image';">Image</button>
-		<button type="button" onclick="window.open('files/', 'upload file', 'width=300,height=300');">Upload</button>
-			<b><a href="files" target="_blank">Button not working?</a></b>
-
+		<style>
+			#formatting > * {
+				display: none;
+			}
+			#bold:target, #italic:target, #bolditalic:target, #script:target, #hr:target, #code:target, #hyperlink:target, #image:target, #other:target {
+				display: block;
+			}
+		</style>
+			<?php require 'files/md.php'; ?>
+<p>View another tip:</p>
+			<?php editorOptions(); ?>
 		</div>
-		<button type="button" onclick="document.getElementById('tips').style.display = 'block';this.style.display='none';" style="width:100%;">Show formatting tips</button>
-
-		<iframe id="tips" src="files/md.php" style="display:none;width:100%;"></iframe>
 		<label for="description">Room description:</label><br />
 		<textarea required="required" maxlength="30000" name="description" id="description" rows="15" style="width:100%;" oninput="document.getElementById('chars').innerHTML=this.value.length+'/30000 allowed characters';"></textarea>
 		<div id="chars"><strong>Character limit:</strong> 30000</div>
@@ -145,6 +155,17 @@
 				}
 			?>
 		</details>
+		<script>
+			var toolbar = document.querySelectorAll('.toolbar a');
+			for (var index = 0; index < toolbar.length; index++) {
+				var item = toolbar[index];
+				item.addEventListener('click', function(event) {
+					event.preventDefault();
+					window.location.href = event.currentTarget.href;
+					document.querySelector('.toolbar').scrollIntoView();
+				});
+			}
+		</script>
 		<br />
 		<input type="submit" value="Create Room" />
 		<input type="reset" style="background-color:transparent !important;outline:none !important;border:none;color:white;" onclick="document.getElementById('chars').innerHTML = 'Discarded'" value="Discard" />

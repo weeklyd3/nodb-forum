@@ -60,7 +60,7 @@ foreach ($revisions as $number => $revision) {
 	<h3>Page at this time</h3>
 		<details>
 			<summary>Show page contents</summary>
-		<div class="smaller box"><?php echo $Parsedown->text($revision->contents); ?></div></details>
+		<div class="smaller box"><?php displayPage($revision->contents, $subpage->contentType ?? "markdown"); ?></div></details>
 		<h3>Page source at this time</h3>
 		<details><summary>View source</summary><pre class="smaller box markdown"><code style="display: block;"><?php echo htmlspecialchars($revision->contents); ?></code></pre></details>
 		<h3>Difference</h3>

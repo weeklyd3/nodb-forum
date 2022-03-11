@@ -51,7 +51,7 @@ function savePage() {
 				if (!isset($currentobj->files)) {
 					$currentobj->files = json_decode("{}");
 				}
-				$currentobj->files->$element = new subPage($element, $_POST['contents']);
+				$currentobj->files->$element = new subPage($_POST['type'], $element, $_POST['contents']);
 				$currentobj = $currentobj->files->$element;
 				$GLOBALS['currentobj'] = $currentobj;
 				eval('$obj' . $objPath . ' = $currentobj;');
@@ -71,11 +71,20 @@ function savePage() {
 		}
 		fwrite(fopen("../../data/accounts/" . cleanFilename(getname()) . '/subpages.json', 'w+'), base64_encode(serialize($obj)));
 		?><p>Page saved. <a href="<?php echo htmlspecialchars("account/pages/index.php?username=" . urlencode(getname()) . "&path=" . urlencode(implode("/", $path))); ?>">Click to visit it now.</a></p><?php
+		exit(0);
 	}
 }
 savePage();
 ?>
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+		<label>Choose the content type of the page. This cannot be changed later.<br />
+		<select name="type">
+			<option value="markdown">Markdown document</option>
+			<option value="txt">Plain text file</option>
+			<option value="js">JavaScript file</option>
+			<option value="css">CSS file</option>
+		</select>
+		</label><br />
 		<label>Enter the path and filename, without the leading slash. If the page already exists, an error will occur.
 		<input required="required" type="text" name="title" value="<?php if (isset($_POST['title'])) {
 	echo htmlspecialchars($_POST['title']);

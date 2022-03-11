@@ -315,6 +315,8 @@ video {
 .box {
 	border: 1px solid;
 	padding: 3px;
+}
+.box:not(.no-height-limit) {
 	max-height: 300px;
 	overflow-y: scroll;
 }

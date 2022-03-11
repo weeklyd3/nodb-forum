@@ -76,7 +76,7 @@
 	  }
 	  return;
   }
-  $rooms = array_diff(scandir(__DIR__ . '/data/messages', SCANDIR_SORT_NONE), array('.', '..', 'index.php'));
+  $rooms = array_diff(scandir(__DIR__ . '/data/messages', SCANDIR_SORT_NONE), array('.', '..', 'readme.txt'));
   class searchResult {
 	  public function __construct(string $room, ?string $post, int $matches, string $text, bool $viewable) {
 		  $this->room = $room;

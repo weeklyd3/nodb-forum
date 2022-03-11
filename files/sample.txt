@@ -1,0 +1,15 @@
+WARNING!!!
+-----------
+You just downloaded a file without asking the sender
+what it was. It was safe this time, but what about
+next time?
+
+So only download files that are sent from a trusted
+account! Files with dangerous extensions such as 
+ - .sh 
+ - .bat
+ - .cmd
+ - .js 
+ - .html 
+and others which can run on your computer can damage
+it.

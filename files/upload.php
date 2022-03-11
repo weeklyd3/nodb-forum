@@ -50,9 +50,11 @@ if (isset($_POST['upload'])) {
 		fwrite(fopen("../file_details.json", "w+"), json_encode($fileDetails));
 		echo "File is valid, and was successfully uploaded. <ul><li>URL: http://";
 		echo $_SERVER['HTTP_HOST'];
-		echo '/files/uploads/';
-		echo htmlspecialchars($name);
-		echo "</li><li>File name (for chat): ".$name.'</li></ul>';
+		echo '/files/download.php?filename=';
+		echo htmlspecialchars(urlencode($name));
+		echo "</li><li>File name (for chat): ".htmlspecialchars($name).'</li></ul>';
+		?><p>You can <a href="viewfile.php?filename=<?php echo htmlspecialchars(urlencode($name)); ?>">view the file online</a>, or upload another file below.</p>
+<hr /><?php
 	} else {
 		echo "<strong>Your file could not be uploaded!</strong> This might be because of your file being too large (see max size below), or because the destination filename is taken. Please try again with a smaller file and a different name. Thanks!\n";
 	}

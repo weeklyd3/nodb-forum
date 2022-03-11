@@ -37,7 +37,6 @@ if (!file_exists(__DIR__ ."/../config.json")) {
 }
 $object = json_decode(file_get_contents(__DIR__ ."/../config.json"));
 echo $object->forumtitle."</span></a></h1></td>";
-echo '<td><a href="explorer/">source code</a></td>';
 if (!getname()) {
 	echo '<td><a href="account/signup.php">sign up</a></td>';
 	echo '<td><a href="account/login.php">log in</a></td>';
@@ -77,7 +76,7 @@ if (!getname()) {
 			}
 		);
 </script>
-<tr><td rowspan="4" align="right"><form action="search.php" method="GET"><label for="query" style="display:none;">Search query:</label> <span style="padding:7px;border:1px solid; color: black; background-color: white;">
+<tr><td rowspan="3" align="right"><form action="search.php" method="GET"><label for="query" style="display:none;">Search query:</label> <span style="padding:7px;border:1px solid; color: black; background-color: white;">
 	<?php if (!isset($_GET['tags'])) { ?><span class="tag nohash"><a href="tagsearch.php" title="Add tags to search">[no tags]</a></span> <?php } 
 else {
 	$tags = array_unique(array_filter(explode(" ", $_GET['tags']), function($m) { return $m !== ""; }));

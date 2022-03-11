@@ -1,7 +1,7 @@
 <?php
 /*
     Forum Software
-    Copyright (C) 2021 contributors
+    Copyright (C) 2022 contributors
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -35,7 +35,9 @@ $GLOBALS['filterMethod'] = isset($_GET['filter']) ? $_GET['filter'] : "everythin
 		?>	<br /><div style="border-bottom:1px solid;">
 		<a href="account/">Account Options</a>
 		<span style="border-radius:3px 3px 0px 0px; text-decoration:none;border:1px solid;border-bottom:1px solid pink;">Private Messages</span>
-	</div><h2>Inbox</h2><div><a href="messages/new.php">Write message</a></div>
+	</div><h2>Private Messages</h2><div><a href="messages/new.php" class="fakebutton">
+		New Message
+	</a></div><br />
 	  <div>
 		  <?php 
 			function check(string $name) {
@@ -60,7 +62,9 @@ $GLOBALS['filterMethod'] = isset($_GET['filter']) ? $_GET['filter'] : "everythin
 		  </form>
 	  </div>
 		<table width="100%" class="messages table">
-			<tr class="msgheader"><th>From</th><th>Message</th><th>View</th></tr>
+			<tr class="msgheader">
+				<th>Date</th>
+			<th>From</th><th>Message</th><th>View</th></tr>
 			<?php 
 		$GLOBLALS['mailShown'] = 0;
 				if (!file_exists(__DIR__ . '/../data/accounts/' . cleanFilename(getname()) . '/msg.json')) {
@@ -76,8 +80,11 @@ $GLOBALS['filterMethod'] = isset($_GET['filter']) ? $_GET['filter'] : "everythin
 					?><tr<?php 
 						if (!in_array(getname(), $m->read)) {
 							?> style="font-weight:bold;"<?php
+						} else {
+							?> style="color: #dddddd;"<?php
 						}
 					?>>
+						<td><?php echo dateDiff($m->time, time()); ?></td>
 						<td><?php 
 					if (!in_array(getname(), $m->read)) {
 						?><img src="img/icons/RedDotIcon.png" />  <?php
@@ -94,7 +101,7 @@ $GLOBALS['filterMethod'] = isset($_GET['filter']) ? $_GET['filter'] : "everythin
 					</tr><?php
 				}
 		if (!$GLOBALS['mailShown']) {
-			?><tr><td colspan="3">
+			?><tr class="msgheader"><td colspan="3">
 				<h3>You have no messages.</h3>
 				<p>Try:</p>
 				<ul>
@@ -105,7 +112,7 @@ $GLOBALS['filterMethod'] = isset($_GET['filter']) ? $_GET['filter'] : "everythin
 			</td></tr><?php
 		}
 			?>
-			<tr class="msgheader"><th>From</th><th>Message</th><th>View</th></tr>
+			<tr class="msgheader"><th>Date</th><th>From</th><th>Message</th><th>View</th></tr>
 		</table>
 		<?php
 	}

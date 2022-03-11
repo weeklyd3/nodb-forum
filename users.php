@@ -26,7 +26,10 @@
   </head>
   <body><h2>Users</h2>This list shows all the members of this board.<?php
   $GLOBALS['size'] = 10;
-$handle = array_diff(scandir(__DIR__ . '/data/accounts/'), array('index.php', '.', '..', 'default.png'));
+$handle = array_diff(scandir(__DIR__ . '/data/accounts/'), array('readme.txt', '.', '..', 'default.png'));
+$search = isset($_GET['search']) ? $_GET['search'] : "";
+$GLOBALS['search'] = $search;
+if ($search !== "") $handle = array_filter($handle, function($n) { $user = file_get_contents('data/accounts/' . $n . '/user.txt'); return stripos($user, $GLOBALS['search']) !== false; });
 $page = isset($_GET['page'])
 	? (
 		is_numeric($_GET['page']) ? (int) $_GET['page'] : 1
@@ -48,18 +51,15 @@ function paginate($handle, $page, $total) {
 	?><a href="?page=<?php echo $total; ?>">last</a></div>
 	<?php
 }
-$search = isset($_GET['search']) ? $_GET['search'] : "";
 paginate($handle, $page, $total);
 $admins = json_decode(file_get_contents("config.json"));
 $admins = $admins->admins;
 ?><div id="gallery"><?php
 $GLOBALS['counter'] = 0;
 $GLOBALS['failEntries'] = 0;
-if ($handle = opendir(__DIR__ . '/data/accounts')) {
-	while (false !== ($entry = readdir($handle))) {
-		if (in_array($entry, array(".", "..", "default.png", "index.php"))) continue;
+foreach ($handle as $entry) {
+		if (in_array($entry, array(".", "..", "default.png", "readme.txt"))) continue;
 		$name = file_get_contents(__DIR__ . '/data/accounts/' . cleanFilename($entry) . '/user.txt');
-		if ($search !== "") { if (stripos($name, $search) === false) continue; }
 		if ($GLOBALS['failEntries'] < ($page - 1) * ($GLOBALS['size'])) {
 			$GLOBALS['failEntries']++;
 			continue;
@@ -83,7 +83,6 @@ if ($handle = opendir(__DIR__ . '/data/accounts')) {
 		<?php
 		$GLOBALS['counter']++;
 	}
-}
 ?>
 </div>
 <style>.flex { background-color: #94bdff; margin: 5px; } #gallery { display: flex; flex-wrap: wrap; }</style>

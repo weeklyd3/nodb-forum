@@ -57,7 +57,22 @@ if ($name === getname()) {
 		}
 	}
 ?>
-	  <p>You are here: <?php echo isset($_GET['path']) ? formatPath($_GET['path'], $name) : htmlspecialchars($name) . '\'s Subpages</a>'; ?></p></div>
+	  <p>You are here: <?php echo isset($_GET['path']) ? formatPath($_GET['path'], $name) : htmlspecialchars($name) . '\'s Subpages</a>'; ?></p>
+		  <details style="display: inline;" class="oneway" ontoggle="if (this.open) {console.log('open'); document.getElementById('pagename').select(); }">
+			  <summary>Go to...</summary>
+	  <form action="account/pages" style="display: inline;" method="GET">
+		  <label>
+			  Username:
+			  <input type="text" name="username" value="<?php echo htmlspecialchars($_GET['username']); ?>" />
+		  </label><br />
+		  <label>
+			  Path:<br />
+			  <input type="text" name="path" value="<?php echo htmlspecialchars($_GET['path']); ?>" id="pagename" class="width-100" />
+		  </label>
+		  <input type="submit" value="Go" />
+	  </form>
+		  </details>
+	  </div>
 	<?php 
 	$errorMSG = $name . " has no user subpages.";
 	$subpageJSON = __DIR__ . '/../../data/accounts/' . cleanFilename($name) . "/subpages.json";
@@ -79,7 +94,8 @@ function validatePath(array $path, $obj, string $baddirmsg) {
 	  			(<b>view</b> | <a href="account/pages/editpage.php?path=<?php echo htmlspecialchars(urlencode(implode("/", $path))); ?>&username=<?php echo htmlspecialchars(urlencode($name)); ?>"><?php echo $name === getname() ? "edit" : "view source"; ?></a> | <a href="account/pages/pagehistory.php?path=<?php echo htmlspecialchars(urlencode(implode("/", $path))); ?>&username=<?php echo htmlspecialchars(urlencode($name)); ?>">view history</a> | <a href="account/pages/createpage.php">new page</a>)
 	  			<?php 
 				$Parsedown = new Parsedown;
-				echo $Parsedown->text($obj->files->$item->contents);
+				$type = $obj->files->$item->contentType ?? "markdown";
+				displayPage($obj->files->$item->contents, $type);
 				exit(0);
 			}
 			die($baddirmsg);
@@ -89,16 +105,18 @@ function validatePath(array $path, $obj, string $baddirmsg) {
 	}
 	return $obj;
 }
-$obj = validatePath($path, $subpages, '<div class="blanket" style="display:block;"><div class="overlay" style="display:block;"><h3>Error</h3><p>The provided directory or file does not exist.</p><p>Please check for typos in the name and the user specified, or <a href="account/pages?username=' . htmlspecialchars(urlencode($name)) . '">return to the root directory</a>.</p></div></div>');
+$obj = validatePath($path, $subpages, '<h3>Error</h3><p>The provided directory or file does not exist.</p><p>Please check for typos in the name and the user specified, or <a href="account/pages?username=' . htmlspecialchars(urlencode($name)) . '">return to the root directory</a>.</p>');
 $objone = $subpages;
 foreach ($path as $index => $pathitem) {
 	if (isset($path[$index + 1])) {
 		$objone = $objone->folders->$pathitem;
 	} else {
 		if (isset($objone->files->$pathitem)) {
-			?><h3>Index page for this directory</h3><?php
+			?><h3>Index page for this directory</h3>
+<a href="account/pages/editpage.php?path=<?php echo htmlspecialchars(urlencode(implode("/", $path))); ?>&username=<?php echo htmlspecialchars(urlencode($name)); ?>"><?php echo $name === getname() ? "Edit " : "View source for "; ?>index page</a> | <a href="account/pages/pagehistory.php?path=<?php echo htmlspecialchars(urlencode(implode("/", $path))); ?>&username=<?php echo htmlspecialchars(urlencode($name)); ?>">Index page history</a>
+			<?php
 			$Parsedown = new Parsedown;
-			echo $Parsedown->text($objone->files->$pathitem->contents);
+			displayPage($objone->files->$pathitem->contents, $objone->files->$pathitem->contentType ?? "markdown");
 		}
 	}
 }

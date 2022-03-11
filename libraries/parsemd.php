@@ -1,5 +1,5 @@
 <?php
-require('parsedown.php');
+require 'parsedown.php';
 require 'lib.php';
 $Parsedown = new Parsedown();
 if (isset($_POST['description'])) {

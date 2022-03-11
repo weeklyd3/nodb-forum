@@ -20,13 +20,13 @@ function diff(string $old, string $new, string $oldcaption = "Old revision", str
 	}
 	?><table class="fixed-layout table exempt-from-format" style="width: 100%;">
 		<tr>
-		<th style="width: 50%;"><?php echo htmlspecialchars($oldcaption); ?></th>
-		<th style="width: 50%;"><?php echo htmlspecialchars($newcaption); ?></th>
+		<th><?php echo htmlspecialchars($oldcaption); ?></th>
+		<th><?php echo htmlspecialchars($newcaption); ?></th>
 		</tr>
 		<?php
 		$rowsSkipped = 0;
 
-		foreach ($unifiedVersion as $line) {
+		foreach ($unifiedVersion as $num => $line) {
 			$oldLine = isset($line['old']) ? $line['old'] : null;
 			$newLine = isset($line['new']) ? $line['new'] : null;
 			if ($oldLine === $newLine) {
@@ -42,7 +42,8 @@ function diff(string $old, string $new, string $oldcaption = "Old revision", str
 			}
 			$rowsSkipped = 0;
 			$inlineDiff = inlineDiff($oldLine, $newLine);
-			?><tr><td><?php echo $inlineDiff['old']; ?></td><td><?php echo $inlineDiff['new']; ?></td></tr><?php
+			?><tr>
+				<td><div style="white-space:pre-wrap; font-family: monospace;"><?php echo $inlineDiff['old']; ?></div></td><td><div style="white-space:pre-wrap; font-family: monospace;"><?php echo $inlineDiff['new']; ?></div></td></tr><?php
 		}
 	if ($rowsSkipped > 0) {
 		?><tr><td colspan="2">(<?php echo $rowsSkipped; ?> identical row(s) skipped)</td></tr><?php
@@ -52,10 +53,10 @@ function diff(string $old, string $new, string $oldcaption = "Old revision", str
 function inlineDiff(?string $oldline, ?string $newline): array {
 	$inlineDiff = array('old' => '', 'new' => '');
 	if (!isset($oldline) || !isset($newline)) {
-		if (!isset($oldline)) {
+		if (!isset($oldline) || $oldline === '') {
 			$inlineDiff['old'] = '<i>(empty)</i>';
 		}
-		if (!isset($newline)) {
+		if (!isset($newline) || $newline === '') {
 			$inlineDiff['new'] = '<i>(empty)</i>';
 		}
 	}
