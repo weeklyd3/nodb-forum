@@ -126,7 +126,7 @@ if (verifyAdmin() || ($config->author === getname() && count((array) $msg) === 0
 				</a>
 				</li>
 				<li>
-				<a>
+				<a href="edit_post.php?topic=<?php echo $esname; ?>&post=<?php echo $espost; ?>">
 				<img src="img/icons/PencilIcon.png" alt="" />
 				Edit
 				</a>
