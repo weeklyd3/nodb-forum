@@ -262,6 +262,13 @@ getMsg($_GET['room']);
 ?></div>
 	  <?php blockCheck(); ?>
 	  <details style="position:sticky; bottom:0; background-color:lightblue; overflow-y:scroll;max-height:calc(100% - 7em); color: black;">
+		  <form id="hidden-uploader" action="files" enctype="multipart/form-data" style="display: none;">
+			  <label>Do not touch this field.
+			  <input name="image" type="file" /></label>
+			  <input type="hidden" name="details" value="This is an image that was pasted and uploaded. If this file only contains simple text or shapes, it is in the public domain." />
+			  <input type="hidden" name="license" value="other" />
+			  <input type="hidden" name="randomize" value="" />
+		  </form>
 	<summary style="list-style: none;padding-left:10;">-<span></span>-> Reply</summary>
 	<span id="status">loading status</span><br />
 	<form action="javascript:void(0);" id="compose" onsubmit="post();">
@@ -278,7 +285,6 @@ getMsg($_GET['room']);
 	<div id="previewHTML" style="display:none;">Click 'preview'!</div>
 		<details><summary>How to reply to a question</summary>
 		<ol>
-			<li>All replies, even those by trusted users, go through a review system, which can be accessed by any user (including you!) <a href="review/">here</a>. In review, good posts are allowed to pass while low-quality posts are flagged for further review by administrators. Before someone reviews your post, the post will still be visible to everyone. (Reviewing your own post is not allowed.)</li>
 			<li>Make sure your post is a legitimate attempt at responding to the question. Replies stating that someone has the same problem and follow up questions are not permitted.</li>
 			<li><strong>No matter how late you are, feel free to submit a response anyway. Even if the original person got an answer, others might appreciate another solution.</strong></li>
 			<li>Make sure your post is readable. You can press the "preview" button to see how it will look.</li>
@@ -355,7 +361,55 @@ mediaForm.addEventListener('submit', function() {
 	insertAtCursor(document.querySelector('textarea[required]'), markdown);
 	document.getElementById('insertmediaoverlay').style.display = 'none';
 });
+		document.getElementById('messages').addEventListener('paste', (e) => {
+  document.querySelector('input[name=image]').files = e.clipboardData.files;
+			if (!document.querySelector('input[name=image]').files[0]) return;
+			if (document.querySelector('input[name=image]').files[0].type.split('/')[0] !== 'image') return;
+
+			uploadPrompt();
+	console.log(e.clipboardData);
+	});
+		function uploadPrompt() {
+			loadFile();
+			document.getElementById('uploadPrompt').style.display = 'block';
+		}
+		function uploadHiddenFile() {
+			var request = new XMLHttpRequest();
+			request.addEventListener('load', function() {
+				var response = JSON.parse(this.responseText);
+				nodbForum.insertIntoInput(document.querySelector('textarea[id=messages]'), "[![" + response.name + "](files/download.php?filename=" + encodeURIComponent(response.name) + ")](viewfile.php?filename=" + encodeURIComponent(response.name) + ")");
+				document.getElementById('uploadPrompt').style.display = 'none';
+				document.querySelector('input[id=uploadButton]').removeAttribute('disabled');
+				document.querySelector('[id=uploadButton]').value = "Upload";
+				document.querySelector('[id=uploadCancel]').removeAttribute('disabled');
+			});
+			request.open('POST', 'api/files/upload.php', true);
+			request.send(new FormData(document.querySelector('#hidden-uploader')));
+		}
+  var loadFile = function(event) {
+    var output = document.getElementById('preview');
+    output.src = URL.createObjectURL(document.querySelector('[name=image]').files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src);
+    }
+  };
 </script>
+	  <div class="blanket" id="uploadPrompt" style="display: none;width:100vw;height:100vw;">
+	<div class="overlay" style="display:block;">
+		<h2>Upload image?</h2>
+		
+			<figure style="float: right;">
+    <img id="preview" alt="Preview image" style="max-width: 50%;" />
+    <figcaption>This image will be uploaded if you continue.</figcaption>
+</figure>
+		<p>To insert this image, it will be uploaded to the server. Please make sure this image has no sensitive information, as it will be available publicly.</p>
+		<p>The Markdown code to embed the image will be automatically inserted after the image has been uploaded.</p>
+
+		<input id="uploadButton" type="button" value="Upload" onclick="this.value = 'Uploading...'; document.getElementById('uploadCancel').disabled = 'disabled'; this.disabled = 'disabled'; uploadHiddenFile();" />
+		<input type="button" id="uploadCancel" value="Cancel" onclick="document.getElementById('preview').style.display = 'none';"
+ />
+	</div>
+</div>
 <div class="blanket" id="overlay" style="display: none;width:100vw;height:100vw;">
 	<div class="overlay" style="display:block;">
 		<h2>A problem occurred while sending your request</h2>

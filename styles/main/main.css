@@ -442,3 +442,6 @@ ul.flex > li {
 td[colspan] {
 	text-align: center;
 }
+img {
+	max-width: 100%;
+}

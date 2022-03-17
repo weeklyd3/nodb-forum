@@ -133,7 +133,7 @@ if (verifyAdmin() || ($config->author === getname() && count((array) $msg) === 0
 				</li>
 				<?php
 			}
-		if ($message->author === getname()) { ?>
+		if ($config->author === getname()) { ?>
 			<li>
 				<a href="markasanswer.php?topic=<?php echo $esname; ?>&post=<?php echo $espost; ?>">
 				<img src="img/icons/CheckIcon.png" alt="" />

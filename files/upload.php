@@ -31,11 +31,14 @@ blockCheck();
 if (!isset($_COOKIE['login'])) {
 	die("You must log in to upload files.");
 }
-if (isset($_POST['upload'])) {
+if (isset($_FILES['image'])) {
 	ini_set('upload_tmp_dir', __DIR__ . '/uploads/');
 	$uploaddir = __DIR__ . '/uploads/';
 	$name = cleanFilename(basename($_FILES['image']['name']));
-	$uploadfile = $uploaddir . cleanFilename(basename($_FILES['image']['name']));
+	if (isset($_POST['randomize'])) {
+		$name = cleanFilename(getname() . "-" . time()) . "-" . array_rand(range(1, 2)) . "-" . $name;
+	}
+	$uploadfile = $uploaddir . $name;
 
 	echo '<pre>';
 	if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile)) {
@@ -46,7 +49,7 @@ if (isset($_POST['upload'])) {
 		$information->license = $_POST['license'];
 		$information->extendedLicense = $licenses[$_POST['license']];
 		$information->details = $_POST['details'];
-		$fileDetails->{cleanFilename(basename($_FILES['image']['name']))} = $information;
+		$fileDetails->{$name} = $information;
 		fwrite(fopen("../file_details.json", "w+"), json_encode($fileDetails));
 		echo "File is valid, and was successfully uploaded. <ul><li>URL: http://";
 		echo $_SERVER['HTTP_HOST'];
@@ -66,6 +69,19 @@ if (isset($_POST['upload'])) {
 <h3>Choose the file to upload</h3>
 <label for="image" class="fileupload">Text file or image: </label>
 <input type="file" accept="text/*, image/*" required="required" id="image" name="image" />
+	<script>
+		var fileInput = document.querySelector('input[type=file]');
+
+window.addEventListener('paste', e => {
+  fileInput.files = e.clipboardData.files;
+	console.log(e.clipboardData);
+	document.getElementById('randomize').checked = 'checked';
+});
+		document.getElementById('jspastetips').removeAttribute('hidden');
+</script>
+	<p hidden="hidden" id="jspastetips">Alternatively, you can paste a file.</p>
+	<p>If you have a generic filename, click below to have a unique string prepended to the filename to avoid conflicts with files of the same name:</p>
+	<label><input type="checkbox" name="randomize" id="randomize" /> Attach unique string to filename</label>
 <div>
 <h3>Fill in details</h3>
 <p>If the form refuses to submit, make sure that these fields are filled out.</p>

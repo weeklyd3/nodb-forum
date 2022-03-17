@@ -108,7 +108,7 @@ require(__DIR__ . '/../libraries/parsedown.php');
 <li><a href="./account/login.php">Log in to different account</a></li>
 <li><a href="./account/signup.php">Sign up for account</a></li>
 <br>
-<li><a href="./explorer">File Explorer</a></li>
+<li><a href="./files/directory.php">File Explorer</a></li>
 <li><a href="https://github.com/weeklyd3/nodb-forum">GitHub repository</a></li>
 <li><a href="app/tools/">Moderation Tools</a></li>
 </ul>
