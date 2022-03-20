@@ -34,6 +34,13 @@
 	  exit(0);
   }
 		if (isset($_POST['roomtitle'])) {
+			$contribsPath = __DIR__ . '/data/accounts/' . cleanFilename(getname()) . '/contribs.json';
+			if (!file_exists($contribsPath)) $contribs = array();
+			else $contribs = json_decode(file_get_contents($contribsPath));
+			$contrib = new stdClass;
+			$contrib->room = $_POST['roomtitle'];
+			array_unshift($contribs, $contrib);
+			fwrite(fopen($contribsPath, 'w+'), json_encode($contribs));
 			$parsedown = new Parsedown();
 			class Room {
 				function __construct($message) {
@@ -131,8 +138,75 @@ editorOptions(); ?>
 		<div id="preview" style="border:1px solid;padding:2px;">markdown preview here</div>
 		<br />
 		<label>Enter your tags separated by spaces:
-		<input required="required" type="text" style="width: 100%;" name="tags" placeholder="Add your tags" />
-		</label>
+		<input required="required" type="text" style="width: 100%;" name="tags" placeholder="Add your tags" /></label><br /><label>
+			<span hidden="hidden">Search for tags:</span> 
+			<input style="width: 100%;" id="search4tags" placeholder="Search for tags..." />
+			
+			<ul style="display: none; position: absolute; z-index: 3328; background-color: white; border: 1px solid; color: black; list-style: none; padding: 0; width: calc(100% - 18px); max-height: calc(50% - 18px); overflow-y: scroll;" id="tag-chooser">
+				<li style="position: sticky; top: 0; background-color: white;" class="no-choose" id="no-choose">Tag chooser (<a onclick="document.getElementById('tag-chooser').style.display = 'none';" href="javascript:;">close</a>)</li>
+			</ul>
+			</label>
+	<?php if (isset($_POST['roomtitle'])) exit(0); ?>	<script>globalThis.tags=JSON.parse(<?php echo json_encode(json_encode($config->tags)); ?>);
+			document.querySelector('#search4tags').value = '';
+		document.querySelector('#search4tags').addEventListener('input', function() {
+	  	document.getElementById('tag-chooser').style.display = 'block';
+			var searchTerm = document.querySelector('#search4tags').value;
+			var firstChild = document.querySelector('#tag-chooser').firstElementChild;
+document.querySelector('#tag-chooser').innerHTML = '';
+			document.querySelector('#tag-chooser').appendChild(firstChild);
+	  if (searchTerm === '') return;
+			var entriesAdded = 0;
+			globalThis.tags.forEach(function(tag) {
+				if (!tag.includes(searchTerm)) {
+					return;
+				}
+	  entriesAdded++;
+				var searchQueryEntry = document.createElement('li');
+				searchQueryEntry.textContent = tag;
+				searchQueryEntry.addEventListener('click', function() {
+	  if (document.querySelector('[name=tags]').value !== "" && !document.querySelector('[name=tags]').value.endsWith(" ")) {
+					document.querySelector('[name=tags]').value += " " + tag;
+	  } else {
+	  document.querySelector('[name=tags]').value += tag;
+	  }
+	  
+				});
+	  document.querySelector('#tag-chooser').appendChild(searchQueryEntry);
+			});
+	  if (entriesAdded === 0) {
+	  var noResults = document.createElement('li');
+	  noResults.classList.add('no-choose');
+	  noResults.textContent = "No results. If you would like to create this tag, please click this message.";
+	  if (!searchTerm.includes(" ")) {
+	  noResults.addEventListener('click', function() {
+	  var newTagName = (document.querySelector('[name=tags]').value !== "" && !document.querySelector('[name=tags]').value.endsWith(" ")) ? " " : "";
+	  newTagName += searchTerm;
+	  document.querySelector('[name=tags]').value += newTagName;
+		  document.querySelector('#tag-chooser').style.display = 'none';
+		  document.querySelector('#search4tags').value = '';
+	  });
+	  } else {
+	  noResults.style.color = 'red';
+	  noResults.textContent = 'Error: Tags cannot contain spaces.';
+	  }
+	  document.querySelector('#tag-chooser').appendChild(noResults);
+	  }
+		});
+		</script>
+		<style>
+			#tag-chooser li:not(.no-choose):hover {
+				background-color: blue;
+				color: white;
+				cursor: pointer;
+			}
+			#tag-chooser li.no-choose {
+				color: gray;
+			}
+			#tag-chooser li {
+				border: 1px solid;
+				padding: 7px;
+			}
+		</style>
 		<details>
 			<summary>What to do to get a response faster</summary>
 			<ul>

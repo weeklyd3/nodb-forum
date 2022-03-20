@@ -406,7 +406,7 @@ mediaForm.addEventListener('submit', function() {
 		<p>The Markdown code to embed the image will be automatically inserted after the image has been uploaded.</p>
 
 		<input id="uploadButton" type="button" value="Upload" onclick="this.value = 'Uploading...'; document.getElementById('uploadCancel').disabled = 'disabled'; this.disabled = 'disabled'; uploadHiddenFile();" />
-		<input type="button" id="uploadCancel" value="Cancel" onclick="document.getElementById('preview').style.display = 'none';"
+		<input type="button" id="uploadCancel" value="Cancel" onclick="document.getElementById('uploadPrompt').style.display = 'none';"
  />
 	</div>
 </div>

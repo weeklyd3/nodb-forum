@@ -39,7 +39,7 @@
 	  <h2>Profile: <?php echo htmlspecialchars($username); ?></h2>
 	  <?php 
 	  if (file_exists('../data/accounts/'.cleanFilename($username).'/ban.txt')) {
-		  ?><div style="background-color:red;">This user account has been blocked and is unable to respond to messages. Block reason: <i><?php echo htmlspecialchars(file_get_contents('../data/accounts/'.cleanFilename($username).'/ban.txt')); ?></i></div><?php
+		  ?><div style="background-color:red;">This user account has been blocked and is unable to respond to messages. Block reason: <i><?php echo file_get_contents('../data/accounts/'.cleanFilename($username).'/ban.txt'); ?></i></div><?php
 	  } ?>
 	  <table class="table" width="100%"><tr>
 	  <td rowspan="3" valign="top"><h3>About Me</h3>
@@ -113,6 +113,39 @@
 		  }
 		  ?>
 		  </ul>
+	  </div>
+	  <div>
+		  <h3>Topics and Posts</h3>
+		  <ul><?php 
+	  	$contribsPath = __DIR__ . '/../data/accounts/' . cleanFilename($_GET['user']) . '/contribs.json';
+	if (!file_exists($contribsPath)) $contribs = array();
+	else $contribs = json_decode(file_get_contents($contribsPath));
+
+	if (count($contribs) === 0) {
+		?><li>No topics or posts.</li><?php
+	}
+		foreach ($contribs as $contrib) {
+			if (!isset($contrib->post)) {
+				$config = json_decode(file_get_contents('../data/messages/' . cleanFilename($contrib->room) . '/config.json'));
+				$author = $config->author;
+				if (file_exists('../data/messages/' . cleanFilename($contrib->room) . '/del.json')) {
+					if ($author !== getname() && !verifyAdmin()) continue;
+				}
+			} else {
+				$messages = json_decode(file_get_contents('../data/messages/' . cleanFilename($contrib->room) . '/msg.json'));
+				$message = $messages->{$contrib->post};
+				if (isset($message->del)) {
+					if ($message->author !== getname() && !verifyAdmin()) continue;
+				}
+			}
+			?><li><h4><a href="viewtopic.php?room=<?php echo htmlspecialchars(urlencode($contrib->room));
+			if (isset($contrib->post)) {
+				?>#topic-message-<?php
+				echo htmlspecialchars(urlencode($contrib->post));
+			}
+			?>"><?php echo htmlspecialchars($contrib->room); ?></a></h4> (<?php echo isset($contrib->post) ? "Reply" : "Topic"; ?>)</li><?php
+		}
+	  ?></ul>
 	  </div>
 	  <?php
   } else {

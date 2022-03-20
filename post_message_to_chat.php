@@ -58,13 +58,22 @@ if ($name) {
 	}
 	$json = json_decode(file_get_contents(__DIR__ . '/data/messages/'.cleanFilename($_POST['room']) . '/msg.json'));
 	$roomobj = json_decode(file_get_contents(__DIR__ . '/data/messages/'.cleanFilename($_POST['room']) . '/config.json'));
+	// Add post to user contributions
+	$contribsPath = __DIR__ . '/data/accounts/' . cleanFilename(getname()) . '/contribs.json';
+	if (!file_exists($contribsPath)) $contribs = array();
+	else $contribs = json_decode(file_get_contents($contribsPath));
+	$contrib = new stdClass;
+	$contrib->room = $_POST['room'];
+	$contrib->post = $name;
+	array_unshift($contribs, $contrib);
+	fwrite(fopen($contribsPath, 'w+'), json_encode($contribs));
 	$author = $roomobj->author;
 	if ($author !== getname()) {
 		// Then, notify the author of a new question reply
 		$not = new stdClass;
 		$not->type = "Reply to your question";
 		$not->read = false;
-		$not->url = 'viewtopic.php?room=' . urlencode($_POST['room']);
+		$not->url = 'viewtopic.php?room=' . urlencode($_POST['room']) . '#topic-message-' . urlencode($name);
 		$not->text = "New reply to a thread you created. Click to open it and read the new reply.";
 		$not->time = time();
 		$existingnotifications = json_decode(file_get_contents("data/accounts/" . cleanFilename($author) . "/inbox.json"));
@@ -103,9 +112,6 @@ if ($name) {
 	} else {
 		echo '{"status":null}';
 	}
-	$queue = json_decode(file_get_contents("review/items.json"));
-	array_push($queue->items, array("room" => $_POST['room'], "message" => $name));
-	fwrite(fopen("review/items.json", "w+"), json_encode($queue));
 } else {
 	echo '{"status":false}';
 }

@@ -19,7 +19,7 @@
 register_shutdown_function(function() {
 	require_once __DIR__ . '/footer.php';
 });
-?>
+?> 
 <div id="keyboard-focus" style="z-index:999;">
 	<a id="link" href="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>#mainContent" style="background-color:black;">Skip to main content</a>
 </div>
@@ -28,6 +28,7 @@ register_shutdown_function(function() {
 		<table height="100%"><tr><td><p id="loading" style="color:black;">loading...</p><iframe src="about:blank" onload="document.getElementById('loading').style.display = 'none';" id="notification-iframe" frameBorder="0" style="height:600px;max-height:75vh;"></iframe></td></tr><tr><td><button onclick="this.parentNode.parentNode.parentNode.parentNode.parentNode.style.display = 'none';document.getElementById('loading').style.display = 'block';document.getElementById('notification-iframe').src = '';">Close</button></td></tr></table>
 	</div>
   </div>
+<header>
 <table id="header" style="width:100%; max-width:100%;background-color:#7AD7FF;color:black;z-index:10;">
 <tr><td><h1 style="display:inline;"><span id="menubutton" style="cursor:pointer;" tabindex="0"><img src="img/menu.png" alt="" /></span> <a style="text-decoration:none !important;" href="./"><img alt="Forum Logo" src="./img/logo.png" /><span id="TitleText">
 <?php
@@ -89,6 +90,8 @@ else {
 }
 	?>&nbsp;<input style="outline:none;padding:0;border:none;" type="search" id="query" name="query" placeholder="search rooms" value="<?php if (isset($_GET['query'])) { echo htmlspecialchars($_GET['query']); } ?>" /> </span><input type="submit" value=">" /></form></td><td></td></tr>
 </table>
+</header>
+<nav>
 <div id="banner" style="width:100%;background-color:gold;color:black;text-align:center;"><?php 
 require(__DIR__ . '/../libraries/parsedown.php');
 	if (isset($object->banner)) {
@@ -120,6 +123,7 @@ echo $link;
 ?><br><br>
 <strong><a href="javascript:;" onclick="document.getElementById('menu').setAttribute('style', 'resize:both; max-width:100%; min-width:120px; width:400px; z-index:10; height:100%; background-color:#e2ccf5; display:block; position:fixed; top:0; left:0; overflow-y:scroll;color:black;');">Reset menu position</a></strong></em></center>
 </div>
+</nav>
 <script>
 document.querySelector("#query").onfocus = function() {
 	document.getElementById('query').setAttribute(
