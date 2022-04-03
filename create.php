@@ -138,14 +138,16 @@ editorOptions(); ?>
 		<div id="preview" style="border:1px solid;padding:2px;">markdown preview here</div>
 		<br />
 		<label>Enter your tags separated by spaces:
-		<input required="required" type="text" style="width: 100%;" name="tags" placeholder="Add your tags" /></label><br /><label>
+		<input required="required" type="text" style="width: 100%;" name="tags" placeholder="Add your tags" /></label><div id="tagsearchwrapper" hidden="hidden"><label>
+			<script>
+document.querySelector('#tagsearchwrapper').removeAttribute('hidden'); </script>
 			<span hidden="hidden">Search for tags:</span> 
-			<input style="width: 100%;" id="search4tags" placeholder="Search for tags..." />
-			
+			<input style="width: 100%;" id="search4tags" placeholder="Search for tags..." autocomplete="off" /> 
+		</label>
 			<ul style="display: none; position: absolute; z-index: 3328; background-color: white; border: 1px solid; color: black; list-style: none; padding: 0; width: calc(100% - 18px); max-height: calc(50% - 18px); overflow-y: scroll;" id="tag-chooser">
 				<li style="position: sticky; top: 0; background-color: white;" class="no-choose" id="no-choose">Tag chooser (<a onclick="document.getElementById('tag-chooser').style.display = 'none';" href="javascript:;">close</a>)</li>
 			</ul>
-			</label>
+			</div> 
 	<?php if (isset($_POST['roomtitle'])) exit(0); ?>	<script>globalThis.tags=JSON.parse(<?php echo json_encode(json_encode($config->tags)); ?>);
 			document.querySelector('#search4tags').value = '';
 		document.querySelector('#search4tags').addEventListener('input', function() {
@@ -162,8 +164,12 @@ document.querySelector('#tag-chooser').innerHTML = '';
 				}
 	  entriesAdded++;
 				var searchQueryEntry = document.createElement('li');
+				
 				searchQueryEntry.textContent = tag;
 				searchQueryEntry.addEventListener('click', function() {
+document.getElementById('tag-chooser').style.display = 'none';
+	  document.getElementById('search4tags').value = '';
+	  document.getElementById('search4tags').focus();
 	  if (document.querySelector('[name=tags]').value !== "" && !document.querySelector('[name=tags]').value.endsWith(" ")) {
 					document.querySelector('[name=tags]').value += " " + tag;
 	  } else {
@@ -280,3 +286,60 @@ document.querySelector('#tag-chooser').innerHTML = '';
     };
 }
 </script>
+		  <form id="hidden-uploader" action="files" enctype="multipart/form-data" style="display: none;">
+			  <label>Do not touch this field.
+			  <input name="image" type="file" /></label>
+			  <input type="hidden" name="details" value="This is an image that was pasted and uploaded. If this file only contains simple text or shapes, it is in the public domain." />
+			  <input type="hidden" name="license" value="other" />
+			  <input type="hidden" name="randomize" value="" />
+		  </form>
+      <script>
+document.getElementById('description').addEventListener('paste', (e) => {
+  document.querySelector('input[name=image]').files = e.clipboardData.files;
+			if (!document.querySelector('input[name=image]').files[0]) return;
+			if (document.querySelector('input[name=image]').files[0].type.split('/')[0] !== 'image') return;
+
+			uploadPrompt();
+	console.log(e.clipboardData);
+	});
+		function uploadPrompt() {
+			loadFile();
+			document.getElementById('uploadPrompt').style.display = 'block';
+		}
+		function uploadHiddenFile() {
+			var request = new XMLHttpRequest();
+			request.addEventListener('load', function() {
+				var response = JSON.parse(this.responseText);
+				nodbForum.insertIntoInput(document.querySelector('textarea[id=description]'), "[![" + response.name + "](files/download.php?filename=" + encodeURIComponent(response.name) + ")](viewfile.php?filename=" + encodeURIComponent(response.name) + ")");
+				document.getElementById('uploadPrompt').style.display = 'none';
+				document.querySelector('input[id=uploadButton]').removeAttribute('disabled');
+				document.querySelector('[id=uploadButton]').value = "Upload";
+				document.querySelector('[id=uploadCancel]').removeAttribute('disabled');
+			});
+			request.open('POST', 'api/files/upload.php', true);
+			request.send(new FormData(document.querySelector('#hidden-uploader')));
+		}
+  var loadFile = function(event) {
+    var output = document.getElementById('previewimg');
+    output.src = URL.createObjectURL(document.querySelector('[name=image]').files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src);
+    }
+  };
+</script>
+	  <div class="blanket" id="uploadPrompt" style="display: none;width:100vw;height:100vw;">
+	<div class="overlay" style="display:block;">
+		<h2>Upload image?</h2>
+		
+			<figure style="float: right;">
+    <img id="previewimg" alt="Preview image" style="max-width: 50%;" />
+    <figcaption>This image will be uploaded if you continue.</figcaption>
+</figure>
+		<p>To insert this image, it will be uploaded to the server. Please make sure this image has no sensitive information, as it will be available publicly.</p>
+		<p>The Markdown code to embed the image will be automatically inserted after the image has been uploaded.</p>
+
+		<input id="uploadButton" type="button" value="Upload" onclick="this.value = 'Uploading...'; document.getElementById('uploadCancel').disabled = 'disabled'; this.disabled = 'disabled'; uploadHiddenFile();" />
+		<input type="button" id="uploadCancel" value="Cancel" onclick="document.getElementById('uploadPrompt').style.display = 'none';"
+ />
+	</div>
+</div>

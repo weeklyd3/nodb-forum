@@ -69,17 +69,6 @@ if (isset($_FILES['image'])) {
 <h3>Choose the file to upload</h3>
 <label for="image" class="fileupload">Text file or image: </label>
 <input type="file" accept="text/*, image/*" required="required" id="image" name="image" />
-	<script>
-		var fileInput = document.querySelector('input[type=file]');
-
-window.addEventListener('paste', e => {
-  fileInput.files = e.clipboardData.files;
-	console.log(e.clipboardData);
-	document.getElementById('randomize').checked = 'checked';
-});
-		document.getElementById('jspastetips').removeAttribute('hidden');
-</script>
-	<p hidden="hidden" id="jspastetips">Alternatively, you can paste a file.</p>
 	<p>If you have a generic filename, click below to have a unique string prepended to the filename to avoid conflicts with files of the same name:</p>
 	<label><input type="checkbox" name="randomize" id="randomize" /> Attach unique string to filename</label>
 <div>

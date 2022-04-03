@@ -9,6 +9,6 @@ return array(
 	"Public domain (Author died 70+ years ago)" => "This work is more than 70 years plus the author's lifetime old. Evidence is provided in the details field.",
 	"Public domain (anonymous author, work is 120+ years old)" => "Proof of anonymous authorship and the age of this work is in the details field.",
 	"Public domain (not creative enough)" => "This file is not creative enough to be eligible for copyright and is therefore in the public domain.",
-	"Other license" => "This work is licensed under another free content license, and distribution is allowed. A link to the license, text to satisfy licensing conditions, and more details are in the details field."
+	"Other license" => "This work is licensed under another free content license. Any required attribution is in the details field."
 );
 }

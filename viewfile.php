@@ -129,6 +129,16 @@ globalThis.noOpenButton = true;	initFilePicker(document.getElementById('filename
 	  echo htmlspecialchars($_GET['lang']);
 	  ?>"<?php } } ?>><?php echo htmlspecialchars(file_get_contents($n)); ?></code></pre>
 	  <?php
+	  if ($type === 'text/html') {
+		  $GLOBALS['nofinish'] = true;
+		  ?></div></div><h3>HTML Preview</h3>
+	  <p>To prevent malicious code from executing, scripts, and forms are blocked.</p>
+		<details>
+			<summary style="list-style: none;"><span class="fakebutton" style="cursor: pointer;">Show code preview</span></summary>
+			<br />
+			<iframe style="background-color: white; border: 1px solid; width: 99%; height: 50vh;" src="files/download.php?filename=<?php echo htmlspecialchars(urlencode($_GET['filename'])); ?>" sandbox=""></iframe>
+		</details><?php
+	  }
   }
   if (startsWith($type, "video/")) {
 	  ?>a video.</p>
@@ -139,5 +149,5 @@ globalThis.noOpenButton = true;	initFilePicker(document.getElementById('filename
 	  Oh no! Browser not supported. Try downloading and opening with a video player.</video><?php
   }
   ?><style>.file-contents { overflow: scroll; max-height: 90vh; }</style><?php
-  if (isset($GLOBALS['t'])) { ?></div></div><?php }
-  else { ?>File type not supported. Click the link above to download the file.<?php } }
+  if (isset($GLOBALS['t']) && !isset($_GLOBALS['nofinish'])) { ?></div></div><?php }
+  if (!isset($GLOBALS['t'])) {?>File type not supported. Click the link above to download the file.<?php } }
