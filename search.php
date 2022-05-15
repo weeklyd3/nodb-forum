@@ -60,6 +60,9 @@
 		  } else {
 			  $viewable = true;
 		  }
+		  if (file_exists(__DIR__ . '/data/messages/' . cleanFilename($room) . '/del.json')) {
+			  $viewable = verifyAdmin() || $msg->author === getname();
+		  }
 	  } else {
 		  $json = json_decode(file_get_contents(__DIR__ . '/data/messages/' . cleanFilename($room) . '/config.json'));
 		  $msg = $json;
