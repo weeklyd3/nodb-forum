@@ -16,14 +16,30 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+require_once '../libraries/lib.php';
+ if ($_POST['c'] == 'login') {
+	 if (file_exists('../data/accounts/'.cleanFilename($_POST['user']).'/psw.txt')) {
+		$USER = $_POST['user'];
+		$PASS = $_POST['psw'];
+		$clean = cleanFilename($USER);
+		$hashfile = '../data/accounts/'.$clean.'/psw.txt';
+		$hash = file_get_contents($hashfile);
+		$PASSHASH = password_hash($PASS, PASSWORD_DEFAULT);
+		$expiry = is_numeric($_POST['expiry']) ? (int) $_POST['expiry'] : 72000;
+		if (password_verify($PASS, $hash)) {
+			$COOK = $USER . "\0" . $PASS;
+			setcookie('login', $COOK, time() + $expiry, '/');
+		}
+ 	}
+ }
 ?><html lang="en">
   <head>
 	<base href="../" />
     <title>Log In</title>
 	<?php
 	ob_start();
- include '../public/header.php';
- include '../styles/inject.php';
+ require_once '../public/header.php';
+ require_once '../styles/inject.php';
  if ($_POST['c'] == 'login') {
 	 if (file_exists('../data/accounts/'.cleanFilename($_POST['user']).'/psw.txt')) {
 		$USER = $_POST['user'];
