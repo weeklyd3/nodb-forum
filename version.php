@@ -40,7 +40,7 @@ foreach ($ext as $p) {
     if (in_array($p, array('.', '..', 'readme.txt'))) {
         continue;
     }
-        $c = json_decode(file_get_contents("plugins/$p/config.json"));
+        $c = json_decode(file_get_contents("extensions/$p/config.json"));
     ?>
         <tr>
             <th scope="colgroup">Plugin: <?php echo $c->name; ?></th>
