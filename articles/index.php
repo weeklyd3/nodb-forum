@@ -16,6 +16,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+if (!is_dir(__DIR__ . "/content")) mkdir(__DIR__ . "/content", 0777, true);
 ?><html lang="en">
   <head>
 	<base href="../../" />
