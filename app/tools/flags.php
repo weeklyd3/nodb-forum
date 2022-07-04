@@ -10,6 +10,7 @@
 		chdir(__DIR__ . '/../../data/messages/');
 		$files = array_diff(scandir(".", SCANDIR_SORT_NONE), array('index.php', '.', '..'));
 		foreach ($files as $topic) {
+			if (!is_dir(__DIR__ . "/../../data/messages/$topic")) continue;
 			$config = json_decode(file_get_contents('./' . $topic . '/config.json'));
 			if (isset($config->flags)) {
 				array_push($stack, 'a');
